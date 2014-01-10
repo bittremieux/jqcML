@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<persistence version="2.1"
+    xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
+    <persistence-unit name="jqcML" transaction-type="RESOURCE_LOCAL">
+        
+        <class>inspector.jqcml.model.QcML</class>
+        <class>inspector.jqcml.model.Cv</class>
+        <class>inspector.jqcml.model.QualityAssessment</class>
+        <class>inspector.jqcml.model.QualityParameter</class>
+        <class>inspector.jqcml.model.Threshold</class>
+        <class>inspector.jqcml.model.AttachmentParameter</class>
+        <class>inspector.jqcml.model.TableAttachment</class>
+        <class>inspector.jqcml.model.TableColumn</class>
+        <class>inspector.jqcml.model.TableRow</class>
+        <class>inspector.jqcml.model.TableValue</class>
+        
+    </persistence-unit>
+</persistence> 

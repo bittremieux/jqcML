@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+	jqcML logging
+	- detailed logging to file jqcml.log
+	- logging to the console disabled
+-->
+<configuration>
+
+	<appenders>
+		<File name="logFile" fileName="jqcml.log" append="true">
+			<PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n" />
+		</File>
+		<Console name="console" target="SYSTEM_OUT">
+			<PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n" />
+		</Console>
+	</appenders>
+	
+	<loggers>
+		<root level="TRACE">
+			<appender-ref ref="logFile" />
+			<appender-ref ref="console" level="OFF" />
+		</root>
+	</loggers>
+	
+</configuration>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<qcML xmlns="http://www.prime-xs.eu/ms/qcml">
+   <runQuality ID="run_1">
+      <qualityParameter name="quality parameter 0 at run 1" value="374" cvRef="cv_0" accession="QC:000000" unitCvRef="cv_0" unitAccession="QC:000000" ID="qp_0"/>
+      <qualityParameter name="quality parameter 1 at run 1" value="158" cvRef="cv_0" accession="QC:000001" unitCvRef="cv_0" unitAccession="QC:000001" ID="qp_1"/>
+      <qualityParameter name="quality parameter 2 at run 1" value="751" cvRef="cv_0" accession="QC:000002" unitCvRef="cv_0" unitAccession="QC:000002" ID="qp_2"/>
+      <qualityParameter name="quality parameter 3 at run 1" value="108" cvRef="cv_1" accession="QC:000003" unitCvRef="cv_1" unitAccession="QC:000003" ID="qp_3"/>
+      <attachment name="attachment" ID="ap_1" cvRef="cv_1" accession="QC:000009" qualityParameterRef="qp_1">
+         <binary>c29tZSBzdHJpbmc=</binary>
+      </attachment>
+   </runQuality>
+   <runQuality ID="run_2">
+      <qualityParameter name="quality parameter 0 at run 2" value="218" cvRef="cv_0" accession="QC:000000" unitCvRef="cv_0" unitAccession="QC:000000" ID="qp_0_r1"/>
+      <qualityParameter name="quality parameter 1 at run 2" value="439" cvRef="cv_0" accession="QC:000001" unitCvRef="cv_0" unitAccession="QC:000001" ID="qp_1_r1"/>
+   </runQuality>
+   <setQuality ID="set_1">
+      <qualityParameter name="quality parameter 0 at set 1" value="843" cvRef="cv_0" accession="QC:000000" unitCvRef="cv_0" unitAccession="QC:000000" ID="qp_0_s1"/>
+      <qualityParameter name="quality parameter 1 at set 1" value="385" cvRef="cv_0" accession="QC:000001" unitCvRef="cv_0" unitAccession="QC:000001" ID="qp_1_s1"/>
+   </setQuality>
+   <cvList>
+      <cv fullName="cv item 0" uri="/path/to/cv/0" ID="cv_0"/>
+      <cv fullName="cv item 1" uri="/path/to/cv/1" ID="cv_1"/>
+   </cvList>
+</qcML>
