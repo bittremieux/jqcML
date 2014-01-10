@@ -6,9 +6,9 @@
 	<groupId>inspector.jqcml</groupId>
 	<artifactId>jqcml</artifactId>
 	<packaging>jar</packaging>
-	<version>1.0a</version>
+	<version>1.0</version>
 
-	<name>jqcml</name>
+	<name>jqcML</name>
 	<url>https://bitbucket.org/proteinspector/jqcml</url>
 	<description>jqcML is a Java application programming interface (API) for the qcML standard. Firstly, jqcML provides a complete object model to represent qcML data. Secondly, jqcML provides the ability to read, write and work in a uniform manner with qcML data from different sources, including the XML-based qcML file format and the relational database qcDB.</description>
 
