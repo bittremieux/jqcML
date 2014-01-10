@@ -29,6 +29,7 @@ import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
+import org.apache.commons.lang3.BooleanUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.eclipse.persistence.oxm.annotations.XmlPath;
@@ -146,8 +147,8 @@ public class QualityParameter extends CvParameter {
 	 * 
 	 * @return True if this QualityParameter has exceeded the given Threshold(s), false if not
 	 */
-	public Boolean hasFlag() {
-		return flag;
+	public boolean hasFlag() {
+		return BooleanUtils.isTrue(flag);
 	}
 	
 	/**
@@ -255,7 +256,7 @@ public class QualityParameter extends CvParameter {
 			if(getCvRef() != null) isEqual &= getCvRef().equals(qpOther.getCvRef()); else isEqual &= qpOther.getCvRef() == null;
 			if(getAccession() != null) isEqual &= getAccession().equals(qpOther.getAccession()); else isEqual &= qpOther.getAccession() == null;
 			if(getId() != null) isEqual &= getId().equals(qpOther.getId()); else isEqual &= qpOther.getId() == null;
-			if(hasFlag() != null) isEqual &= hasFlag().equals(qpOther.hasFlag()); else isEqual &= qpOther.hasFlag() == null;
+            isEqual &= hasFlag() == qpOther.hasFlag();
 			isEqual &= getNumberOfThresholds() == qpOther.getNumberOfThresholds();
             for(Iterator<Threshold> it = getThresholdIterator(); it.hasNext(); ) {
                 Threshold th = it.next();
