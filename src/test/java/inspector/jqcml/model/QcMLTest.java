@@ -96,7 +96,7 @@ public class QcMLTest {
 		qcmlExpected.addCv(new Cv("cv item 11", "/path/to/cv/10", "cv_11"));
 		
 		// read qcML
-		qcml = new QcMLFileReader().getQcML("data/test/QcMLTest.qcML");
+		qcml = new QcMLFileReader().getQcML(getClass().getResource("/QcMLTest.qcML").getFile());
 	}
 	
 	@SuppressWarnings("deprecation")
@@ -210,7 +210,7 @@ public class QcMLTest {
 	
 	@Test
 	public void getSetQuality_noSet() {
-		qcml = new QcMLFileReader().getQcML("data/test/NoSet.qcML");
+		qcml = new QcMLFileReader().getQcML(getClass().getResource("/NoSet.qcML").getFile());
 		
 		assertEquals(qcml.getNumberOfSetQualities(), 0);	
 

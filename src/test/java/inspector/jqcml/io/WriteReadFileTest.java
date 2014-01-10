@@ -234,24 +234,9 @@ public class WriteReadFileTest {
 
     @After
     public void clearSQLite() {
-        EntityManagerFactory emf = QcDBManagerFactory.createSQLiteFactory("data/test/WriteReadFileTest.sqlite");
-        EntityManager em = emf.createEntityManager();
-        em.getTransaction().begin();
-        em.createNativeQuery("DROP TABLE table_value").executeUpdate();
-        em.createNativeQuery("DROP TABLE table_row").executeUpdate();
-        em.createNativeQuery("DROP TABLE table_column").executeUpdate();
-        em.createNativeQuery("DROP TABLE table_attachment").executeUpdate();
-        em.createNativeQuery("DROP TABLE attachment_parameter").executeUpdate();
-        em.createNativeQuery("DROP TABLE threshold").executeUpdate();
-        em.createNativeQuery("DROP TABLE quality_parameter").executeUpdate();
-        em.createNativeQuery("DROP TABLE quality_assessment").executeUpdate();
-        em.createNativeQuery("DROP TABLE cv_list").executeUpdate();
-        em.createNativeQuery("DROP TABLE cv").executeUpdate();
-        em.createNativeQuery("DROP TABLE qcml").executeUpdate();
-        em.createNativeQuery("DROP TABLE pk_sequence").executeUpdate();
-        em.getTransaction().commit();
-        em.close();
-        emf.close();
+        // no need to drop the tables, just delete the database file
+        File file = new File("WriteReadFileTest.sqlite");
+        file.delete();
     }
 
     @Test
@@ -303,7 +288,7 @@ public class WriteReadFileTest {
     @Test
     public void sqlite_new() {
         // write the object to a SQLite database
-        EntityManagerFactory emf = QcDBManagerFactory.createSQLiteFactory("data/test/WriteReadFileTest.sqlite");
+        EntityManagerFactory emf = QcDBManagerFactory.createSQLiteFactory("WriteReadFileTest.sqlite");
         QcDBWriter writer = new QcDBWriter(emf);
         writer.writeQcML(qcmlExpected);
 
@@ -318,7 +303,7 @@ public class WriteReadFileTest {
     @Test
     public void sqlite_overwrite() {
         // write the object to a MySQL database
-        EntityManagerFactory emf = QcDBManagerFactory.createSQLiteFactory("data/test/WriteReadFileTest.sqlite");
+        EntityManagerFactory emf = QcDBManagerFactory.createSQLiteFactory("WriteReadFileTest.sqlite");
         QcDBWriter writer = new QcDBWriter(emf);
         writer.writeQcML(qcmlExpected);
         // overwrite the first object

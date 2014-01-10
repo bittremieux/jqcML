@@ -13,7 +13,7 @@ public class CvParameterTest {
 	
 	@Before
 	public void setUp() {
-		qcml = new QcMLFileReader().getQcML("data/test/CvParameterTest.qcML");
+		qcml = new QcMLFileReader().getQcML(getClass().getResource("/CvParameterTest.qcML").getFile());
 	}
 	
 	@Test

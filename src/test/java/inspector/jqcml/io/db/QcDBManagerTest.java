@@ -4,6 +4,8 @@ import org.junit.Test;
 
 import javax.persistence.EntityManagerFactory;
 
+import static org.junit.Assert.assertNotNull;
+
 public class QcDBManagerTest {
 
     @Test
@@ -119,10 +121,10 @@ public class QcDBManagerTest {
     @Test
     public void createSQLiteFactory_valid() {
         // create EMF
-        EntityManagerFactory emf = QcDBManagerFactory.createSQLiteFactory("data/test/all-attributes.sqlite");
+        EntityManagerFactory emf = QcDBManagerFactory.createSQLiteFactory(getClass().getResource("/QcDBManagerTest.sqlite").getFile());
         // test connection
         QcDBReader reader = new QcDBReader(emf);
-        reader.getCv("qcML", "cv");
+        assertNotNull(reader.getCv(null, "cv_0"));
         // close emf
         emf.close();
     }
