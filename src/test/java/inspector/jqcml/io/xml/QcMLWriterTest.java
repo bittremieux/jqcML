@@ -21,6 +21,12 @@ public class QcMLWriterTest {
 		writer = new QcMLFileWriter();
 	}
 
+    @After
+    public void tearDown() {
+        File file = new File("Invalid.qcML");
+        file.delete();
+    }
+
 	@Test(expected = NullPointerException.class)
 	public void writeQcML_null() {
 		writer.writeQcML(null);
