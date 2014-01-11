@@ -95,6 +95,12 @@ public class QcMLReaderTest {
         assertNull(reader.getCv(getClass().getResource("/CvParameterTest.qcML").getFile(), "non-existing id"));
     }
 
+    @Test
+    public void getCv_valid() {
+        assertNotNull(reader.getCv(getClass().getResource("/CvParameterTest.qcML").getFile(), "cv_0"));
+        assertNotNull(reader.getCv(getClass().getResource("/CvParameterTest.qcML").getFile(), "cv_1"));
+    }
+
     @Test(expected=NullPointerException.class)
     public void getCvIterator_nullFile() {
         reader.getCvIterator(null);
@@ -116,6 +122,17 @@ public class QcMLReaderTest {
     public void getCvIterator_invalidXMLFile() {
         Iterator<Cv> it = reader.getCvIterator(getClass().getResource("/Invalid.qcML").getFile());
 
+        assertFalse(it.hasNext());
+    }
+
+    @Test
+    public void getCvIterator_valid() {
+        Iterator<Cv> it = reader.getCvIterator(getClass().getResource("/CvParameterTest.qcML").getFile());
+
+        for(int i = 0; i < 2; i++) {
+            assertTrue(it.hasNext());
+            it.next();
+        }
         assertFalse(it.hasNext());
     }
 
@@ -149,6 +166,13 @@ public class QcMLReaderTest {
         assertNull(reader.getQualityAssessment(getClass().getResource("/CvParameterTest.qcML").getFile(), "non-existing id"));
     }
 
+    @Test
+    public void getQualityAssessment_valid() {
+        assertNotNull(reader.getQualityAssessment(getClass().getResource("/CvParameterTest.qcML").getFile(), "run_1"));
+        assertNotNull(reader.getQualityAssessment(getClass().getResource("/CvParameterTest.qcML").getFile(), "run_2"));
+        assertNotNull(reader.getQualityAssessment(getClass().getResource("/CvParameterTest.qcML").getFile(), "set_1"));
+    }
+
     @Test(expected=NullPointerException.class)
     public void getQualityAssessmentIterator_nullFile() {
         reader.getQualityAssessmentIterator(null);
@@ -170,6 +194,17 @@ public class QcMLReaderTest {
     public void getQualityAssessmentIterator_invalidXMLFile() {
         Iterator<QualityAssessment> it = reader.getQualityAssessmentIterator(getClass().getResource("/Invalid.qcML").getFile());
 
+        assertFalse(it.hasNext());
+    }
+
+    @Test
+    public void getQualityAssessmentIterator_valid() {
+        Iterator<QualityAssessment> it = reader.getQualityAssessmentIterator(getClass().getResource("/CvParameterTest.qcML").getFile());
+
+        for(int i = 0; i < 3; i++) {
+            assertTrue(it.hasNext());
+            it.next();
+        }
         assertFalse(it.hasNext());
     }
 
