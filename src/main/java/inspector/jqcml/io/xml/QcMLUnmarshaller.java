@@ -36,6 +36,8 @@ public class QcMLUnmarshaller {
 	private JAXBIntrospector introspector;
     /** Filter to handle the qcML namespace when unmarshalling only a section of a qcML file */
 	private NamespaceFilter namespaceFilter;
+    /** Schema used to validate during unmarshalling */
+    private Schema schema;
 	
 	/**
 	 * Creates a JAXB {@link Unmarshaller} using the required {@link JAXBContext} required for unmarshalling a qcML file.
@@ -65,6 +67,7 @@ public class QcMLUnmarshaller {
     public QcMLUnmarshaller(Schema schema) {
         this();
 
+        this.schema = schema;
         unmarshaller.setSchema(schema);
     }
 
@@ -135,6 +138,10 @@ public class QcMLUnmarshaller {
 		logger.info("Unmarshal type <{}> from XML snippet: {}", type, xmlSnippet.substring(0, xmlSnippet.indexOf('>')+1));
 		
 		try {
+            // disable validation
+            unmarshaller.setSchema(null);
+
+            // unmarshal
 			Object temp = unmarshaller.unmarshal(createSource(xmlSnippet));
 
             return type.cast(JAXBIntrospector.getValue(temp));
@@ -142,7 +149,10 @@ public class QcMLUnmarshaller {
 		} catch (JAXBException e) {
 			logger.error("Error while unmarshalling XML snippet {}\n{}", xmlSnippet.substring(0, xmlSnippet.indexOf('>')+1), e);
 			throw new IllegalStateException("Error while unmarshalling XML snippet " + xmlSnippet.substring(0, xmlSnippet.indexOf('>')+1) + ": " + e);
-		}
+		} finally {
+            // re-enable validation
+            unmarshaller.setSchema(schema);
+        }
 	}
 	
 	/**
@@ -157,12 +167,19 @@ public class QcMLUnmarshaller {
 		logger.info("Unmarshal general object from XML snippet: {}", xmlSnippet.substring(0, xmlSnippet.indexOf('>')+1));
 		
 		try {
+            // disable validation
+            unmarshaller.setSchema(null);
+
+            // unmarshal
 			return unmarshaller.unmarshal(createSource(xmlSnippet));
 			
 		} catch (JAXBException e) {
 			logger.error("Error while unmarshalling XML snippet {}\n{}", xmlSnippet.substring(0, xmlSnippet.indexOf('>')+1), e);
 			throw new IllegalStateException("Error while unmarshalling XML snippet " + xmlSnippet.substring(0, xmlSnippet.indexOf('>')+1) + ": " + e);
-		}
+		} finally {
+            // re-enable validation
+            unmarshaller.setSchema(schema);
+        }
 	}
 
     /**
