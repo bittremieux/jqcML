@@ -1,6 +1,6 @@
 # Release notes
 
-## jqcML v1.0 (10-Jan-2014)
+## jqcML v1.0 (11-Jan-2014)
 
 * BUGFIX: Better error handling for the command-line interface
 * BUGFIX: Requesting an iterator for an invalid qcML file results in an empty iterator
