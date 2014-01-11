@@ -5,6 +5,7 @@ package inspector.jqcml.io.xml;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Iterator;
 
@@ -54,16 +55,16 @@ public class QcMLFileReader implements QcMLReader {
      * @return A Schema representing the qcML XML schema
      */
 	private static Schema createSchema() {
-		File schemaFile = new File("src/main/resources/qcML_0.0.7.xsd");
+		URL schemaUrl = QcMLFileReader.class.getResource("/qcML_0.0.7.xsd");
 		try {
-			logger.info("Create schema validator from xsd file <{}>", schemaFile.getAbsoluteFile());
+			logger.info("Create schema validator from xsd file <{}>", schemaUrl.getFile());
 			
 			SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-			return schemaFactory.newSchema(schemaFile);
+			return schemaFactory.newSchema(schemaUrl);
 
 		} catch (SAXException e) {
-			logger.error("File <{}> is no valid XML schema: ", schemaFile.getAbsolutePath(), e.getMessage());
-			throw new IllegalArgumentException("No valid XML schema: " + schemaFile.getAbsolutePath());
+			logger.error("File <{}> is no valid XML schema: ", schemaUrl.getFile(), e.getMessage());
+			throw new IllegalArgumentException("No valid XML schema: " + schemaUrl.getFile());
 		}
 	}
 	
