@@ -205,26 +205,26 @@ public class QcDBReader implements QcMLReader {
 	}
 
     /**
-     * Provides the functionality to retrieve arbitrary data from the qcDB using a custom {@link TypedQuery}.
+     * Provides the functionality to retrieve arbitrary data from the qcDB.
      *
      * @param query  the query used to retrieve the data
+     * @param clss  the class type of the object returned by the query
      * @param <T>  the type of the requested data
      * @return a List containing all objects of the given type returned by the given query
      */
-    public <T> List<T> getFromCustomQuery(TypedQuery<T> query) {
+    public <T> List<T> getFromCustomQuery(String query, Class<T> clss) {
         if(query != null) {
-            logger.info("Execute custom query: {}", query.toString());
+            logger.info("Execute custom query: {}", query);
 
             EntityManager entityManager = createEntityManager();
 
             try {
-                return query.getResultList();
+                return entityManager.createQuery(query, clss).getResultList();
             }
             finally {
                 entityManager.close();
             }
         }
-
         else {
             logger.error("Unable to execute <null> query");
             throw new NullPointerException("Unable to execute <null> query");
