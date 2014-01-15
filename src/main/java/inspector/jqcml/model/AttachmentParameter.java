@@ -69,7 +69,7 @@ public class AttachmentParameter extends CvParameter {
 	@XmlID
 	@XmlAttribute(name="ID", required=true)
 	// JPA
-	@Column(name="id", length=45, unique=true)
+	@Column(name="id", length=255, unique=true)
 	private String id;
 	/** reference to the {@link QualityParameter} for which this attachment contains additional information */
 	// JAXB

@@ -52,7 +52,7 @@ public class QualityAssessment {
 	private int primaryKey;
 
 	/** a unique identifier */
-	@Column(name="id", length=45, unique=true)
+	@Column(name="id", length=255, unique=true)
 	private String id;
 	/** list of {@link QualityParameter}s */
 	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER, mappedBy="parentAssessment")

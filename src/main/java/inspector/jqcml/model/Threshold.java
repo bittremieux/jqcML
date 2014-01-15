@@ -53,7 +53,7 @@ public class Threshold extends CvParameter {
 	@XmlSchemaType(name="token")
 	@XmlAttribute(name="thresholdFilename")
 	// JPA
-	@Column(length=45, name="threshold_filename")
+	@Column(length=255, name="threshold_filename")
 	private String fileName;
 	
 	/** inverse part of the bi-directional relationship with {@link QualityParameter} */

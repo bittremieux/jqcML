@@ -49,7 +49,7 @@ public class Cv {
 	@XmlSchemaType(name="token")
 	@XmlAttribute(required=true)
 	// JPA
-	@Column(name="full_name", length=45)
+	@Column(name="full_name", length=255)
 	private String fullName;
 	/** the version number of the particular cv version */
 	// JAXB
@@ -57,14 +57,14 @@ public class Cv {
 	@XmlSchemaType(name="token")
 	@XmlAttribute
 	// JPA
-	@Column(name="version", length=45)
+	@Column(name="version", length=255)
 	private String version;
 	/** the uri specifying the location of the controlled vocabulary */
 	// JAXB
 	@XmlSchemaType(name="anyURI")
 	@XmlAttribute(required=true)
 	// JPA
-	@Column(name="uri", length=45)
+	@Column(name="uri", length=255)
 	private String uri;
 	/** a unique identifier, used by other elements to refer to this cv */
 	// JAXB
@@ -73,7 +73,7 @@ public class Cv {
 	@XmlID
 	@XmlAttribute(name="ID", required=true)
 	// JPA
-	@Column(name="id", length=45, unique=true)
+	@Column(name="id", length=255, unique=true)
 	private String id;
 	
 	/**

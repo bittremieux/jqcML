@@ -70,7 +70,7 @@ public class QualityParameter extends CvParameter {
 	@XmlID
 	@XmlAttribute(name="ID", required=true)
 	// JPA
-	@Column(name="id", length=45, unique=true)
+	@Column(name="id", length=255, unique=true)
 	private String id;
 	/** indicates if the parameter has exceeded a given threshold */
 	// JAXB

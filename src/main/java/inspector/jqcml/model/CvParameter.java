@@ -61,7 +61,7 @@ public class CvParameter extends AbstractParameter {
 	@XmlSchemaType(name="token")
 	@XmlAttribute(required=true)
 	// JPA
-	@Column(name="accession", length=45)
+	@Column(name="accession", length=255)
 	protected String accession;
 	
 	/**

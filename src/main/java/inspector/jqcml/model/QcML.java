@@ -73,7 +73,7 @@ public class QcML {
 	// JAXB
 	@XmlTransient
 	// JPA
-	@Column(name="qcml_file", length=45)
+	@Column(name="qcml_file", length=255)
 	private String fileName;
 
 	/** list of {@link QualityAssessment}s as a runQuality */

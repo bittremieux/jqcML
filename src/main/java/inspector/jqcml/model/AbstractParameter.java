@@ -43,7 +43,7 @@ public abstract class AbstractParameter {
 	@XmlSchemaType(name="token")
 	@XmlAttribute(required=true)
 	// JPA
-	@Column(name="name", length=45)
+	@Column(name="name", length=255)
 	protected String name;
 	/** the value of the parameter */
 	// JAXB
@@ -51,7 +51,7 @@ public abstract class AbstractParameter {
 	@XmlSchemaType(name="token")
 	@XmlAttribute
 	// JPA
-	@Column(name="value", length=45)
+	@Column(name="value", length=255)
 	protected String value;
 	/** the accession number identifying the unit in which the value is expressed in the controlled vocabulary */
 	// JAXB
@@ -59,7 +59,7 @@ public abstract class AbstractParameter {
 	@XmlSchemaType(name="token")
 	@XmlAttribute
 	// JPA
-	@Column(name="unit_accession", length=45)
+	@Column(name="unit_accession", length=255)
 	protected String unitAccession;
 	/** the name of the unit (as defined by the controlled vocabulary) in which the value is expressed */
 	// JAXB
@@ -67,7 +67,7 @@ public abstract class AbstractParameter {
 	@XmlSchemaType(name="token")
 	@XmlAttribute
 	// JPA
-	@Column(name="unit_name", length=45)
+	@Column(name="unit_name", length=255)
 	protected String unitName;
 	/** (textual) reference to the controlled vocabulary used to define the unit in which the value is expressed */
 	// JAXB
