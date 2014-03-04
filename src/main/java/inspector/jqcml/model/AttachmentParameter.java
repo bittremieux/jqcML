@@ -189,18 +189,18 @@ public class AttachmentParameter extends CvParameter {
 	}
 
     /**
-     * Stores an image file as the binary information in this AttachmentParameter object.
+     * Stores the contents of a file as the binary information in this AttachmentParameter object.
      * AttachmentParameters can contain either binary data or tabular data, but not both at the same time.
      *
-     * @param imageFile  The image file that will be stored as binary information as a base64-encoded string
+     * @param file  The file that will be stored as binary information as a base64-encoded string
      */
-    public void setBinaryImageFile(File imageFile) {
+    public void setBinaryFromFile(File file) {
         try {
-            binary = Base64.encodeBase64String(FileUtils.readFileToByteArray(imageFile));
+            binary = Base64.encodeBase64String(FileUtils.readFileToByteArray(file));
 
         } catch(IOException e) {
-            logger.warn("Unable to read the specified image file <{}> as a binary attachment", imageFile.getAbsolutePath());
-            throw new IllegalArgumentException("Unable to read the specified image file <" + imageFile.getAbsolutePath() +  ">");
+            logger.warn("Unable to read the specified file <{}> as a binary attachment", file.getAbsolutePath());
+            throw new IllegalArgumentException("Unable to read the specified file <" + file.getAbsolutePath() +  ">");
         }
     }
 	
