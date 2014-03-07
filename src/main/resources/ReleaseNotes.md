@@ -1,5 +1,9 @@
 # Release notes
 
+## jqcML v1.0.1 (07-Mar-2014)
+* BUGFIX: Simplify executing custom queries
+* NEW FEATURE: Explicitly set file contents as a binary attachment
+
 ## jqcML v1.0 (11-Jan-2014)
 
 * BUGFIX: Better error handling for the command-line interface
