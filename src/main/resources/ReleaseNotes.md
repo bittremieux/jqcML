@@ -15,4 +15,4 @@
 * NEW FEATURE: Retrieve arbitrary data from a qcDB using custom queries
 
 
-## jqcML v1.0a (18-Dec-2013)
+## jqcML v1.0a (18-Dec-2013) - qcML v0.0.7
