@@ -58,7 +58,13 @@ public class QcDBReader implements QcMLReader {
 			TypedQuery<QcML> query = entityManager.createQuery("SELECT qcml FROM QcML qcml WHERE qcml.fileName = :fileName", QcML.class);
 			query.setParameter("fileName", qcmlFile);
 			
-			return query.getSingleResult();
+			QcML qcml = query.getSingleResult();
+
+			if(!qcml.getVersion().equals(QCML_VERSION)) {
+				logger.warn("The qcML version <{}> doesn't correspond to the qcML XML schema version <{}>", qcml.getVersion(), QCML_VERSION);
+			}
+
+			return qcml;
 		}
 		catch(NoResultException e) {
 			return null;

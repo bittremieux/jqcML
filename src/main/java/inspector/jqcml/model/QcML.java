@@ -25,12 +25,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.TableGenerator;
 import javax.persistence.Transient;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlTransient;
-import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.logging.log4j.LogManager;
@@ -75,6 +71,15 @@ public class QcML {
 	// JPA
 	@Column(name="qcml_file", length=255)
 	private String fileName;
+
+	/** version number of the qcML file **/
+	// JAXB
+	@XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+	@XmlSchemaType(name="token")
+	@XmlAttribute(required=true)
+	// JPA
+	@Column(name="version", length=10)
+	private String version;
 
 	/** list of {@link QualityAssessment}s as a runQuality */
 	// JAXB
@@ -146,6 +151,24 @@ public class QcML {
 	 */
 	public void setFileName(String fileName) {
 		this.fileName = fileName;
+	}
+
+	/**
+	 * Returns the version of this QcML object.
+	 *
+	 * @return The version of this QcML object
+	 */
+	public String getVersion() {
+		return version;
+	}
+
+	/**
+	 * Sets the version for this QcML object.
+	 *
+	 * @param version  The version that will be set
+	 */
+	public void setVersion(String version) {
+		this.version = version;
 	}
 	
 	/**

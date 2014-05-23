@@ -8,6 +8,9 @@ import inspector.jqcml.model.QcML;
  */
 public interface QcMLWriter {
 
+	/** The version of the current qcML XML schema **/
+	public static final String QCML_VERSION = "0.0.8";
+
 	/**
 	 * Writes a {@link QcML} object to the writer's source.
 	 * 

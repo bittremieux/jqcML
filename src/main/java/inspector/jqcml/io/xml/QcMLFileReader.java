@@ -136,7 +136,14 @@ public class QcMLFileReader implements QcMLReader {
 	public QcML getQcML(String qcmlFile) {
 		try {
 			setFile(qcmlFile);
-			return unmarshaller.unmarshal(currentFile);
+			QcML qcml = unmarshaller.unmarshal(currentFile);
+
+			if(!qcml.getVersion().equals(QCML_VERSION)) {
+				logger.warn("The qcML version <{}> doesn't correspond to the qcML XML schema version <{}>", qcml.getVersion(), QCML_VERSION);
+			}
+
+			return qcml;
+
 		} catch(IllegalStateException e) {
 			return null;
 		}

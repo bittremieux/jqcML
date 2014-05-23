@@ -69,6 +69,14 @@ public class QcDBWriter implements QcMLWriter {
         if(qcml != null) {
             logger.info("Store qcML <{}>", qcml.getFileName());
 
+			// check if the version corresponds to the XML schema version
+			if(!qcml.getVersion().equals(QCML_VERSION)) {
+				// if the version was incorrect, issue a warning that it was changed
+				if(qcml.getVersion() != null)
+					logger.warn("qcML version number changed to <{}>", QCML_VERSION);
+				qcml.setVersion(QCML_VERSION);
+			}
+
             EntityManager entityManager = createEntityManager();
 
             // persist the qcML object in a transaction

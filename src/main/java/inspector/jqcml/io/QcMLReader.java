@@ -10,6 +10,9 @@ import inspector.jqcml.model.QualityAssessment;
  * A qcML input reader.
  */
 public interface QcMLReader {
+
+	/** The version of the current qcML XML schema **/
+	public static final String QCML_VERSION = "0.0.8";
 	
 	/**
 	 * Returns the full {@link QcML} object specified by the given file.
