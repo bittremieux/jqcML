@@ -45,6 +45,14 @@ public abstract class AbstractParameter {
 	// JPA
 	@Column(name="name", length=255)
 	protected String name;
+	/** description of the parameter, containing information to allow the user to interpret the QC value */
+	// JAXB
+	@XmlJavaTypeAdapter(CollapsedStringAdapter.class)
+	@XmlSchemaType(name="token")
+	@XmlAttribute
+	// JPA
+	@Column(name="description", length=255)
+	protected String description;
 	/** the value of the parameter */
 	// JAXB
 	@XmlJavaTypeAdapter(CollapsedStringAdapter.class)
@@ -109,6 +117,24 @@ public abstract class AbstractParameter {
 	 */
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	/**
+	 * Returns the description of this MetaDataParameter object.
+	 *
+	 * @return The description of this MetaDataParameter object
+	 */
+	public String getDescription() {
+		return description;
+	}
+
+	/**
+	 * Sets the description of this MetaDataParameter object.
+	 *
+	 * @param description  The description to be set
+	 */
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	/**

@@ -249,6 +249,7 @@ public class QualityParameter extends CvParameter {
 			QualityParameter qpOther = (QualityParameter) other;
 			boolean isEqual = true;
 			if(getName() != null) isEqual &= getName().equals(qpOther.getName()); else isEqual &= qpOther.getName() == null;
+			if(getDescription() != null) isEqual &= getDescription().equals(qpOther.getDescription()); else isEqual &= qpOther.getDescription() == null;
 			if(getValue() != null) isEqual &= getValue().equals(qpOther.getValue()); else isEqual &= qpOther.getValue() == null;
 			if(getUnitAccession() != null) isEqual &= getUnitAccession().equals(qpOther.getUnitAccession()); else isEqual &= qpOther.getUnitAccession() == null;
 			if(getUnitName() != null) isEqual &= getUnitName().equals(qpOther.getUnitName()); else isEqual &= qpOther.getUnitName() == null;

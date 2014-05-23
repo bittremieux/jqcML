@@ -237,6 +237,7 @@ public class AttachmentParameter extends CvParameter {
 			AttachmentParameter apOther = (AttachmentParameter) other;
 			boolean isEqual = true;
 			if(getName() != null) isEqual &= getName().equals(apOther.getName()); else isEqual &= apOther.getName() == null;
+			if(getDescription() != null) isEqual &= getDescription().equals(apOther.getDescription()); else isEqual &= apOther.getDescription() == null;
 			if(getValue() != null) isEqual &= getValue().equals(apOther.getValue()); else isEqual &= apOther.getValue() == null;
 			if(getUnitAccession() != null) isEqual &= getUnitAccession().equals(apOther.getUnitAccession()); else isEqual &= apOther.getUnitAccession() == null;
 			if(getUnitName() != null) isEqual &= getUnitName().equals(apOther.getUnitName()); else isEqual &= apOther.getUnitName() == null;
