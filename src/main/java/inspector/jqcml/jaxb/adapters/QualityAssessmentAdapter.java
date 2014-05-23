@@ -2,12 +2,7 @@ package inspector.jqcml.jaxb.adapters;
 
 import inspector.jqcml.io.xml.QcMLUnmarshaller;
 import inspector.jqcml.io.xml.index.QcMLIndexer;
-import inspector.jqcml.model.AttachmentParameter;
-import inspector.jqcml.model.CvParameter;
-import inspector.jqcml.model.Cv;
-import inspector.jqcml.model.QualityAssessment;
-import inspector.jqcml.model.QualityAssessmentList;
-import inspector.jqcml.model.QualityParameter;
+import inspector.jqcml.model.*;
 
 import java.util.Iterator;
 import java.util.Map;
@@ -17,7 +12,7 @@ import javax.xml.bind.annotation.adapters.XmlAdapter;
 /**
  * Converts between a {@link QualityAssessmentList} and a {@link QualityAssessment}.
  * 
- * During this conversion the {@link QualityParameter}s and {@link AttachmentParameter}s are stored in a separate {@link Map}, indexed by their id.
+ * During this conversion the {@link MetaDataParameter}s, {@link QualityParameter}s and {@link AttachmentParameter}s are stored in a separate {@link Map}, indexed by their id.
  */
 public class QualityAssessmentAdapter extends XmlAdapter<QualityAssessmentList, QualityAssessment> {
 
@@ -27,6 +22,8 @@ public class QualityAssessmentAdapter extends XmlAdapter<QualityAssessmentList, 
 		qal.setId(qa.getId());
 		qal.setSet(qa.isSet());
 
+		for(Iterator<MetaDataParameter> it = qa.getMetaDataParameterIterator(); it.hasNext(); )
+			qal.addParameter(it.next());
 		for(Iterator<QualityParameter> it = qa.getQualityParameterIterator(); it.hasNext(); )
 			qal.addParameter(it.next());
 		for(Iterator<AttachmentParameter> it = qa.getAttachmentParameterIterator(); it.hasNext(); )
@@ -41,7 +38,12 @@ public class QualityAssessmentAdapter extends XmlAdapter<QualityAssessmentList, 
 		qa.setSet(qal.isSet());
 		
 		for(CvParameter param : qal) {
-			if(param instanceof QualityParameter) {
+			if(param instanceof MetaDataParameter) {
+				qa.addMetaDataParameter((MetaDataParameter) param);
+				// add bi-directional relationship
+				param.setParentQualityAssessment(qa);
+			}
+			else if(param instanceof QualityParameter) {
 				qa.addQualityParameter((QualityParameter) param);
 				// add bi-directional relationship
 				param.setParentQualityAssessment(qa);

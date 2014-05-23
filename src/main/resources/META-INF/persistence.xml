@@ -7,6 +7,7 @@
         <class>inspector.jqcml.model.QcML</class>
         <class>inspector.jqcml.model.Cv</class>
         <class>inspector.jqcml.model.QualityAssessment</class>
+        <class>inspector.jqcml.model.MetaDataParameter</class>
         <class>inspector.jqcml.model.QualityParameter</class>
         <class>inspector.jqcml.model.Threshold</class>
         <class>inspector.jqcml.model.AttachmentParameter</class>

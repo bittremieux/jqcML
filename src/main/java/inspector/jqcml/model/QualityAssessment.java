@@ -54,11 +54,16 @@ public class QualityAssessment {
 	/** a unique identifier */
 	@Column(name="id", length=255, unique=true)
 	private String id;
+	/** list of {@link MetaDataParameter}s */
+	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER, mappedBy="parentAssessment")
+	@MapKey(name="accession")
+	// key=accession, value=QP
+	private Map<String, MetaDataParameter> metaDataList;
 	/** list of {@link QualityParameter}s */
 	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER, mappedBy="parentAssessment")
 	@MapKey(name="accession")
 	// key=accession, value=QP
-    private Map<String, QualityParameter> parameterList;
+	private Map<String, QualityParameter> parameterList;
 	/** list of {@link AttachmentParameter}s */
 	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER, mappedBy="parentAssessment")
 	@MapKey(name="accession")
@@ -77,6 +82,7 @@ public class QualityAssessment {
      * Constructs a new QualityAssessment object with empty {@link QualityParameter} and {@link AttachmentParameter} lists.
      */
     public QualityAssessment() {
+		this.metaDataList = new TreeMap<>();
     	this.parameterList = new TreeMap<>();
     	this.attachmentList = new TreeMap<>();
     }
@@ -123,8 +129,85 @@ public class QualityAssessment {
 	}
 	
 	/**
-	 * Returns the number of {@link QualityParameter}s that are contained in this QualityAssessment object.
+	 * Returns the number of {@link MetaDataParameter}s that are contained in this QualityAssessment object.
 	 * 
+	 * @return The number of MetaDataParameters
+	 */
+	public int getNumberOfMetaDataParameters() {
+		return metaDataList.size();
+	}
+
+	/**
+	 * Returns the {@link MetaDataParameter} specified by the given accession number.
+	 * 
+	 * @param accession  The accession number of the requested MetaDataParameter
+	 * @return The MetaDataParameter specified by the given accession number if this MetaDataParameter is present, {@code null} otherwise
+	 */
+	public MetaDataParameter getMetaDataParameter(String accession) {
+		if(accession != null)
+			return metaDataList.get(accession);
+		else
+			return null;
+	}
+	
+	/**
+	 * Returns a {@link Iterator} over all {@link MetaDataParameter}s contained in this QualityAssessment object.
+	 * 
+	 * @return An Iterator over all MetaDataParameters
+	 */
+	public Iterator<MetaDataParameter> getMetaDataParameterIterator() {
+		return metaDataList.values().iterator();
+	}
+
+	/**
+	 * Adds a given {@link MetaDataParameter} to this QualityAssessment object.
+	 * 
+	 * If a MetaDataParameter with the same accession number was already present, the old MetaDataParameter is replaced by the given MetaDataParameter.
+	 * 
+	 * @param param  The given MetaDataParameter
+	 */
+	public void addMetaDataParameter(MetaDataParameter param) {
+		if(param != null) {
+			param.setParentQualityAssessment(this);	// add the bi-directional relationship
+			metaDataList.put(param.getAccession(), param);
+		}
+		else {
+			logger.error("Can't add <null> MetaDataParameter to a QualityAssessment object");
+			throw new NullPointerException("Can't add <null> MetaDataParameter");
+		}
+	}
+	
+	/**
+	 * Removes the {@link MetaDataParameter} contained in this QualityAssessment object, specified by the given accession number, from this QualityAssessment object.
+	 * 
+	 * @param accession  The accession number of the MetaDataParameter that will be removed
+	 */
+	public void removeMetaDataParameter(String accession) {
+		if(accession != null) {
+			MetaDataParameter param = getMetaDataParameter(accession);
+			if(param != null)	// remove the bi-directional relationship
+				param.setParentQualityAssessment(null);
+			metaDataList.remove(accession);
+		}
+	}
+	
+	/**
+	 * Removes all {@link MetaDataParameter}s contained in this QualityAssessment object, from this QualityAssessment object.
+	 */
+	public void removeAllMetaDataParameters() {
+		Iterator<MetaDataParameter> it = getMetaDataParameterIterator();
+		while(it.hasNext()) {
+			// first remove the bi-directional relationship
+			MetaDataParameter param = it.next();
+			param.setParentQualityAssessment(null);
+			// remove the QualityParameter
+			it.remove();
+		}
+	}
+
+	/**
+	 * Returns the number of {@link QualityParameter}s that are contained in this QualityAssessment object.
+	 *
 	 * @return The number of QualityParameters
 	 */
 	public int getNumberOfQualityParameters() {
@@ -133,7 +216,7 @@ public class QualityAssessment {
 
 	/**
 	 * Returns the {@link QualityParameter} specified by the given accession number.
-	 * 
+	 *
 	 * @param accession  The accession number of the requested QualityParameter
 	 * @return The QualityParameter specified by the given accession number if this QualityParameter is present, {@code null} otherwise
 	 */
@@ -143,10 +226,10 @@ public class QualityAssessment {
 		else
 			return null;
 	}
-	
+
 	/**
 	 * Returns a {@link Iterator} over all {@link QualityParameter}s contained in this QualityAssessment object.
-	 * 
+	 *
 	 * @return An Iterator over all QualityParameters
 	 */
 	public Iterator<QualityParameter> getQualityParameterIterator() {
@@ -155,9 +238,9 @@ public class QualityAssessment {
 
 	/**
 	 * Adds a given {@link QualityParameter} to this QualityAssessment object.
-	 * 
+	 *
 	 * If a QualityParameter with the same accession number was already present, the old QualityParameter is replaced by the given QualityParameter.
-	 * 
+	 *
 	 * @param param  The given QualityParameter
 	 */
 	public void addQualityParameter(QualityParameter param) {
@@ -170,10 +253,10 @@ public class QualityAssessment {
 			throw new NullPointerException("Can't add <null> QualityParameter");
 		}
 	}
-	
+
 	/**
 	 * Removes the {@link QualityParameter} contained in this QualityAssessment object, specified by the given accession number, from this QualityAssessment object.
-	 * 
+	 *
 	 * @param accession  The accession number of the QualityParameter that will be removed
 	 */
 	public void removeQualityParameter(String accession) {
@@ -184,7 +267,7 @@ public class QualityAssessment {
 			parameterList.remove(accession);
 		}
 	}
-	
+
 	/**
 	 * Removes all {@link QualityParameter}s contained in this QualityAssessment object, from this QualityAssessment object.
 	 */
