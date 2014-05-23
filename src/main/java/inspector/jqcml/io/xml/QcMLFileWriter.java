@@ -34,7 +34,7 @@ public class QcMLFileWriter implements QcMLWriter {
      * @return A Schema representing the qcML XML schema
      */
     private static Schema createSchema() {
-        URL schemaUrl = QcMLFileWriter.class.getResource("/qcML_0.0.7.xsd");
+        URL schemaUrl = QcMLFileWriter.class.getResource("/qcML_0.0.8.xsd");
         try {
             logger.info("Create schema validator from xsd file <{}>", schemaUrl.getFile());
 

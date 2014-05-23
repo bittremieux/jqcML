@@ -55,7 +55,7 @@ public class QcMLFileReader implements QcMLReader {
      * @return A Schema representing the qcML XML schema
      */
 	private static Schema createSchema() {
-		URL schemaUrl = QcMLFileReader.class.getResource("/qcML_0.0.7.xsd");
+		URL schemaUrl = QcMLFileReader.class.getResource("/qcML_0.0.8.xsd");
 		try {
 			logger.info("Create schema validator from xsd file <{}>", schemaUrl.getFile());
 			
