@@ -2,13 +2,7 @@ package inspector.jqcml.jaxb.listener;
 
 import java.util.Iterator;
 
-import inspector.jqcml.model.AttachmentParameter;
-import inspector.jqcml.model.QcML;
-import inspector.jqcml.model.QualityAssessment;
-import inspector.jqcml.model.QualityParameter;
-import inspector.jqcml.model.Threshold;
-import inspector.jqcml.model.CvParameter;
-import inspector.jqcml.model.Cv;
+import inspector.jqcml.model.*;
 
 import javax.xml.bind.Unmarshaller.Listener;
 
@@ -89,7 +83,7 @@ public class QcMLListener extends Listener {
 	}
 
 	/**
-	 * Resolves references to {@link Cv}s in {@link QualityParameter}s, {@link AttachmentParameter}s and {@link Threshold}s.
+	 * Resolves references to {@link Cv}s in {@link MetaDataParameter}s, {@link QualityParameter}s, {@link AttachmentParameter}s and {@link Threshold}s.
 	 * 
 	 * While unmarshalling references to Cvs (i.e. cvRef and unitCvRef) are stored as String values.
 	 * This is done to ensure that the reference to the Cv is saved, even when the corresponding Cv couldn't be found while unmarshalling. 
@@ -104,6 +98,11 @@ public class QcMLListener extends Listener {
 		// all runQuality's
 		for (Iterator<QualityAssessment> qaIt = qcml.getRunQualityIterator(); qaIt.hasNext(); ) {
 			QualityAssessment qa = qaIt.next();
+			// all MetaDataParameters
+			for(Iterator<MetaDataParameter> mpIt = qa.getMetaDataParameterIterator(); mpIt.hasNext(); ) {
+				MetaDataParameter mp = mpIt.next();
+				mp.setCvRef(qcml.getCv(mp.getCvRefId()));
+			}
 			// all QualityParameters
 			for(Iterator<QualityParameter> qpIt = qa.getQualityParameterIterator(); qpIt.hasNext(); ) {
 				QualityParameter qp = qpIt.next();
@@ -126,6 +125,11 @@ public class QcMLListener extends Listener {
 		// all setQuality's
 		for (Iterator<QualityAssessment> qaIt = qcml.getSetQualityIterator(); qaIt.hasNext(); ) {
 			QualityAssessment qa = qaIt.next();
+			// all MetaDataParameters
+			for(Iterator<MetaDataParameter> mpIt = qa.getMetaDataParameterIterator(); mpIt.hasNext(); ) {
+				MetaDataParameter mp = mpIt.next();
+				mp.setCvRef(qcml.getCv(mp.getCvRefId()));
+			}
 			// all QualityParameters
 			for(Iterator<QualityParameter> qpIt = qa.getQualityParameterIterator(); qpIt.hasNext(); ) {
 				QualityParameter qp = qpIt.next();

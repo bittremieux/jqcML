@@ -394,6 +394,11 @@ public class QcML {
 				// check all runQualities
 				for(Iterator<QualityAssessment> qaIt = getRunQualityIterator(); canDelete && qaIt.hasNext(); ) {
 					QualityAssessment qa = qaIt.next();
+					// check all MetaDataParameters
+					for(Iterator<MetaDataParameter> paramIt = qa.getMetaDataParameterIterator(); canDelete && paramIt.hasNext(); ) {
+						MetaDataParameter param = paramIt.next();
+						canDelete &= param.getCvRef() != null ? !param.getCvRef().equals(cv) : canDelete;
+					}
 					// check all QualityParameters
 					for(Iterator<QualityParameter> paramIt = qa.getQualityParameterIterator(); canDelete && paramIt.hasNext(); ) {
 						QualityParameter param = paramIt.next();
@@ -416,6 +421,11 @@ public class QcML {
 				// check all setQualities
 				for(Iterator<QualityAssessment> qaIt = getSetQualityIterator(); canDelete && qaIt.hasNext(); ) {
 					QualityAssessment qa = qaIt.next();
+					// check all MetaDataParameters
+					for(Iterator<MetaDataParameter> paramIt = qa.getMetaDataParameterIterator(); canDelete && paramIt.hasNext(); ) {
+						MetaDataParameter param = paramIt.next();
+						canDelete &= param.getCvRef() != null ? !param.getCvRef().equals(cv) : canDelete;
+					}
 					// check all QualityParameters
 					for(Iterator<QualityParameter> paramIt = qa.getQualityParameterIterator(); canDelete && paramIt.hasNext(); ) {
 						QualityParameter param = paramIt.next();
