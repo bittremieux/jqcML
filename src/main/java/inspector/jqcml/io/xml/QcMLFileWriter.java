@@ -76,7 +76,7 @@ public class QcMLFileWriter implements QcMLWriter {
 	public void writeQcML(QcML qcml) {
 		if(qcml != null) {
 			// check if the version corresponds to the XML schema version
-			if(!qcml.getVersion().equals(QCML_VERSION)) {
+			if(qcml.getVersion() == null || !qcml.getVersion().equals(QCML_VERSION)) {
 				// if the version was incorrect, issue a warning that it was changed
 				if(qcml.getVersion() != null)
 					logger.warn("qcML version number changed to <{}>", QCML_VERSION);

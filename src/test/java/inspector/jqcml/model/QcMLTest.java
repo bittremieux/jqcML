@@ -9,7 +9,10 @@ import java.util.Iterator;
 
 import javax.xml.bind.DatatypeConverter;
 
+import inspector.jqcml.io.QcMLReader;
+import inspector.jqcml.io.QcMLWriter;
 import inspector.jqcml.io.xml.QcMLFileReader;
+import inspector.jqcml.io.xml.QcMLFileWriter;
 import inspector.jqcml.model.Cv;
 import inspector.jqcml.model.QcML;
 import inspector.jqcml.model.QualityAssessment;
@@ -38,6 +41,16 @@ public class QcMLTest {
 		// add RunQuality's
 		for(int i = 0; i < 5; i++) {
 			QualityAssessment runQuality = new QualityAssessment("run_" + i);
+			// add MetaDataParameters
+			for(int j = 0; j < (i+1) * 2; j++) {
+				MetaDataParameter param = new MetaDataParameter();
+				param.setName("metadata parameter " + i + "-" + j);
+				param.setId("mp_run" + i + "_param" + j);
+				param.setCvRef(qcmlExpected.getCv("cv_" + (i+j) % qcmlExpected.getNumberOfCvs()));
+				param.setAccession("QC:00000" + j);
+				param.setValue(Integer.toString((int)(Math.random()*1000)));
+				runQuality.addMetaDataParameter(param);
+			}
 			// add QualityParameters
 			for(int j = 0; j < (i+1) * 3; j++) {
 				QualityParameter param = new QualityParameter();
@@ -64,6 +77,16 @@ public class QcMLTest {
 		// add SetQuality's
 		for(int i = 0; i < 2; i++) {
 			QualityAssessment setQuality = new QualityAssessment("set_" + i);
+			// add MetaDataParameters
+			for(int j = 0; j < (i+1) * 2; j++) {
+				MetaDataParameter param = new MetaDataParameter();
+				param.setName("metadata parameter " + i + "-" + j);
+				param.setId("mp_set" + i + "_param" + j);
+				param.setCvRef(qcmlExpected.getCv("cv_" + (i+j) % qcmlExpected.getNumberOfCvs()));
+				param.setAccession("QC:00000" + j);
+				param.setValue(Integer.toString((int)(Math.random()*1000)));
+				setQuality.addMetaDataParameter(param);
+			}
 			// add QualityParameters
 			for(int j = 0; j < (i+1) * 5; j++) {
 				QualityParameter param = new QualityParameter();
@@ -93,7 +116,8 @@ public class QcMLTest {
 		qcmlExpected.addCv(new Cv("cv item 8", "/path/to/cv/8", "cv_8"));
 		qcmlExpected.addCv(new Cv("cv item 9", "/path/to/cv/9", "cv_9"));
 		qcmlExpected.addCv(new Cv("cv item 10", "/path/to/cv/10", "cv_10"));
-		qcmlExpected.addCv(new Cv("cv item 11", "/path/to/cv/10", "cv_11"));
+		qcmlExpected.addCv(new Cv("cv item 11", "/path/to/cv/11", "cv_11"));
+		qcmlExpected.addCv(new Cv("cv item 12", "/path/to/cv/12", "cv_12"));
 		
 		// read qcML
 		qcml = new QcMLFileReader().getQcML(getClass().getResource("/QcMLTest.qcML").getFile());
@@ -103,6 +127,11 @@ public class QcMLTest {
 	@Test
 	public void getFileName() {
 		assertThat(qcml.getFileName(), containsString("QcMLTest.qcML"));
+	}
+
+	@Test
+	public void getVersion() {
+		assertEquals(QcMLReader.QCML_VERSION, qcml.getVersion());
 	}
 	
 	@Test
@@ -351,11 +380,18 @@ public class QcMLTest {
 		
 		assertEquals(qcmlExpected.getNumberOfCvs(), qcml.getNumberOfCvs());
 	}
-	
+
+	@Test(expected=IllegalArgumentException.class)
+	public void removeCv_referencedMetaDataParameter() {
+		assertEquals(qcmlExpected.getNumberOfCvs(), qcml.getNumberOfCvs());
+
+		qcml.removeCv("cv_12");
+	}
+
 	@Test(expected=IllegalArgumentException.class)
 	public void removeCv_referencedQualityParameter() {
 		assertEquals(qcmlExpected.getNumberOfCvs(), qcml.getNumberOfCvs());
-		
+
 		qcml.removeCv("cv_5");
 	}
 	

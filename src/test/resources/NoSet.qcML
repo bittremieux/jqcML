@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<qcML xmlns="http://www.prime-xs.eu/ms/qcml">
+<qcML xmlns="http://www.prime-xs.eu/ms/qcml" version="0.0.8">
    <runQuality ID="run_0">
       <qualityParameter name="quality parameter 0-0" value="889" ID="qp_run0_param0" cvRef="cv_0" accession="QC:000000"/>
       <qualityParameter name="quality parameter 0-1" value="541" ID="qp_run0_param1" cvRef="cv_1" accession="QC:000001"/>

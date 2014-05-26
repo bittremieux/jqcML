@@ -62,10 +62,23 @@ public class MetaDataParameter extends CvParameter {
 	private String id;
 
 	/**
-     * Constructs a new empty QualityParameter object.
+     * Constructs a new empty MetaDataParameter object.
      */
 	public MetaDataParameter() {
 		super();
+	}
+
+	/**
+	 * Constructs a new MetaDataParameter object with the given name and id, and defined by the given {@link Cv} object.
+	 *
+	 * @param name  The name of the parameter
+	 * @param cvRef  The reference to the Cv object which defines this parameter
+	 * @param id  The unique identifier for this parameter
+	 */
+	public MetaDataParameter(String name, Cv cvRef, String id) {
+		super(name, cvRef);
+
+		setId(id);
 	}
 	
 	/**

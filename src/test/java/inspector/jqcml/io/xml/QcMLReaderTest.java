@@ -4,11 +4,19 @@ import static org.junit.Assert.*;
 
 import inspector.jqcml.io.xml.QcMLFileReader;
 import inspector.jqcml.model.Cv;
+import inspector.jqcml.model.QcML;
 import inspector.jqcml.model.QualityAssessment;
 
+import java.io.StringWriter;
 import java.util.Iterator;
+import java.util.Vector;
 
+import org.apache.log4j.Appender;
+import org.apache.log4j.ConsoleAppender;
+import org.apache.log4j.PatternLayout;
+import org.apache.log4j.WriterAppender;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class QcMLReaderTest {
@@ -18,7 +26,7 @@ public class QcMLReaderTest {
     @Before
     public void setUp() {
         reader = new QcMLFileReader();
-    }
+	}
 
     @Test(expected=NullPointerException.class)
     public void validate_null() {
@@ -64,6 +72,22 @@ public class QcMLReaderTest {
     public void getQcML_invalidXMLFile() {
         assertNull(reader.getQcML(getClass().getResource("/Invalid.qcML").getFile()));
     }
+
+	@Test
+	public void getQcML_invalidVersionFormat() {
+		// warning should be logged
+		assertNull(reader.getQcML(getClass().getResource("/InvalidVersionFormat.qcML").getFile()));
+	}
+
+	@Test
+	public void getQcML_invalidVersionNumber() {
+		// warning should be logged
+		QcML qcml = reader.getQcML(getClass().getResource("/InvalidVersionNumber.qcML").getFile());
+
+		assertNotNull(qcml);
+
+		assertEquals(QcMLFileReader.QCML_VERSION, qcml.getVersion());
+	}
 
     @Test(expected=NullPointerException.class)
     public void getCv_nullFile() {

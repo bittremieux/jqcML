@@ -140,6 +140,7 @@ public class QcMLFileReader implements QcMLReader {
 
 			if(!qcml.getVersion().equals(QCML_VERSION)) {
 				logger.warn("The qcML version <{}> doesn't correspond to the qcML XML schema version <{}>", qcml.getVersion(), QCML_VERSION);
+				qcml.setVersion(QCML_VERSION);
 			}
 
 			return qcml;
