@@ -249,7 +249,7 @@ public class WriteReadFileTest {
 
     @After
     public void clearMySQL() {
-        /*EntityManagerFactory emf = QcDBManagerFactory.createMySQLFactory("localhost", "3306", schema, "root", null);
+        EntityManagerFactory emf = QcDBManagerFactory.createMySQLFactory("localhost", "3306", schema, "root", null);
         EntityManager em = emf.createEntityManager();
         em.getTransaction().begin();
         em.createNativeQuery("DROP TABLE table_value").executeUpdate();
@@ -267,7 +267,7 @@ public class WriteReadFileTest {
         em.createNativeQuery("DROP TABLE pk_sequence").executeUpdate();
         em.getTransaction().commit();
         em.close();
-        emf.close();*/
+        emf.close();
     }
 
     @After

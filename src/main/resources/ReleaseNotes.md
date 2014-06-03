@@ -1,5 +1,10 @@
 # Release notes
 
+## jqcML v1.0.2 (03-Jun-2014) - qcML v0.0.8
+* NEW FEATURE: Support qcML `version` attribute
+* NEW FEATURE: Support new `MetaDataParameter`s
+* NEW FEATURE: Support parameter `description` attribute
+
 ## jqcML v1.0.1 (07-Mar-2014)
 * BUGFIX: Simplify executing custom queries
 * NEW FEATURE: Explicitly set file contents as a binary attachment
