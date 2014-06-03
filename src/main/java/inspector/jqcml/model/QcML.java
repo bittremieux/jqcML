@@ -78,7 +78,7 @@ public class QcML {
 	@XmlSchemaType(name="token")
 	@XmlAttribute(required=true)
 	// JPA
-	@Column(name="version", length=10)
+	@Column(name="version", length=45)
 	private String version;
 
 	/** list of {@link QualityAssessment}s as a runQuality */

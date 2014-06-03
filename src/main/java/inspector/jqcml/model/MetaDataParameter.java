@@ -31,7 +31,7 @@ import org.apache.logging.log4j.Logger;
 @XmlType(name="metaDataType")
 //JPA
 @Entity
-@Table(name="metadata_parameter")
+@Table(name="meta_data_parameter")
 public class MetaDataParameter extends CvParameter {
 
 	// JAXB

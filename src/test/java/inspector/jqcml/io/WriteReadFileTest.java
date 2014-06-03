@@ -14,6 +14,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.xml.bind.DatatypeConverter;
 import java.io.File;
+import java.io.IOException;
 import java.math.BigInteger;
 import java.util.Iterator;
 import java.util.Random;
@@ -32,8 +33,8 @@ public class WriteReadFileTest {
     @Before
     public void setUp() {
         // create fully populated qcML object
-        qcmlExpected = generateRandomQcML("WriteReadFileTest.qcML");
-    }
+        qcmlExpected = generateRandomQcML(getClass().getResource("/").getPath() + "WriteReadFileTest.qcML");
+	}
 
     private QcML generateRandomQcML(String name) {
         QcML qcml = new QcML();
@@ -236,13 +237,19 @@ public class WriteReadFileTest {
 
     @After
     public void deleteFile() {
-        File file = new File("WriteReadFileTest.qcML");
-        file.delete();
+		if(getClass().getResource("/WriteReadFileTest.qcML") != null) {
+			File file = new File(getClass().getResource("/WriteReadFileTest.qcML").getFile());
+			file.delete();
+		}
+		if(getClass().getResource("/WriteReadFileTest.db") != null) {
+			File file = new File(getClass().getResource("/WriteReadFileTest.db").getFile());
+			file.delete();
+		}
     }
 
     @After
     public void clearMySQL() {
-        EntityManagerFactory emf = QcDBManagerFactory.createMySQLFactory("localhost", "3306", schema, "root", null);
+        /*EntityManagerFactory emf = QcDBManagerFactory.createMySQLFactory("localhost", "3306", schema, "root", null);
         EntityManager em = emf.createEntityManager();
         em.getTransaction().begin();
         em.createNativeQuery("DROP TABLE table_value").executeUpdate();
@@ -251,7 +258,8 @@ public class WriteReadFileTest {
         em.createNativeQuery("DROP TABLE table_attachment").executeUpdate();
         em.createNativeQuery("DROP TABLE attachment_parameter").executeUpdate();
         em.createNativeQuery("DROP TABLE threshold").executeUpdate();
-        em.createNativeQuery("DROP TABLE quality_parameter").executeUpdate();
+		em.createNativeQuery("DROP TABLE quality_parameter").executeUpdate();
+		em.createNativeQuery("DROP TABLE meta_data_parameter").executeUpdate();
         em.createNativeQuery("DROP TABLE quality_assessment").executeUpdate();
         em.createNativeQuery("DROP TABLE cv_list").executeUpdate();
         em.createNativeQuery("DROP TABLE cv").executeUpdate();
@@ -259,7 +267,7 @@ public class WriteReadFileTest {
         em.createNativeQuery("DROP TABLE pk_sequence").executeUpdate();
         em.getTransaction().commit();
         em.close();
-        emf.close();
+        emf.close();*/
     }
 
     @After
@@ -277,7 +285,8 @@ public class WriteReadFileTest {
 
         // read it back in
         QcMLFileReader reader = new QcMLFileReader();
-        QcML qcmlRead = reader.getQcML("WriteReadFileTest.qcML");
+        QcML qcmlRead = reader.getQcML(getClass().getResource("/WriteReadFileTest.qcML").getFile());
+		qcmlRead.setFileName(getClass().getResource("/").getPath() + "WriteReadFileTest.qcML");
 
         assertEquality(qcmlExpected, qcmlRead);
     }
@@ -291,7 +300,7 @@ public class WriteReadFileTest {
 
         // read it back in
         QcDBReader reader = new QcDBReader(emf);
-        QcML qcmlRead = reader.getQcML("WriteReadFileTest.qcML");
+		QcML qcmlRead = reader.getQcML(getClass().getResource("/").getPath() + "WriteReadFileTest.qcML");
         emf.close();
 
         assertEquality(qcmlExpected, qcmlRead);
@@ -304,12 +313,12 @@ public class WriteReadFileTest {
         QcDBWriter writer = new QcDBWriter(emf);
         writer.writeQcML(qcmlExpected);
         // overwrite the first object
-        QcML qcmlOther = generateRandomQcML("WriteReadFileTest.qcML");
+        QcML qcmlOther = generateRandomQcML(getClass().getResource("/").getPath() + "WriteReadFileTest.qcML");
         writer.writeQcML(qcmlOther);
 
         // read the second object back in
         QcDBReader reader = new QcDBReader(emf);
-        QcML qcmlRead = reader.getQcML("WriteReadFileTest.qcML");
+        QcML qcmlRead = reader.getQcML(getClass().getResource("/").getPath() + "WriteReadFileTest.qcML");
         emf.close();
 
         assertEquality(qcmlOther, qcmlRead);
@@ -324,7 +333,7 @@ public class WriteReadFileTest {
 
         // read it back in
         QcDBReader reader = new QcDBReader(emf);
-        QcML qcmlRead = reader.getQcML("WriteReadFileTest.qcML");
+        QcML qcmlRead = reader.getQcML(getClass().getResource("/").getPath() + "WriteReadFileTest.qcML");
         emf.close();
 
         assertEquality(qcmlExpected, qcmlRead);
@@ -337,16 +346,35 @@ public class WriteReadFileTest {
         QcDBWriter writer = new QcDBWriter(emf);
         writer.writeQcML(qcmlExpected);
         // overwrite the first object
-        QcML qcmlOther = generateRandomQcML("WriteReadFileTest.qcML");
+        QcML qcmlOther = generateRandomQcML(getClass().getResource("/").getPath() + "WriteReadFileTest.qcML");
         writer.writeQcML(qcmlOther);
 
         // read the second object back in
         QcDBReader reader = new QcDBReader(emf);
-        QcML qcmlRead = reader.getQcML("WriteReadFileTest.qcML");
+        QcML qcmlRead = reader.getQcML(getClass().getResource("/").getPath() + "WriteReadFileTest.qcML");
         emf.close();
 
         assertEquality(qcmlOther, qcmlRead);
     }
+
+	@Test
+	public void qcML2qcDB() throws IOException, InterruptedException {
+		// write to a qcML file
+		QcMLFileWriter fileWriter = new QcMLFileWriter();
+		fileWriter.writeQcML(qcmlExpected);
+
+		// convert using the Python script
+		Process p = Runtime.getRuntime().exec("python " + getClass().getResource("/qcml2qcdb.py").getFile() + " " + getClass().getResource("/WriteReadFileTest.qcML").getFile());
+		p.waitFor();
+
+		// read the qcDB
+		EntityManagerFactory emf = QcDBManagerFactory.createSQLiteFactory(getClass().getResource("/WriteReadFileTest.db").getFile());
+		QcDBReader reader = new QcDBReader(emf);
+		QcML qcmlRead = reader.getQcML(getClass().getResource("/WriteReadFileTest.qcML").getFile());
+		emf.close();
+
+		assertEquality(qcmlExpected, qcmlRead);
+	}
 
     private void assertEquality(QcML qcmlExpected, QcML qcmlRead) {
         // compare both objects
@@ -367,6 +395,15 @@ public class WriteReadFileTest {
             assertNotNull(qaOther);
             assertEquals(qa.getId(), qaOther.getId());
             assertEquals(qa.isSet(), qaOther.isSet());
+
+			// MetaDataParameters
+			assertEquals(qa.getNumberOfMetaDataParameters(), qaOther.getNumberOfMetaDataParameters());
+			for(Iterator<MetaDataParameter> paramIt = qa.getMetaDataParameterIterator(); paramIt.hasNext(); ) {
+				MetaDataParameter param = paramIt.next();
+				MetaDataParameter paramOther = qaOther.getMetaDataParameter(param.getAccession());
+				assertNotNull(paramOther);
+				assertEquals(param, paramOther);
+			}
 
             // QualityParameters
             assertEquals(qa.getNumberOfQualityParameters(), qaOther.getNumberOfQualityParameters());
@@ -394,6 +431,15 @@ public class WriteReadFileTest {
             assertNotNull(qaOther);
             assertEquals(qa.getId(), qaOther.getId());
             assertEquals(qa.isSet(), qaOther.isSet());
+
+			// MetaDataParameters
+			assertEquals(qa.getNumberOfMetaDataParameters(), qaOther.getNumberOfMetaDataParameters());
+			for(Iterator<MetaDataParameter> paramIt = qa.getMetaDataParameterIterator(); paramIt.hasNext(); ) {
+				MetaDataParameter param = paramIt.next();
+				MetaDataParameter paramOther = qaOther.getMetaDataParameter(param.getAccession());
+				assertNotNull(paramOther);
+				assertEquals(param, paramOther);
+			}
 
             // QualityParameters
             assertEquals(qa.getNumberOfQualityParameters(), qaOther.getNumberOfQualityParameters());

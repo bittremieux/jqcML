@@ -18,7 +18,7 @@ public class QcDBReaderTest {
 
     @Before
     public void setUp() {
-        emf = QcDBManagerFactory.createMySQLFactory("localhost", "3306", "mydb", "root", null);
+        emf = QcDBManagerFactory.createMySQLFactory("localhost", "3306", "jqcmltest", "root", null);
         reader = new QcDBReader(emf);
     }
 

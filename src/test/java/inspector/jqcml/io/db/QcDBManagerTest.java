@@ -11,7 +11,7 @@ public class QcDBManagerTest {
     @Test
     public void createMySQLFactory_valid() {
         // create EMF
-        EntityManagerFactory emf = QcDBManagerFactory.createMySQLFactory("localhost", "3306", "mydb", "root", null);
+        EntityManagerFactory emf = QcDBManagerFactory.createMySQLFactory("localhost", "3306", "jqcmltest", "root", null);
         // test connection
         QcDBReader reader = new QcDBReader(emf);
         reader.getCv("qcML", "cv");
@@ -22,7 +22,7 @@ public class QcDBManagerTest {
     @Test
     public void createMySQLFactory_ipHost() {
         // create EMF
-        EntityManagerFactory emf = QcDBManagerFactory.createMySQLFactory("127.0.0.1", "3306", "mydb", "root", null);
+        EntityManagerFactory emf = QcDBManagerFactory.createMySQLFactory("127.0.0.1", "3306", "jqcmltest", "root", null);
         // test connection
         QcDBReader reader = new QcDBReader(emf);
         reader.getCv("qcML", "cv");
@@ -33,7 +33,7 @@ public class QcDBManagerTest {
     @Test
     public void createMySQLFactory_nullHost() {
         // create EMF
-        EntityManagerFactory emf = QcDBManagerFactory.createMySQLFactory(null, "3306", "mydb", "root", null);
+        EntityManagerFactory emf = QcDBManagerFactory.createMySQLFactory(null, "3306", "jqcmltest", "root", null);
         // test connection
         QcDBReader reader = new QcDBReader(emf);
         reader.getCv("qcML", "cv");
@@ -44,7 +44,7 @@ public class QcDBManagerTest {
     @Test
     public void createMySQLFactory_nullPort() {
         // create EMF
-        EntityManagerFactory emf = QcDBManagerFactory.createMySQLFactory("localhost", null, "mydb", "root", null);
+        EntityManagerFactory emf = QcDBManagerFactory.createMySQLFactory("localhost", null, "jqcmltest", "root", null);
         // test connection
         QcDBReader reader = new QcDBReader(emf);
         reader.getCv("qcML", "cv");
@@ -66,7 +66,7 @@ public class QcDBManagerTest {
     @Test(expected = NullPointerException.class)
     public void createMySQLFactory_nullUser() {
         // create EMF
-        EntityManagerFactory emf = QcDBManagerFactory.createMySQLFactory("localhost", "3306", "mydb", null, null);
+        EntityManagerFactory emf = QcDBManagerFactory.createMySQLFactory("localhost", "3306", "jqcmltest", null, null);
         // test connection
         QcDBReader reader = new QcDBReader(emf);
         reader.getCv("qcML", "cv");
@@ -77,7 +77,7 @@ public class QcDBManagerTest {
     @Test(expected = IllegalStateException.class)
     public void createMySQLFactory_invalidHost() {
         // create EMF
-        EntityManagerFactory emf = QcDBManagerFactory.createMySQLFactory("nonlocalhost", "3306", "mydb", "root", null);
+        EntityManagerFactory emf = QcDBManagerFactory.createMySQLFactory("nonlocalhost", "3306", "jqcmltest", "root", null);
         // test connection
         QcDBReader reader = new QcDBReader(emf);
         reader.getCv("qcML", "cv");
@@ -88,7 +88,7 @@ public class QcDBManagerTest {
     @Test(expected = IllegalStateException.class)
     public void createMySQLFactory_invalidPort() {
         // create EMF
-        EntityManagerFactory emf = QcDBManagerFactory.createMySQLFactory("localhost", "123456", "mydb", "root", null);
+        EntityManagerFactory emf = QcDBManagerFactory.createMySQLFactory("localhost", "123456", "jqcmltest", "root", null);
         // test connection
         QcDBReader reader = new QcDBReader(emf);
         reader.getCv("qcML", "cv");
@@ -110,7 +110,7 @@ public class QcDBManagerTest {
     @Test(expected = IllegalStateException.class)
     public void createMySQLFactory_invalidUser() {
         // create EMF
-        EntityManagerFactory emf = QcDBManagerFactory.createMySQLFactory("localhost", "3306", "mydb", "noUser", null);
+        EntityManagerFactory emf = QcDBManagerFactory.createMySQLFactory("localhost", "3306", "jqcmltest", "noUser", null);
         // test connection
         QcDBReader reader = new QcDBReader(emf);
         reader.getCv("qcML", "cv");
