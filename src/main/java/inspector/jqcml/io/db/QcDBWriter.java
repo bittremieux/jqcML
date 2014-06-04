@@ -37,6 +37,8 @@ public class QcDBWriter implements QcMLWriter {
 	
 	/**
 	 * Creates a QcDBWriter specified by the given {@link EntityManagerFactory}.
+	 *
+	 * @param factory  the EntityManagerFactory used to set up connections to the database
 	 */
 	public QcDBWriter(EntityManagerFactory factory) {
 		this.factory = factory;

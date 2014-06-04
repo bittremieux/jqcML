@@ -43,6 +43,8 @@ public class QcMLMarshaller {
     /**
      * Creates a JAXB {@link Marshaller} validated by the provided {@link javax.xml.validation.Schema},
      * using the required {@link JAXBContext} required for marshalling a qcML file.
+	 *
+	 * @param schema  the {@link Schema} used to perform validation during marshalling
      */
     public QcMLMarshaller(Schema schema) {
         this();

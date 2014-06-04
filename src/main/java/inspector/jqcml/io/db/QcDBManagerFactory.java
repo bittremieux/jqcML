@@ -39,7 +39,7 @@ public class QcDBManagerFactory {
 	 * @param port  the MySQL port. If {@code null}, 3306 is used as default.
 	 * @param db  the MySQL database schema
 	 * @param user  the MySQL user name
-	 * @param password  the MySQL password. If <code>null</null>, no password is used.
+	 * @param password  the MySQL password. If <code>null</code>, no password is used.
      * @return an EntityManagerFactory to be used to connect to the specified database
 	 */
 	public static EntityManagerFactory createMySQLFactory(String host, String port, String db, String user, String password) {

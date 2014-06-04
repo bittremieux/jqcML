@@ -63,6 +63,8 @@ public class QcMLUnmarshaller {
     /**
      * Creates a JAXB {@link Unmarshaller} validated by the provided {@link Schema},
      * using the required {@link JAXBContext} required for unmarshalling a qcML file.
+	 *
+	 * @param schema  the {@link Schema} used to perform validation during unmarshalling
      */
     public QcMLUnmarshaller(Schema schema) {
         this();
@@ -129,7 +131,8 @@ public class QcMLUnmarshaller {
 	
 	/**
 	 * Returns the specified object from the given XML snippet.
-	 * 
+	 *
+	 * @param <T>  The class of the object unmarshalled from the given XML snippet
 	 * @param xmlSnippet  The XML snippet that will be unmarshalled. This should be valid XML content.
 	 * @param type  The class of the object unmarshalled from the given XML snippet
 	 * @return The object unmarshalled from the given XML snippet

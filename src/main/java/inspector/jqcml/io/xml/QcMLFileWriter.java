@@ -96,7 +96,7 @@ public class QcMLFileWriter implements QcMLWriter {
 	/**
 	 * Unsupported operation for a QcMLFileWriter. Only possible for a QcDBWriter.
 	 * 
-	 * @throws UnsupportedOperationException
+	 * @throws UnsupportedOperationException  this operation is unsupported for XML-based qcML files
 	 */
 	@Override
 	public void writeCv(Cv cv) {
