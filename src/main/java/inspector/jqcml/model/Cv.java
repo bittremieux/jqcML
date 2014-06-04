@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
 // JAXB
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement(name="cv")
-@XmlType(name="cvType")
+@XmlType(name="CVType")
 // JPA
 @Entity
 @Table(name="cv")

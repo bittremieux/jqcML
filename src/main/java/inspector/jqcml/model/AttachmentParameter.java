@@ -44,7 +44,7 @@ import java.io.IOException;
 // JAXB
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement(name="attachment")
-@XmlType(name="attachmentType")
+@XmlType(name="AttachmentType")
 //JPA
 @Entity
 @Table(name="attachment_parameter")

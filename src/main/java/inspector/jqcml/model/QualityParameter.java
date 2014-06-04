@@ -40,7 +40,7 @@ import org.eclipse.persistence.oxm.annotations.XmlPath;
 // JAXB
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement(name="qualityParameter")
-@XmlType(name="qualityParameterType")
+@XmlType(name="QualityParameterType")
 //JPA
 @Entity
 @Table(name="quality_parameter")

@@ -24,7 +24,7 @@ import org.apache.logging.log4j.Logger;
  */
 // JAXB
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name="abstractParameter")
+@XmlType(name="AbstractParameterType")
 @XmlTransient
 @XmlSeeAlso( { CvParameter.class } )
 // JPA

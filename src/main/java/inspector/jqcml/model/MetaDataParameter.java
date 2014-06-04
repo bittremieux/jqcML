@@ -28,7 +28,7 @@ import org.apache.logging.log4j.Logger;
 // JAXB
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement(name="metaDataParameter")
-@XmlType(name="metaDataType")
+@XmlType(name="MetaDataType")
 //JPA
 @Entity
 @Table(name="meta_data_parameter")

@@ -27,7 +27,7 @@ import org.apache.logging.log4j.Logger;
  */
 // JAXB
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name="cvParameter")
+@XmlType(name="CVParamType")
 @XmlSeeAlso( { MetaDataParameter.class, QualityParameter.class, AttachmentParameter.class } )
 //JPA
 @MappedSuperclass
