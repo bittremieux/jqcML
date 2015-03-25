@@ -3,23 +3,6 @@
  */
 package inspector.jqcml.io.xml;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URL;
-import java.util.HashMap;
-import java.util.Iterator;
-
-import javax.xml.XMLConstants;
-import javax.xml.bind.JAXBIntrospector;
-import javax.xml.transform.stream.StreamSource;
-import javax.xml.validation.Schema;
-import javax.xml.validation.SchemaFactory;
-import javax.xml.validation.Validator;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.xml.sax.SAXException;
-
 import inspector.jqcml.io.QcMLReader;
 import inspector.jqcml.io.xml.index.QcMLIndexer;
 import inspector.jqcml.jaxb.adapters.QualityAssessmentAdapter;
@@ -27,6 +10,20 @@ import inspector.jqcml.model.Cv;
 import inspector.jqcml.model.QcML;
 import inspector.jqcml.model.QualityAssessment;
 import inspector.jqcml.model.QualityAssessmentList;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.xml.sax.SAXException;
+
+import javax.xml.XMLConstants;
+import javax.xml.bind.JAXBIntrospector;
+import javax.xml.transform.stream.StreamSource;
+import javax.xml.validation.Schema;
+import javax.xml.validation.SchemaFactory;
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
+import java.util.HashMap;
+import java.util.Iterator;
 
 /**
  * A qcML input reader which takes its input from an XML-based qcML file.
@@ -192,7 +189,7 @@ public class QcMLFileReader implements QcMLReader {
 				// resolve references to Cv's (unmarshal them if required)
 				// use a cache of unmarshalled Cv's because we might encounter the same Cv multiple times
 				HashMap<String, Cv> cvCache = new HashMap<>();
-				adapter.resolveReferences(result, cvCache, index, unmarshaller);
+				unmarshaller.resolveCvReferences(result, cvCache, index);
 				
 				// set the isSet flag based on the element name
 				if(unmarshaller.getIntrospector().getElementName(temp).getLocalPart().equals("setQuality"))

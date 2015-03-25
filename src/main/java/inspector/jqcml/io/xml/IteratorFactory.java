@@ -1,20 +1,18 @@
 package inspector.jqcml.io.xml;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.NoSuchElementException;
-
-import javax.xml.bind.JAXBIntrospector;
-import javax.xml.bind.annotation.adapters.XmlAdapter;
-
-import psidev.psi.tools.xxindex.index.IndexElement;
-
 import inspector.jqcml.io.xml.index.QcMLIndexer;
 import inspector.jqcml.jaxb.adapters.QualityAssessmentAdapter;
 import inspector.jqcml.model.Cv;
 import inspector.jqcml.model.QualityAssessment;
 import inspector.jqcml.model.QualityAssessmentList;
+import psidev.psi.tools.xxindex.index.IndexElement;
+
+import javax.xml.bind.JAXBIntrospector;
+import javax.xml.bind.annotation.adapters.XmlAdapter;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.NoSuchElementException;
 
 /**
  * A factory to create an {@link Iterator} over a specific qcML (sub)object.
@@ -90,7 +88,7 @@ class QualityAssessmentIterator extends QcMLAdapterIterator<QualityAssessmentLis
 			QualityAssessment result = adapter.unmarshal(qaList);
 			
 			// resolve references to Cv's (unmarshal them if required)
-			adapter.resolveReferences(result, cvCache, index, unmarshaller);
+			unmarshaller.resolveCvReferences(result, cvCache, index);
 			
 			// set the isSet flag based on the element name
 			if(unmarshaller.getIntrospector().getElementName(temp).getLocalPart().equals("setQuality"))

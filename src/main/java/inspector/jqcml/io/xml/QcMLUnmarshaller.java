@@ -1,13 +1,15 @@
 package inspector.jqcml.io.xml;
 
+import inspector.jqcml.io.xml.index.QcMLIndexer;
 import inspector.jqcml.jaxb.NamespaceFilter;
 import inspector.jqcml.jaxb.listener.QcMLListener;
-import inspector.jqcml.model.QcML;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.StringReader;
+import inspector.jqcml.model.*;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import org.xml.sax.XMLReader;
+import org.xml.sax.helpers.XMLReaderFactory;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -15,13 +17,12 @@ import javax.xml.bind.JAXBIntrospector;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.transform.sax.SAXSource;
 import javax.xml.validation.Schema;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
-import org.xml.sax.XMLReader;
-import org.xml.sax.helpers.XMLReaderFactory;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.StringReader;
+import java.util.Iterator;
+import java.util.Map;
 
 /**
  * A JAXB {@link Unmarshaller} specified with the required context to deserialize an XML-based qcML file into Java objects.
@@ -214,4 +215,52 @@ public class QcMLUnmarshaller {
 		return new SAXSource(namespaceFilter, is);
 	}
 
+	/**
+	 * Resolves references to a {@link Cv} for all parameters in the given {@link QualityAssessment}.
+	 *
+	 * If the referenced Cv has already been unmarshalled in the past and is available in the Cv cache, it isn't unmarshalled again.
+	 * If the referenced Cv isn't available in the cache, it is unmarshalled using the {@link QcMLUnmarshaller}.
+	 *
+	 * @param qa  the QualityAssessment containing the parameters for which the references will be resolved
+	 * @param cvCache  a cache containing the previously unmarshalled Cv's
+	 * @param index  the {@link QcMLIndexer} used to unmarshal
+	 */
+	public void resolveCvReferences(QualityAssessment qa, Map<String, Cv> cvCache, QcMLIndexer index) {
+		// for each QualityParameter
+		for(Iterator<QualityParameter> it = qa.getQualityParameterIterator(); it.hasNext(); )
+			resolveCvReferences(it.next(), cvCache, index);
+		// for each AttachmentParameter
+		for(Iterator<AttachmentParameter> it = qa.getAttachmentParameterIterator(); it.hasNext(); )
+			resolveCvReferences(it.next(), cvCache, index);
+	}
+
+	private void resolveCvReferences(CvParameter param, Map<String, Cv> cvCache, QcMLIndexer index) {
+		// cvRef
+		String cvId = param.getCvRefId();
+		Cv cvRef = resolveCvReference(cvId, cvCache, index);
+		param.setCvRef(cvRef);
+
+		// unitCvRef
+		String unitCvId = param.getUnitCvRefId();
+		Cv unitCvRef = resolveCvReference(unitCvId, cvCache, index);
+		param.setUnitCvRef(unitCvRef);
+	}
+
+	private Cv resolveCvReference(String id, Map<String, Cv> cvCache, QcMLIndexer index) {
+		if(cvCache.containsKey(id))	// Cv already unmarshalled and found in cache
+			return cvCache.get(id);
+		else {	// new Cv
+			// unmarshal the Cv
+			String xmlSnippet = index.getXMLSnippet(Cv.class, id);
+			if(xmlSnippet != null) {	// can be null if the Cv isn't found in the file
+				Cv cv = unmarshal(xmlSnippet, Cv.class);
+				// if this is a viable Cv, store it in the cache
+				if(cv != null) {
+					cvCache.put(id, cv);
+					return cv;
+				}
+			}
+		}
+		return null;
+	}
 }
