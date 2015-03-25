@@ -22,13 +22,15 @@ import java.util.Random;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-public class WriteReadFileTest {
+public class WriteReadFileIT {
+
+    private static final String PORT = System.getProperty("mysql.port");
 
     private Random random = new Random();
 
     private QcML qcmlExpected;
 
-    private String schema = "jqcmltest";
+    private String schema = "root";
 
     @Before
     public void setUp() {
@@ -249,7 +251,7 @@ public class WriteReadFileTest {
 
     @After
     public void clearMySQL() {
-        EntityManagerFactory emf = QcDBManagerFactory.createMySQLFactory("localhost", "3306", schema, "root", null);
+        EntityManagerFactory emf = QcDBManagerFactory.createMySQLFactory("localhost", PORT, schema, "root", "root");
         EntityManager em = emf.createEntityManager();
         em.getTransaction().begin();
         em.createNativeQuery("DROP TABLE table_value").executeUpdate();
@@ -294,7 +296,7 @@ public class WriteReadFileTest {
     @Test
     public void mysql_new() {
         // write the object to a MySQL database
-        EntityManagerFactory emf = QcDBManagerFactory.createMySQLFactory("localhost", "3306", schema, "root", null);
+        EntityManagerFactory emf = QcDBManagerFactory.createMySQLFactory("localhost", PORT, schema, "root", "root");
         QcDBWriter writer = new QcDBWriter(emf);
         writer.writeQcML(qcmlExpected);
 
@@ -309,7 +311,7 @@ public class WriteReadFileTest {
     @Test
     public void mysql_overwrite() {
         // write the object to a MySQL database
-        EntityManagerFactory emf = QcDBManagerFactory.createMySQLFactory("localhost", "3306", schema, "root", null);
+        EntityManagerFactory emf = QcDBManagerFactory.createMySQLFactory("localhost", PORT, schema, "root", "root");
         QcDBWriter writer = new QcDBWriter(emf);
         writer.writeQcML(qcmlExpected);
         // overwrite the first object

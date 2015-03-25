@@ -11,14 +11,16 @@ import java.util.Iterator;
 
 import static org.junit.Assert.*;
 
-public class QcDBReaderTest {
+public class QcDBReaderIT {
+
+    private static final String PORT = System.getProperty("mysql.port");
 
     private EntityManagerFactory emf;
 	private QcDBReader reader;
 
     @Before
     public void setUp() {
-        emf = QcDBManagerFactory.createMySQLFactory("localhost", "3306", "jqcmltest", "root", null);
+        emf = QcDBManagerFactory.createMySQLFactory("localhost", PORT, "root", "root", "root");
         reader = new QcDBReader(emf);
     }
 

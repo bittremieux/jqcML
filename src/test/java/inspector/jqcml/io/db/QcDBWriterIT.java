@@ -6,14 +6,16 @@ import org.junit.Test;
 
 import javax.persistence.EntityManagerFactory;
 
-public class QcDBWriterTest {
+public class QcDBWriterIT {
+
+    private static final String PORT = System.getProperty("mysql.port");
 
     private EntityManagerFactory emf;
 	private QcDBWriter writer;
 
 	@Before
 	public void setUp() {
-        emf = QcDBManagerFactory.createMySQLFactory("localhost", "3306", "mydb", "root", null);
+        emf = QcDBManagerFactory.createMySQLFactory("localhost", PORT, "root", "root", "root");
 		writer = new QcDBWriter(emf);
 	}
 
