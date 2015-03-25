@@ -1,10 +1,7 @@
 package inspector.jqcml.io.xml;
 
-import java.io.File;
-
 import inspector.jqcml.io.QcMLWriter;
 import inspector.jqcml.model.Cv;
-
 import inspector.jqcml.model.QcML;
 import inspector.jqcml.model.QualityAssessment;
 import inspector.jqcml.model.QualityParameter;
@@ -12,7 +9,10 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.File;
+
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 public class QcMLWriterTest {
 
@@ -29,12 +29,37 @@ public class QcMLWriterTest {
         file.delete();
 		file = new File("Invalid_version.qcML");
 		file.delete();
+        file = new File("Null_version.qcML");
+        file.delete();
     }
 
 	@Test(expected = NullPointerException.class)
 	public void writeQcML_null() {
 		writer.writeQcML(null);
 	}
+
+    @Test
+    public void writeQcML_nullVersion() {
+        QcML qcml = new QcML();
+        qcml.setFileName("Null_version.qcML");
+        qcml.setVersion(null);
+
+        Cv cv = new Cv("name", "uri", "cv");
+        qcml.addCv(cv);
+
+        QualityAssessment run = new QualityAssessment("run");
+        QualityParameter param = new QualityParameter("name", cv, "param");
+        param.setAccession("accession");
+        run.addQualityParameter(param);
+        qcml.addRunQuality(run);
+
+        assertNull(qcml.getVersion());
+
+        // warning should be logged
+        writer.writeQcML(qcml);
+
+        assertEquals(QcMLFileWriter.QCML_VERSION, qcml.getVersion());
+    }
 
 	@Test
 	public void writeQcML_invalidVersion() {

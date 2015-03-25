@@ -1,10 +1,19 @@
 package inspector.jqcml.io.db;
 
+import inspector.jqcml.io.xml.QcMLFileWriter;
+import inspector.jqcml.model.Cv;
+import inspector.jqcml.model.QcML;
+import inspector.jqcml.model.QualityAssessment;
+import inspector.jqcml.model.QualityParameter;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 public class QcDBWriterIT {
 
@@ -21,6 +30,27 @@ public class QcDBWriterIT {
 
 	@After
 	public void tearDown() {
+		EntityManager em = emf.createEntityManager();
+
+		em.getTransaction().begin();
+		em.createNativeQuery("SET FOREIGN_KEY_CHECKS = 0").executeUpdate();
+		em.createNativeQuery("TRUNCATE TABLE table_value").executeUpdate();
+		em.createNativeQuery("TRUNCATE TABLE table_row").executeUpdate();
+		em.createNativeQuery("TRUNCATE TABLE table_column").executeUpdate();
+		em.createNativeQuery("TRUNCATE TABLE table_attachment").executeUpdate();
+		em.createNativeQuery("TRUNCATE TABLE attachment_parameter").executeUpdate();
+		em.createNativeQuery("TRUNCATE TABLE threshold").executeUpdate();
+		em.createNativeQuery("TRUNCATE TABLE quality_parameter").executeUpdate();
+		em.createNativeQuery("TRUNCATE TABLE meta_data_parameter").executeUpdate();
+		em.createNativeQuery("TRUNCATE TABLE quality_assessment").executeUpdate();
+		em.createNativeQuery("TRUNCATE TABLE cv_list").executeUpdate();
+		em.createNativeQuery("TRUNCATE TABLE cv").executeUpdate();
+		em.createNativeQuery("TRUNCATE TABLE qcml").executeUpdate();
+		em.createNativeQuery("TRUNCATE TABLE pk_sequence").executeUpdate();
+		em.createNativeQuery("SET FOREIGN_KEY_CHECKS = 1").executeUpdate();
+		em.getTransaction().commit();
+		em.close();
+
         emf.close();
 	}
 
@@ -33,4 +63,51 @@ public class QcDBWriterIT {
     public void writeCv_null() {
         writer.writeCv(null);
     }
+
+	@Test
+	public void writeQcML_nullVersion() {
+		QcML qcml = new QcML();
+		qcml.setFileName("Null_version.qcML");
+		qcml.setVersion(null);
+
+		Cv cv = new Cv("name", "uri", "cv");
+		qcml.addCv(cv);
+
+		QualityAssessment run = new QualityAssessment("run");
+		QualityParameter param = new QualityParameter("name", cv, "param");
+		param.setAccession("accession");
+		run.addQualityParameter(param);
+		qcml.addRunQuality(run);
+
+		assertNull(qcml.getVersion());
+
+		// warning should be logged
+		writer.writeQcML(qcml);
+
+		assertEquals(QcMLFileWriter.QCML_VERSION, qcml.getVersion());
+	}
+
+	@Test
+	public void writeQcML_invalidVersion() {
+		QcML qcml = new QcML();
+		qcml.setFileName("Invalid_version.qcML");
+		String version = "My.version.number";
+		qcml.setVersion(version);
+
+		Cv cv = new Cv("name", "uri", "cv");
+		qcml.addCv(cv);
+
+		QualityAssessment run = new QualityAssessment("run");
+		QualityParameter param = new QualityParameter("name", cv, "param");
+		param.setAccession("accession");
+		run.addQualityParameter(param);
+		qcml.addRunQuality(run);
+
+		assertEquals(version, qcml.getVersion());
+
+		// warning should be logged
+		writer.writeQcML(qcml);
+
+		assertEquals(QcMLFileWriter.QCML_VERSION, qcml.getVersion());
+	}
 }
