@@ -4,7 +4,7 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-public class TableValueTest {
+public class TableTest {
 	
 	@Test
 	public void tableValueType() {

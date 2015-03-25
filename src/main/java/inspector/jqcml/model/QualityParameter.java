@@ -238,37 +238,6 @@ public class QualityParameter extends CvParameter {
 	}
 	
 	@Override
-	public boolean equals(Object other) {
-		if(other == null)
-			return false;
-		else if(other == this)
-			return true;
-		else if(!(other instanceof QualityParameter))
-			return false;
-		else {
-			QualityParameter qpOther = (QualityParameter) other;
-			boolean isEqual = true;
-			if(getName() != null) isEqual &= getName().equals(qpOther.getName()); else isEqual &= qpOther.getName() == null;
-			if(getDescription() != null) isEqual &= getDescription().equals(qpOther.getDescription()); else isEqual &= qpOther.getDescription() == null;
-			if(getValue() != null) isEqual &= getValue().equals(qpOther.getValue()); else isEqual &= qpOther.getValue() == null;
-			if(getUnitAccession() != null) isEqual &= getUnitAccession().equals(qpOther.getUnitAccession()); else isEqual &= qpOther.getUnitAccession() == null;
-			if(getUnitName() != null) isEqual &= getUnitName().equals(qpOther.getUnitName()); else isEqual &= qpOther.getUnitName() == null;
-			if(getUnitCvRef() != null) isEqual &= getUnitCvRef().equals(qpOther.getUnitCvRef()); else isEqual &= qpOther.getUnitCvRef() == null;
-			if(getCvRef() != null) isEqual &= getCvRef().equals(qpOther.getCvRef()); else isEqual &= qpOther.getCvRef() == null;
-			if(getAccession() != null) isEqual &= getAccession().equals(qpOther.getAccession()); else isEqual &= qpOther.getAccession() == null;
-			if(getId() != null) isEqual &= getId().equals(qpOther.getId()); else isEqual &= qpOther.getId() == null;
-            isEqual &= hasFlag() == qpOther.hasFlag();
-			isEqual &= getNumberOfThresholds() == qpOther.getNumberOfThresholds();
-            for(Iterator<Threshold> it = getThresholdIterator(); it.hasNext(); ) {
-                Threshold th = it.next();
-                isEqual &= th.equals(qpOther.getThreshold(th.getAccession()));
-            }
-
-			return isEqual;
-		}
-	}
-	
-	@Override
 	public String toString() {
 		return "qualityParameter <ID=\"" + getId() + "\" name=\"" + getName() + "\" value=\"" + getValue() + "\">";
 	}

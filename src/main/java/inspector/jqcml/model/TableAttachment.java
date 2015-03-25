@@ -241,35 +241,6 @@ public class TableAttachment {
 	public void setParentAttachment(AttachmentParameter parent) {
 		this.parentAttachment = parent;
 	}
-	
-	@Override
-    public boolean equals(Object other) {
-        if(other == null)
-            return false;
-        else if(other == this)
-            return true;
-        else if(!(other instanceof TableAttachment))
-            return false;
-        else {
-            TableAttachment tableOther = (TableAttachment) other;
-            if(getColumns().size() != tableOther.getColumns().size())
-                return false;
-            if(getRows().size() != tableOther.getRows().size())
-                return false;
-            for(Iterator<TableColumn> colIt = getColumns().iterator(); colIt.hasNext(); ) {
-                String column = colIt.next().getColumn();
-                for(Iterator<TableRow> rowIt = getRows().iterator(); rowIt.hasNext(); ) {
-                    int row = rowIt.next().getRow();
-                    TableValue value = getValue(column, row);
-                    TableValue valueOther = tableOther.getValue(column, row);
-                    if(!(value != null ? value.equals(valueOther) : valueOther == null))
-                        return false;
-                }
-            }
-
-            return true;
-        }
-    }
 
     @Override
 	public String toString() {

@@ -103,30 +103,6 @@ public class Threshold extends CvParameter {
 	}
 	
 	@Override
-	public boolean equals(Object other) {
-		if(other == null)
-			return false;
-		else if(other == this)
-			return true;
-		else if(!(other instanceof Threshold))
-			return false;
-		else {
-			Threshold thrOther = (Threshold) other;
-			boolean isEqual = true;
-			if(getName() != null) isEqual &= getName().equals(thrOther.getName()); else isEqual &= thrOther.getName() == null;
-			if(getValue() != null) isEqual &= getValue().equals(thrOther.getValue()); else isEqual &= thrOther.getValue() == null;
-			if(getUnitAccession() != null) isEqual &= getUnitAccession().equals(thrOther.getUnitAccession()); else isEqual &= thrOther.getUnitAccession() == null;
-			if(getUnitName() != null) isEqual &= getUnitName().equals(thrOther.getUnitName()); else isEqual &= thrOther.getUnitName() == null;
-			if(getUnitCvRef() != null) isEqual &= getUnitCvRef().equals(thrOther.getUnitCvRef()); else isEqual &= thrOther.getUnitCvRef() == null;
-			if(getCvRef() != null) isEqual &= getCvRef().equals(thrOther.getCvRef()); else isEqual &= thrOther.getCvRef() == null;
-			if(getAccession() != null) isEqual &= getAccession().equals(thrOther.getAccession()); else isEqual &= thrOther.getAccession() == null;
-			if(getFileName() != null) isEqual &= getFileName().equals(thrOther.getFileName()); else isEqual &= thrOther.getFileName() == null;
-
-			return isEqual;
-		}
-	}
-	
-	@Override
 	public String toString() {
 		return "threshold <name=\"" + getName() + "\" file name=\"" + getFileName() + "\">";
 	}

@@ -1,6 +1,7 @@
 package inspector.jqcml.model;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -134,21 +135,24 @@ public class TableRow {
 	public void setParentTable(TableAttachment parent) {
 		this.parentTable = parent;
 	}
-	
+
 	@Override
-	public boolean equals(Object other) {
-		if(other == null)
-			return false;
-		else if(other == this)
+	public boolean equals(Object o) {
+		if(this == o) {
 			return true;
-		else if(!(other instanceof TableRow))
-			return false;
-		else {
-			TableRow trOther = (TableRow) other;
-			return getRow() == trOther.getRow();
 		}
+		if(o == null || getClass() != o.getClass()) {
+			return false;
+		}
+		TableRow tableRow = (TableRow) o;
+		return Objects.equals(row, tableRow.row);
 	}
-	
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(row);
+	}
+
 	@Override
 	public String toString() {
 		return "TableRow <" + getRow() + ">";

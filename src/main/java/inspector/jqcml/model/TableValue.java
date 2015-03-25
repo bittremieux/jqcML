@@ -17,6 +17,8 @@ import javax.persistence.TableGenerator;
 
 import org.eclipse.persistence.annotations.Customizer;
 
+import java.util.Objects;
+
 /**
  * Represents a single value in a {@link TableAttachment}, specified by a certain {@link TableColumn} and {@link TableRow}.
  */
@@ -153,23 +155,27 @@ public class TableValue {
 	public void setRow(TableRow row) {
 		this.row = row;
 	}
-	
+
 	@Override
-	public boolean equals(Object other) {
-		if(other == null)
-			return false;
-		else if(other == this)
+	public boolean equals(Object o) {
+		if(this == o) {
 			return true;
-		else if(!(other instanceof TableValue))
-			return false;
-		else {
-			TableValue tvOther = (TableValue) other;
-			return getValue().equals(tvOther.getValue()) &&
-					getColumn().equals(tvOther.getColumn()) &&
-					getRow().equals(tvOther.getRow());
 		}
+		if(o == null || getClass() != o.getClass()) {
+			return false;
+		}
+		TableValue that = (TableValue) o;
+		return  Objects.equals(value, that.value) &&
+				Objects.equals(type, that.type) &&
+				Objects.equals(column, that.column) &&
+				Objects.equals(row, that.row);
 	}
-	
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(value, type, column, row);
+	}
+
 	@Override
 	public String toString() {
 		return "TableValue value=" + getValue() + " (column=" + column.getColumn() + ", row=" + row.getRow() + ")";

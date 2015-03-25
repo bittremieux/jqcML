@@ -226,34 +226,6 @@ public class AttachmentParameter extends CvParameter {
 	}
 	
 	@Override
-	public boolean equals(Object other) {
-		if(other == null)
-			return false;
-		else if(other == this)
-			return true;
-		else if(!(other instanceof AttachmentParameter))
-			return false;
-		else {
-			AttachmentParameter apOther = (AttachmentParameter) other;
-			boolean isEqual = true;
-			if(getName() != null) isEqual &= getName().equals(apOther.getName()); else isEqual &= apOther.getName() == null;
-			if(getDescription() != null) isEqual &= getDescription().equals(apOther.getDescription()); else isEqual &= apOther.getDescription() == null;
-			if(getValue() != null) isEqual &= getValue().equals(apOther.getValue()); else isEqual &= apOther.getValue() == null;
-			if(getUnitAccession() != null) isEqual &= getUnitAccession().equals(apOther.getUnitAccession()); else isEqual &= apOther.getUnitAccession() == null;
-			if(getUnitName() != null) isEqual &= getUnitName().equals(apOther.getUnitName()); else isEqual &= apOther.getUnitName() == null;
-			if(getUnitCvRef() != null) isEqual &= getUnitCvRef().equals(apOther.getUnitCvRef()); else isEqual &= apOther.getUnitCvRef() == null;
-			if(getCvRef() != null) isEqual &= getCvRef().equals(apOther.getCvRef()); else isEqual &= apOther.getCvRef() == null;
-			if(getAccession() != null) isEqual &= getAccession().equals(apOther.getAccession()); else isEqual &= apOther.getAccession() == null;
-			if(getId() != null) isEqual &= getId().equals(apOther.getId()); else isEqual &= apOther.getId() == null;
-			if(getQualityParameterRef() != null) isEqual &= getQualityParameterRef().equals(apOther.getQualityParameterRef()); else isEqual &= apOther.getQualityParameterRef() == null;
-			if(getBinary() != null) isEqual &= getBinary().equals(apOther.getBinary()); else isEqual &= apOther.getBinary() == null;
-			if(getTable() != null) isEqual &= getTable().equals(apOther.getTable()); else isEqual &= apOther.getTable() == null;
-			
-			return isEqual;
-		}
-	}
-	
-	@Override
 	public String toString() {
 		return "attachmentParameter <ID=\"" + getId() + "\" name=\"" + getName() + "\">";
 	}

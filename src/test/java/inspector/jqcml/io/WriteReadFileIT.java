@@ -16,10 +16,12 @@ import javax.xml.bind.DatatypeConverter;
 import java.io.File;
 import java.math.BigInteger;
 import java.util.Iterator;
+import java.util.Objects;
 import java.util.Random;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 public class WriteReadFileIT {
 
@@ -382,7 +384,7 @@ public class WriteReadFileIT {
 				MetaDataParameter param = paramIt.next();
 				MetaDataParameter paramOther = qaOther.getMetaDataParameter(param.getAccession());
 				assertNotNull(paramOther);
-				assertEquals(param, paramOther);
+				assertTrue(equalsParameters(param, paramOther));
 			}
 
             // QualityParameters
@@ -391,7 +393,7 @@ public class WriteReadFileIT {
                 QualityParameter param = paramIt.next();
                 QualityParameter paramOther = qaOther.getQualityParameter(param.getAccession());
                 assertNotNull(paramOther);
-                assertEquals(param, paramOther);
+                assertTrue(equalsParameters(param, paramOther));
             }
 
             // AttachmentParameters
@@ -400,7 +402,7 @@ public class WriteReadFileIT {
                 AttachmentParameter param = paramIt.next();
                 AttachmentParameter paramOther = qaOther.getAttachmentParameter(param.getAccession());
                 assertNotNull(paramOther);
-                assertEquals(param, paramOther);
+                assertTrue(equalsParameters(param, paramOther));
             }
         }
         // setQualities
@@ -418,7 +420,7 @@ public class WriteReadFileIT {
 				MetaDataParameter param = paramIt.next();
 				MetaDataParameter paramOther = qaOther.getMetaDataParameter(param.getAccession());
 				assertNotNull(paramOther);
-				assertEquals(param, paramOther);
+                assertTrue(equalsParameters(param, paramOther));
 			}
 
             // QualityParameters
@@ -427,7 +429,7 @@ public class WriteReadFileIT {
                 QualityParameter param = paramIt.next();
                 QualityParameter paramOther = qaOther.getQualityParameter(param.getAccession());
                 assertNotNull(paramOther);
-                assertEquals(param, paramOther);
+                assertTrue(equalsParameters(param, paramOther));
             }
 
             // AttachmentParameters
@@ -436,9 +438,85 @@ public class WriteReadFileIT {
                 AttachmentParameter param = paramIt.next();
                 AttachmentParameter paramOther = qaOther.getAttachmentParameter(param.getAccession());
                 assertNotNull(paramOther);
-                assertEquals(param, paramOther);
+                assertTrue(equalsParameters(param, paramOther));
             }
         }
     }
 
+    private boolean equalsParameters(AbstractParameter param1, AbstractParameter param2) {
+        boolean abstractEquals = Objects.equals(param1.getName(), param2.getName()) &&
+                Objects.equals(param1.getDescription(), param2.getDescription()) &&
+                Objects.equals(param1.getValue(), param2.getValue()) &&
+                Objects.equals(param1.getUnitAccession(), param2.getUnitAccession()) &&
+                Objects.equals(param1.getUnitName(), param2.getUnitName()) &&
+                Objects.equals(param1.getUnitCvRefId(), param2.getUnitCvRefId()) &&
+                Objects.equals(param1.getUnitCvRef(), param2.getUnitCvRef());
+        boolean metadataEquals = true;
+        if(param1 instanceof MetaDataParameter) {
+            if(param2 instanceof MetaDataParameter) {
+                metadataEquals = Objects.equals(((MetaDataParameter) param1).getId(), ((MetaDataParameter) param2).getId());
+            } else {
+                metadataEquals = false;
+            }
+        }
+        boolean qualityEquals = true;
+        if(param1 instanceof QualityParameter) {
+            if(param2 instanceof QualityParameter) {
+                QualityParameter qp1 = (QualityParameter) param1;
+                QualityParameter qp2 = (QualityParameter) param2;
+                qualityEquals = Objects.equals(qp1.getId(), qp2.getId()) &&
+                        Objects.equals(qp1.hasFlag(), qp2.hasFlag());
+                for(Iterator<Threshold> it = qp1.getThresholdIterator(); it.hasNext(); ) {
+                    Threshold tr1 = it.next();
+                    Threshold tr2 = qp2.getThreshold(tr1.getAccession());
+                    qualityEquals &= equalsParameters(tr1, tr2);
+                }
+            } else {
+                qualityEquals = false;
+            }
+        }
+        boolean attachmentEquals = true;
+        if(param1 instanceof AttachmentParameter) {
+            if(param2 instanceof AttachmentParameter) {
+                AttachmentParameter ap1 = (AttachmentParameter) param1;
+                AttachmentParameter ap2 = (AttachmentParameter) param2;
+                attachmentEquals = Objects.equals(ap1.getId(), ap2.getId()) &&
+                        Objects.equals(ap1.getBinary(), ap2.getBinary()) &&
+                        equalsTable(ap1.getTable(), ap2.getTable()) &&
+                        equalsParameters(ap1.getQualityParameterRef(), ap2.getQualityParameterRef());
+            } else {
+                attachmentEquals = false;
+            }
+        }
+        boolean thresholdEquals = true;
+        if(param1 instanceof Threshold) {
+            if(param2 instanceof Threshold) {
+                thresholdEquals = Objects.equals(((Threshold) param1).getFileName(), ((Threshold) param2).getFileName());
+            } else {
+                thresholdEquals = false;
+            }
+        }
+        return abstractEquals && metadataEquals && qualityEquals && attachmentEquals && thresholdEquals;
+    }
+
+    private boolean equalsTable(TableAttachment table1, TableAttachment table2) {
+        if(table1 == null && table2 == null) {
+            return true;
+        } else if(table1 == null || table2 == null) {
+            return false;
+        } else {
+            if(Objects.equals(table1.getRows(), table2.getRows()) &&
+                    Objects.equals(table1.getColumns(), table2.getColumns())) {
+                for(TableRow row : table1.getRows()) {
+                    for(TableColumn column : table1.getColumns()) {
+                        if(!table1.getValue(column.getColumn(), row.getRow()).equals(
+                                table2.getValue(column.getColumn(), row.getRow()))) {
+                            return false;
+                        }
+                    }
+                }
+            }
+            return true;
+        }
+    }
 }

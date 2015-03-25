@@ -17,6 +17,7 @@ import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
+import java.util.Objects;
 
 /**
  * Represents a controlled vocabulary.
@@ -191,22 +192,25 @@ public class Cv {
 	public void setId(String id) {
 		this.id = id;
 	}
-	
+
 	@Override
-	public boolean equals(Object other) {
-		if(other == null)
-			return false;
-		else if(other == this)
+	public boolean equals(Object o) {
+		if(this == o) {
 			return true;
-		else if(!(other instanceof Cv))
-			return false;
-		else {
-			Cv cvOther = (Cv) other;
-			return getFullName().equals(cvOther.getFullName()) &&
-					getVersion().equals(cvOther.getVersion()) &&
-					getUri().equals(cvOther.getUri()) &&
-					getId().equals(cvOther.getId());
 		}
+		if(!(o instanceof Cv)) {
+			return false;
+		}
+		Cv cv = (Cv) o;
+		return  Objects.equals(fullName, cv.fullName) &&
+				Objects.equals(version, cv.version) &&
+				Objects.equals(uri, cv.uri) &&
+				Objects.equals(id, cv.id);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(fullName, version, uri, id);
 	}
 
 	@Override

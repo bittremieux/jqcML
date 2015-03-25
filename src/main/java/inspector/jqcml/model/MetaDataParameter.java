@@ -112,35 +112,7 @@ public class MetaDataParameter extends CvParameter {
 	}
 	
 	@Override
-	public boolean equals(Object other) {
-		if(other == null)
-			return false;
-		else if(other == this)
-			return true;
-		else if(!(other instanceof MetaDataParameter))
-			return false;
-		else {
-			MetaDataParameter mpOther = (MetaDataParameter) other;
-			boolean isEqual = true;
-			if(getName() != null) isEqual &= getName().equals(mpOther.getName()); else isEqual &= mpOther.getName() == null;
-			if(getDescription() != null) isEqual &= getDescription().equals(mpOther.getDescription()); else isEqual &= mpOther.getDescription() == null;
-			if(getValue() != null) isEqual &= getValue().equals(mpOther.getValue()); else isEqual &= mpOther.getValue() == null;
-			if(getUnitAccession() != null) isEqual &= getUnitAccession().equals(mpOther.getUnitAccession()); else isEqual &= mpOther.getUnitAccession() == null;
-			if(getUnitName() != null) isEqual &= getUnitName().equals(mpOther.getUnitName()); else isEqual &= mpOther.getUnitName() == null;
-			if(getUnitCvRef() != null) isEqual &= getUnitCvRef().equals(mpOther.getUnitCvRef()); else isEqual &= mpOther.getUnitCvRef() == null;
-			if(getCvRef() != null) isEqual &= getCvRef().equals(mpOther.getCvRef()); else isEqual &= mpOther.getCvRef() == null;
-			if(getAccession() != null) isEqual &= getAccession().equals(mpOther.getAccession()); else isEqual &= mpOther.getAccession() == null;
-			if(getId() != null) isEqual &= getId().equals(mpOther.getId()); else isEqual &= mpOther.getId() == null;
-
-			return isEqual;
-		}
-	}
-	
-	@Override
 	public String toString() {
 		return "metadataParameter <ID=\"" + getId() + "\" name=\"" + getName() + "\" value=\"" + getValue() + "\">";
 	}
-	
-	
-
 }
