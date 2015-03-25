@@ -12,8 +12,10 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 /**
  * A qcML input reader which takes its input from a qcDB RDBMS.
@@ -202,27 +204,59 @@ public class QcDBReader implements QcMLReader {
     }
 
     /**
-     * Provides the functionality to retrieve arbitrary data from the qcDB.
+     * Returns arbitrary data retrieved by a custom JPQL query.
      *
-     * @param query  the query used to retrieve the data
-     * @param clss  the class type of the object returned by the query
+     * Use this method only for queries without any parameters.
+     * To include parameters, please use the {@link #getFromCustomQuery(String, Class, Map)} method.
+     *
+     * @param queryStr  the query used to retrieve the data, {@code null} returns {@code null}
+     * @param clss  the class type of the query result, {@code null} returns {@code null}
      * @param <T>  the type of the requested data
-     * @return a List containing all objects of the given type returned by the given query
+     * @return a {@code List} containing all objects of the given type returned by the given query
      */
-    public <T> List<T> getFromCustomQuery(String query, Class<T> clss) {
-        if(query != null) {
-            LOGGER.info("Execute custom query: {}", query);
+    public <T> List<T> getFromCustomQuery(String queryStr, Class<T> clss) {
+        return getFromCustomQuery(queryStr, clss, null);
+    }
+
+    /**
+     * Returns arbitrary data retrieved by a custom JPQL query.
+     *
+     * Parameters can be inserted in the query by making use of named parameters (:name).
+     * Named parameters have to be specified by their special form, preceded by a colon, in the query string.
+     * The parameters {@code Map} contains for each parameter the name (without the colon prefix) and the value that will be substituted.
+     *
+     * @param queryStr  the query used to retrieve the data, {@code null} returns {@code null}
+     * @param clss  the class type of the query result, {@code null} returns {@code null}
+     * @param parameters  a {@code Map} of named parameters and their values
+     * @param <T>  the type of the requested data
+     * @return a {@code List} containing all objects of the given type returned by the given query
+     */
+    public <T> List<T> getFromCustomQuery(String queryStr, Class<T> clss, Map<String, String> parameters) {
+        if(queryStr != null && clss != null) {
+            LOGGER.debug("Execute custom query: {}", queryStr);
 
             EntityManager entityManager = createEntityManager();
 
             try {
-                return entityManager.createQuery(query, clss).getResultList();
+                TypedQuery<T> query = entityManager.createQuery(queryStr, clss);
+
+                if(parameters != null) {
+                    for(Map.Entry<String, String> entry : parameters.entrySet()) {
+                        LOGGER.trace("Set parameter <{}>: <{}>", entry.getKey(), entry.getValue());
+                        query.setParameter(entry.getKey(), entry.getValue());
+                    }
+                }
+
+                List<T> result = query.getResultList();
+                LOGGER.trace("Result list retrieved from the database");
+
+                return result;
             } finally {
                 entityManager.close();
             }
         } else {
-            LOGGER.error("Unable to execute <null> query");
-            throw new NullPointerException("Unable to execute <null> query");
+            LOGGER.debug("Unable to execute <null> query");
+            return Collections.emptyList();
         }
     }
 
