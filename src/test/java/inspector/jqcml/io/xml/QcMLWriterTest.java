@@ -38,6 +38,23 @@ public class QcMLWriterTest {
 		writer.writeQcML(null);
 	}
 
+    @Test(expected = NullPointerException.class)
+    public void writeQcML_nullFileName() {
+        QcML qcml = new QcML();
+        qcml.setFileName(null);
+
+        Cv cv = new Cv("name", "uri", "cv");
+        qcml.addCv(cv);
+
+        QualityAssessment run = new QualityAssessment("run");
+        QualityParameter param = new QualityParameter("name", cv, "param");
+        param.setAccession("accession");
+        run.addQualityParameter(param);
+        qcml.addRunQuality(run);
+
+        writer.writeQcML(qcml);
+    }
+
     @Test
     public void writeQcML_nullVersion() {
         QcML qcml = new QcML();
