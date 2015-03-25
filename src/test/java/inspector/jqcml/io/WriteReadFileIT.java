@@ -35,7 +35,7 @@ public class WriteReadFileIT {
     public void setUp() {
         // create fully populated qcML object
         qcmlExpected = generateRandomQcML(getClass().getResource("/").getPath() + "WriteReadFileTest.qcML");
-	}
+    }
 
     private QcML generateRandomQcML(String name) {
         QcML qcml = new QcML();
@@ -52,22 +52,22 @@ public class WriteReadFileIT {
         // add runQualities
         for(int run = 0; run < 4; run++) {
             QualityAssessment runQuality = new QualityAssessment("run_" + run);
-			// add MetaDataParameters
-			for(int p = 0; p < Math.random() * 10; p++) {
-				MetaDataParameter param = new MetaDataParameter();
-				param.setName("metadata parameter " + p + " name");
-				param.setDescription("metadata parameter " + p + " description");
-				param.setValue("metadata value " + p);
-				param.setCvRef(qcml.getCv("cv_" + (int)(Math.random() * qcml.getNumberOfCvs())));
-				param.setAccession("accession " + p);
-				param.setId("r" + run + "_mp" + p);
-				runQuality.addMetaDataParameter(param);
-			}
+            // add MetaDataParameters
+            for(int p = 0; p < Math.random() * 10; p++) {
+                MetaDataParameter param = new MetaDataParameter();
+                param.setName("metadata parameter " + p + " name");
+                param.setDescription("metadata parameter " + p + " description");
+                param.setValue("metadata value " + p);
+                param.setCvRef(qcml.getCv("cv_" + (int)(Math.random() * qcml.getNumberOfCvs())));
+                param.setAccession("accession " + p);
+                param.setId("r" + run + "_mp" + p);
+                runQuality.addMetaDataParameter(param);
+            }
             // add QualityParameters
             for(int p = 0; p < Math.random() * 30; p++) {
                 QualityParameter param = new QualityParameter();
                 param.setName("quality parameter " + p + " name");
-				param.setDescription("quality parameter " + p + " description");
+                param.setDescription("quality parameter " + p + " description");
                 param.setValue("value " + p);
                 param.setUnitAccession("unit accession " + p);
                 param.setUnitName("unit name " + p);
@@ -80,7 +80,7 @@ public class WriteReadFileIT {
                     for(int t = 0; t < Math.random() * 3; t++) {
                         Threshold threshold = new Threshold();
                         threshold.setName("threshold " + p + " " + t);
-						threshold.setDescription("threshold " + p + " description");
+                        threshold.setDescription("threshold " + p + " description");
                         threshold.setValue("threshold value " + p + " " + t);
                         threshold.setUnitAccession("threshold unit accession " + p + " " + t);
                         threshold.setUnitName("threshold unit name " + p + " " + t);
@@ -99,7 +99,7 @@ public class WriteReadFileIT {
                     // binary attachment
                     AttachmentParameter binaryAttachment = new AttachmentParameter();
                     binaryAttachment.setName("binary attachment parameter name " + run + " " + p);
-					binaryAttachment.setDescription("binary attachment parameter " + p + " description");
+                    binaryAttachment.setDescription("binary attachment parameter " + p + " description");
                     binaryAttachment.setValue(Double.toString(Math.random() * 100000));
                     binaryAttachment.setUnitAccession("binary attachment unit accession " + run + " " + p);
                     binaryAttachment.setUnitName("binary attachment unit name " + run + " " + p);
@@ -116,7 +116,7 @@ public class WriteReadFileIT {
                     // tabular attachment
                     AttachmentParameter tableAttachment = new AttachmentParameter();
                     tableAttachment.setName("table attachment parameter name " + run + " " + p);
-					tableAttachment.setDescription("table attachment parameter " + p + " description");
+                    tableAttachment.setDescription("table attachment parameter " + p + " description");
                     tableAttachment.setValue("456");
                     tableAttachment.setUnitAccession("table attachment unit accession " + run + " " + p);
                     tableAttachment.setUnitName("table attachment unit name " + run + " " + p);
@@ -144,22 +144,22 @@ public class WriteReadFileIT {
         // add setQualities
         for(int set = 0; set < 2; set++) {
             QualityAssessment setQuality = new QualityAssessment("set_" + set);
-			// add MetaDataParameters
-			for(int p = 0; p < Math.random() * 10; p++) {
-				MetaDataParameter param = new MetaDataParameter();
-				param.setName("metadata parameter " + p + " name");
-				param.setDescription("metadata parameter " + p + " description");
-				param.setValue("metadata value " + p);
-				param.setCvRef(qcml.getCv("cv_" + (int)(Math.random() * qcml.getNumberOfCvs())));
-				param.setAccession("accession " + p);
-				param.setId("s" + set + "_mp" + p);
-				setQuality.addMetaDataParameter(param);
-			}
+            // add MetaDataParameters
+            for(int p = 0; p < Math.random() * 10; p++) {
+                MetaDataParameter param = new MetaDataParameter();
+                param.setName("metadata parameter " + p + " name");
+                param.setDescription("metadata parameter " + p + " description");
+                param.setValue("metadata value " + p);
+                param.setCvRef(qcml.getCv("cv_" + (int)(Math.random() * qcml.getNumberOfCvs())));
+                param.setAccession("accession " + p);
+                param.setId("s" + set + "_mp" + p);
+                setQuality.addMetaDataParameter(param);
+            }
             // add QualityParameters
             for(int p = 0; p < Math.random() * 20; p++) {
                 QualityParameter param = new QualityParameter();
                 param.setName("quality parameter " + p + " name");
-				param.setDescription("quality parameter " + p + " description");
+                param.setDescription("quality parameter " + p + " description");
                 param.setValue("value " + p);
                 param.setUnitAccession("unit accession " + p);
                 param.setUnitName("unit name " + p);
@@ -172,7 +172,7 @@ public class WriteReadFileIT {
                     for(int t = 0; t < Math.random() * 3; t++) {
                         Threshold threshold = new Threshold();
                         threshold.setName("threshold " + p + " " + t);
-						threshold.setDescription("threshold " + p + " description");
+                        threshold.setDescription("threshold " + p + " description");
                         threshold.setValue("threshold value " + p + " " + t);
                         threshold.setUnitAccession("threshold unit accession " + p + " " + t);
                         threshold.setUnitName("threshold unit name " + p + " " + t);
@@ -191,7 +191,7 @@ public class WriteReadFileIT {
                     // binary attachment
                     AttachmentParameter binaryAttachment = new AttachmentParameter();
                     binaryAttachment.setName("binary attachment parameter name " + set + " " + p);
-					binaryAttachment.setDescription("binary attachment parameter " + p + " description");
+                    binaryAttachment.setDescription("binary attachment parameter " + p + " description");
                     binaryAttachment.setValue(Double.toString(Math.random() * 100000));
                     binaryAttachment.setUnitAccession("binary attachment unit accession " + set + " " + p);
                     binaryAttachment.setUnitName("binary attachment unit name " + set + " " + p);
@@ -208,7 +208,7 @@ public class WriteReadFileIT {
                     // tabular attachment
                     AttachmentParameter tableAttachment = new AttachmentParameter();
                     tableAttachment.setName("table attachment parameter name " + set + " " + p);
-					tableAttachment.setDescription("table attachment parameter " + p + " description");
+                    tableAttachment.setDescription("table attachment parameter " + p + " description");
                     tableAttachment.setValue("456");
                     tableAttachment.setUnitAccession("table attachment unit accession " + set + " " + p);
                     tableAttachment.setUnitName("table attachment unit name " + set + " " + p);
@@ -238,14 +238,14 @@ public class WriteReadFileIT {
 
     @After
     public void deleteFile() {
-		if(getClass().getResource("/WriteReadFileTest.qcML") != null) {
-			File file = new File(getClass().getResource("/WriteReadFileTest.qcML").getFile());
-			file.delete();
-		}
-		if(getClass().getResource("/WriteReadFileTest.db") != null) {
-			File file = new File(getClass().getResource("/WriteReadFileTest.db").getFile());
-			file.delete();
-		}
+        if(getClass().getResource("/WriteReadFileTest.qcML") != null) {
+            File file = new File(getClass().getResource("/WriteReadFileTest.qcML").getFile());
+            file.delete();
+        }
+        if(getClass().getResource("/WriteReadFileTest.db") != null) {
+            File file = new File(getClass().getResource("/WriteReadFileTest.db").getFile());
+            file.delete();
+        }
     }
 
     @After
@@ -259,8 +259,8 @@ public class WriteReadFileIT {
         em.createNativeQuery("DROP TABLE table_attachment").executeUpdate();
         em.createNativeQuery("DROP TABLE attachment_parameter").executeUpdate();
         em.createNativeQuery("DROP TABLE threshold").executeUpdate();
-		em.createNativeQuery("DROP TABLE quality_parameter").executeUpdate();
-		em.createNativeQuery("DROP TABLE meta_data_parameter").executeUpdate();
+        em.createNativeQuery("DROP TABLE quality_parameter").executeUpdate();
+        em.createNativeQuery("DROP TABLE meta_data_parameter").executeUpdate();
         em.createNativeQuery("DROP TABLE quality_assessment").executeUpdate();
         em.createNativeQuery("DROP TABLE cv_list").executeUpdate();
         em.createNativeQuery("DROP TABLE cv").executeUpdate();
@@ -287,7 +287,7 @@ public class WriteReadFileIT {
         // read it back in
         QcMLFileReader reader = new QcMLFileReader();
         QcML qcmlRead = reader.getQcML(getClass().getResource("/WriteReadFileTest.qcML").getFile());
-		qcmlRead.setFileName(getClass().getResource("/").getPath() + "WriteReadFileTest.qcML");
+        qcmlRead.setFileName(getClass().getResource("/").getPath() + "WriteReadFileTest.qcML");
 
         assertEquality(qcmlExpected, qcmlRead);
     }
@@ -301,7 +301,7 @@ public class WriteReadFileIT {
 
         // read it back in
         QcDBReader reader = new QcDBReader(emf);
-		QcML qcmlRead = reader.getQcML(getClass().getResource("/").getPath() + "WriteReadFileTest.qcML");
+        QcML qcmlRead = reader.getQcML(getClass().getResource("/").getPath() + "WriteReadFileTest.qcML");
         emf.close();
 
         assertEquality(qcmlExpected, qcmlRead);
@@ -378,14 +378,14 @@ public class WriteReadFileIT {
             assertEquals(qa.getId(), qaOther.getId());
             assertEquals(qa.isSet(), qaOther.isSet());
 
-			// MetaDataParameters
-			assertEquals(qa.getNumberOfMetaDataParameters(), qaOther.getNumberOfMetaDataParameters());
-			for(Iterator<MetaDataParameter> paramIt = qa.getMetaDataParameterIterator(); paramIt.hasNext(); ) {
-				MetaDataParameter param = paramIt.next();
-				MetaDataParameter paramOther = qaOther.getMetaDataParameter(param.getAccession());
-				assertNotNull(paramOther);
-				assertTrue(equalsParameters(param, paramOther));
-			}
+            // MetaDataParameters
+            assertEquals(qa.getNumberOfMetaDataParameters(), qaOther.getNumberOfMetaDataParameters());
+            for(Iterator<MetaDataParameter> paramIt = qa.getMetaDataParameterIterator(); paramIt.hasNext(); ) {
+                MetaDataParameter param = paramIt.next();
+                MetaDataParameter paramOther = qaOther.getMetaDataParameter(param.getAccession());
+                assertNotNull(paramOther);
+                assertTrue(equalsParameters(param, paramOther));
+            }
 
             // QualityParameters
             assertEquals(qa.getNumberOfQualityParameters(), qaOther.getNumberOfQualityParameters());
@@ -414,14 +414,14 @@ public class WriteReadFileIT {
             assertEquals(qa.getId(), qaOther.getId());
             assertEquals(qa.isSet(), qaOther.isSet());
 
-			// MetaDataParameters
-			assertEquals(qa.getNumberOfMetaDataParameters(), qaOther.getNumberOfMetaDataParameters());
-			for(Iterator<MetaDataParameter> paramIt = qa.getMetaDataParameterIterator(); paramIt.hasNext(); ) {
-				MetaDataParameter param = paramIt.next();
-				MetaDataParameter paramOther = qaOther.getMetaDataParameter(param.getAccession());
-				assertNotNull(paramOther);
+            // MetaDataParameters
+            assertEquals(qa.getNumberOfMetaDataParameters(), qaOther.getNumberOfMetaDataParameters());
+            for(Iterator<MetaDataParameter> paramIt = qa.getMetaDataParameterIterator(); paramIt.hasNext(); ) {
+                MetaDataParameter param = paramIt.next();
+                MetaDataParameter paramOther = qaOther.getMetaDataParameter(param.getAccession());
+                assertNotNull(paramOther);
                 assertTrue(equalsParameters(param, paramOther));
-			}
+            }
 
             // QualityParameters
             assertEquals(qa.getNumberOfQualityParameters(), qaOther.getNumberOfQualityParameters());

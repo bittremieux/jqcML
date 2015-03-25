@@ -16,27 +16,27 @@ import static org.junit.Assert.assertNull;
 
 public class QcMLWriterTest {
 
-	private QcMLWriter writer;
+    private QcMLWriter writer;
 
-	@Before
-	public void setUp() {
-		writer = new QcMLFileWriter();
-	}
+    @Before
+    public void setUp() {
+        writer = new QcMLFileWriter();
+    }
 
     @After
     public void tearDown() {
         File file = new File("Invalid.qcML");
         file.delete();
-		file = new File("Invalid_version.qcML");
-		file.delete();
+        file = new File("Invalid_version.qcML");
+        file.delete();
         file = new File("Null_version.qcML");
         file.delete();
     }
 
-	@Test(expected = NullPointerException.class)
-	public void writeQcML_null() {
-		writer.writeQcML(null);
-	}
+    @Test(expected = NullPointerException.class)
+    public void writeQcML_null() {
+        writer.writeQcML(null);
+    }
 
     @Test(expected = NullPointerException.class)
     public void writeQcML_nullFileName() {
@@ -78,29 +78,29 @@ public class QcMLWriterTest {
         assertEquals(QcMLFileWriter.QCML_VERSION, qcml.getVersion());
     }
 
-	@Test
-	public void writeQcML_invalidVersion() {
-		QcML qcml = new QcML();
-		qcml.setFileName("Invalid_version.qcML");
-		String version = "My.version.number";
-		qcml.setVersion(version);
+    @Test
+    public void writeQcML_invalidVersion() {
+        QcML qcml = new QcML();
+        qcml.setFileName("Invalid_version.qcML");
+        String version = "My.version.number";
+        qcml.setVersion(version);
 
-		Cv cv = new Cv("name", "uri", "cv");
-		qcml.addCv(cv);
+        Cv cv = new Cv("name", "uri", "cv");
+        qcml.addCv(cv);
 
-		QualityAssessment run = new QualityAssessment("run");
-		QualityParameter param = new QualityParameter("name", cv, "param");
-		param.setAccession("accession");
-		run.addQualityParameter(param);
-		qcml.addRunQuality(run);
+        QualityAssessment run = new QualityAssessment("run");
+        QualityParameter param = new QualityParameter("name", cv, "param");
+        param.setAccession("accession");
+        run.addQualityParameter(param);
+        qcml.addRunQuality(run);
 
-		assertEquals(version, qcml.getVersion());
+        assertEquals(version, qcml.getVersion());
 
-		// warning should be logged
-		writer.writeQcML(qcml);
+        // warning should be logged
+        writer.writeQcML(qcml);
 
-		assertEquals(QcMLFileWriter.QCML_VERSION, qcml.getVersion());
-	}
+        assertEquals(QcMLFileWriter.QCML_VERSION, qcml.getVersion());
+    }
 
     @Test(expected = UnsupportedOperationException.class)
     public void writeCv_null() {

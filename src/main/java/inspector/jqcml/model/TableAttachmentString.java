@@ -10,28 +10,28 @@ import javax.xml.bind.annotation.XmlElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class TableAttachmentString {
 
-	@XmlElement(name="tableColumnTypes")
-	private String tableHeader;
-	@XmlElement(name="tableRowValues")
-	private String[] tableBody;
+    @XmlElement(name="tableColumnTypes")
+    private String tableHeader;
+    @XmlElement(name="tableRowValues")
+    private String[] tableBody;
 
-	public TableAttachmentString() {
-		// do nothing
-	}
+    public TableAttachmentString() {
+        // do nothing
+    }
 
-	public String getTableHeader() {
-		return tableHeader;
-	}
+    public String getTableHeader() {
+        return tableHeader;
+    }
 
-	public void setTableHeader(String header) {
-		this.tableHeader = header;
-	}
+    public void setTableHeader(String header) {
+        this.tableHeader = header;
+    }
 
-	public String[] getTableBody() {
-		return tableBody;
-	}
+    public String[] getTableBody() {
+        return tableBody.clone();
+    }
 
-	public void setTableBody(String[] body) {
-		this.tableBody = body;
-	}
+    public void setTableBody(String[] body) {
+        this.tableBody = body.clone();
+    }
 }

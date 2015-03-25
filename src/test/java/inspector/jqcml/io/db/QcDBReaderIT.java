@@ -18,7 +18,7 @@ public class QcDBReaderIT {
     private static final String PORT = System.getProperty("mysql.port");
 
     private EntityManagerFactory emf;
-	private QcDBReader reader;
+    private QcDBReader reader;
 
     @Before
     public void setUp() {

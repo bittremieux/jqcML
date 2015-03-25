@@ -8,16 +8,16 @@ import javax.xml.namespace.QName;
 
 @XmlRegistry
 public class ObjectFactory {
-	
-	private final String NAMESPACE = "http://www.prime-xs.eu/ms/qcml"; 
 
-	@XmlElementDecl(name="runQuality")
-	public JAXBElement<QualityAssessmentList> createRunQuality(QualityAssessmentList qaList) {
+    private static final String NAMESPACE = "http://www.prime-xs.eu/ms/qcml";
+
+    @XmlElementDecl(name="runQuality")
+    public JAXBElement<QualityAssessmentList> createRunQuality(QualityAssessmentList qaList) {
         return new JAXBElement<>(new QName(NAMESPACE, "runQuality"), QualityAssessmentList.class, qaList);
-	}
+    }
 
-	@XmlElementDecl(name="setQuality")
-	public JAXBElement<QualityAssessmentList> createSetQuality(QualityAssessmentList qaList) {
+    @XmlElementDecl(name="setQuality")
+    public JAXBElement<QualityAssessmentList> createSetQuality(QualityAssessmentList qaList) {
         return new JAXBElement<>(new QName(NAMESPACE, "setQuality"), QualityAssessmentList.class, qaList);
-	}
+    }
 }

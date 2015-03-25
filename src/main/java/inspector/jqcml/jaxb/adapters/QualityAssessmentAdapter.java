@@ -13,45 +13,46 @@ import java.util.Map;
  */
 public class QualityAssessmentAdapter extends XmlAdapter<QualityAssessmentList, QualityAssessment> {
 
-	@Override
-	public QualityAssessmentList marshal(QualityAssessment qa) throws Exception {
-		QualityAssessmentList qal = new QualityAssessmentList();
-		qal.setId(qa.getId());
-		qal.setSet(qa.isSet());
+    @Override
+    public QualityAssessmentList marshal(QualityAssessment qa) throws Exception {
+        QualityAssessmentList qal = new QualityAssessmentList();
+        qal.setId(qa.getId());
+        qal.setSet(qa.isSet());
 
-		for(Iterator<MetaDataParameter> it = qa.getMetaDataParameterIterator(); it.hasNext(); )
-			qal.addParameter(it.next());
-		for(Iterator<QualityParameter> it = qa.getQualityParameterIterator(); it.hasNext(); )
-			qal.addParameter(it.next());
-		for(Iterator<AttachmentParameter> it = qa.getAttachmentParameterIterator(); it.hasNext(); )
-			qal.addParameter(it.next());
-		
-		return qal;
-	}
+        for(Iterator<MetaDataParameter> it = qa.getMetaDataParameterIterator(); it.hasNext(); ) {
+            qal.addParameter(it.next());
+        }
+        for(Iterator<QualityParameter> it = qa.getQualityParameterIterator(); it.hasNext(); ) {
+            qal.addParameter(it.next());
+        }
+        for(Iterator<AttachmentParameter> it = qa.getAttachmentParameterIterator(); it.hasNext(); ) {
+            qal.addParameter(it.next());
+        }
 
-	@Override
-	public QualityAssessment unmarshal(QualityAssessmentList qal) throws Exception {
-		QualityAssessment qa = new QualityAssessment(qal.getId());
-		qa.setSet(qal.isSet());
-		
-		for(CvParameter param : qal) {
-			if(param instanceof MetaDataParameter) {
-				qa.addMetaDataParameter((MetaDataParameter) param);
-				// add bi-directional relationship
-				param.setParentQualityAssessment(qa);
-			}
-			else if(param instanceof QualityParameter) {
-				qa.addQualityParameter((QualityParameter) param);
-				// add bi-directional relationship
-				param.setParentQualityAssessment(qa);
-			}
-			else if(param instanceof AttachmentParameter) {
-				qa.addAttachmentParameter((AttachmentParameter) param);
-				// add bi-directional relationship
-				param.setParentQualityAssessment(qa);
-			}
-		}
-		
-		return qa;
-	}
+        return qal;
+    }
+
+    @Override
+    public QualityAssessment unmarshal(QualityAssessmentList qal) throws Exception {
+        QualityAssessment qa = new QualityAssessment(qal.getId());
+        qa.setSet(qal.isSet());
+
+        for(CvParameter param : qal) {
+            if(param instanceof MetaDataParameter) {
+                qa.addMetaDataParameter((MetaDataParameter) param);
+                // add bi-directional relationship
+                param.setParentQualityAssessment(qa);
+            } else if(param instanceof QualityParameter) {
+                qa.addQualityParameter((QualityParameter) param);
+                // add bi-directional relationship
+                param.setParentQualityAssessment(qa);
+            } else if(param instanceof AttachmentParameter) {
+                qa.addAttachmentParameter((AttachmentParameter) param);
+                // add bi-directional relationship
+                param.setParentQualityAssessment(qa);
+            }
+        }
+
+        return qa;
+    }
 }

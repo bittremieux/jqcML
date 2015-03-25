@@ -6,9 +6,9 @@ package inspector.jqcml.io.db;
 public class IdKeyPair {
 
     /** the (textual) unique identifier */
-	private String id;
+    private String id;
     /** the (integer) primary key in the database */
-	private int key;
+    private int key;
 
     /**
      * Constructs a mapping between the given key and identifier.
@@ -16,50 +16,50 @@ public class IdKeyPair {
      * @param id  the database key
      * @param key  the unique identifier
      */
-	public IdKeyPair(String id, int key) {
-		setId(id);
-		setKey(key);
-	}
+    public IdKeyPair(String id, int key) {
+        setId(id);
+        setKey(key);
+    }
 
     /**
      * Returns the identifier that constitutes the mapping.
      *
      * @return the identifier
      */
-	public String getId() {
-		return id;
-	}
+    public String getId() {
+        return id;
+    }
 
     /**
      * Sets the identifier that constitutes the mapping.
      *
      * @param id  the identifier
      */
-	public void setId(String id) {
-		this.id = id;
-	}
+    public void setId(String id) {
+        this.id = id;
+    }
 
     /**
      * Returns the key that constitutes the mapping.
      *
      * @return the key
      */
-	public int getKey() {
-		return key;
-	}
+    public int getKey() {
+        return key;
+    }
 
     /**
      * Sets the key that constitutes the mapping.
      *
      * @param key  the key
      */
-	public void setKey(int key) {
-		this.key = key;
-	}
-	
-	@Override
-	public String toString() {
-		return "(id="+ id + ", key=" + key + ")";
-	}
+    public void setKey(int key) {
+        this.key = key;
+    }
+
+    @Override
+    public String toString() {
+        return "(id="+ id + ", key=" + key + ")";
+    }
 
 }
