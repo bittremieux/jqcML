@@ -1,10 +1,9 @@
 package inspector.jqcml.jaxb.listener;
 
-import java.util.Iterator;
-
 import inspector.jqcml.model.*;
 
 import javax.xml.bind.Unmarshaller.Listener;
+import java.util.Iterator;
 
 /**
  * Resolves various references that couldn't be set automatically during unmarshalling.
@@ -97,58 +96,37 @@ public class QcMLListener extends Listener {
 	private void resolveCvRef(QcML qcml) {
 		// all runQuality's
 		for (Iterator<QualityAssessment> qaIt = qcml.getRunQualityIterator(); qaIt.hasNext(); ) {
-			QualityAssessment qa = qaIt.next();
-			// all MetaDataParameters
-			for(Iterator<MetaDataParameter> mpIt = qa.getMetaDataParameterIterator(); mpIt.hasNext(); ) {
-				MetaDataParameter mp = mpIt.next();
-				mp.setCvRef(qcml.getCv(mp.getCvRefId()));
-			}
-			// all QualityParameters
-			for(Iterator<QualityParameter> qpIt = qa.getQualityParameterIterator(); qpIt.hasNext(); ) {
-				QualityParameter qp = qpIt.next();
-				qp.setCvRef(qcml.getCv(qp.getCvRefId()));
-				qp.setUnitCvRef(qcml.getCv(qp.getUnitCvRefId()));
-				// threshold
-				for(Iterator<Threshold> thresholdIt = qp.getThresholdIterator(); thresholdIt.hasNext(); ) {
-					Threshold threshold = thresholdIt.next();
-					threshold.setCvRef(qcml.getCv(threshold.getCvRefId()));
-					threshold.setUnitCvRef(qcml.getCv(threshold.getUnitCvRefId()));
-				}
-			}
-			// all AttachmentParameters
-			for(Iterator<AttachmentParameter> apIt = qa.getAttachmentParameterIterator(); apIt.hasNext(); ) {
-				AttachmentParameter ap = apIt.next();
-				ap.setCvRef(qcml.getCv(ap.getCvRefId()));
-				ap.setUnitCvRef(qcml.getCv(ap.getUnitCvRefId()));
-			}
+			resolveCvRef(qcml, qaIt.next());
 		}
 		// all setQuality's
 		for (Iterator<QualityAssessment> qaIt = qcml.getSetQualityIterator(); qaIt.hasNext(); ) {
-			QualityAssessment qa = qaIt.next();
-			// all MetaDataParameters
-			for(Iterator<MetaDataParameter> mpIt = qa.getMetaDataParameterIterator(); mpIt.hasNext(); ) {
-				MetaDataParameter mp = mpIt.next();
-				mp.setCvRef(qcml.getCv(mp.getCvRefId()));
-			}
-			// all QualityParameters
-			for(Iterator<QualityParameter> qpIt = qa.getQualityParameterIterator(); qpIt.hasNext(); ) {
-				QualityParameter qp = qpIt.next();
-				qp.setCvRef(qcml.getCv(qp.getCvRefId()));
-				qp.setUnitCvRef(qcml.getCv(qp.getUnitCvRefId()));
-				// threshold
-				for(Iterator<Threshold> thresholdIt = qp.getThresholdIterator(); thresholdIt.hasNext(); ) {
-					Threshold threshold = thresholdIt.next();
-					threshold.setCvRef(qcml.getCv(threshold.getCvRefId()));
-					threshold.setUnitCvRef(qcml.getCv(threshold.getUnitCvRefId()));
-				}
-			}
-			// all AttachmentParameters
-			for(Iterator<AttachmentParameter> apIt = qa.getAttachmentParameterIterator(); apIt.hasNext(); ) {
-				AttachmentParameter ap = apIt.next();
-				ap.setCvRef(qcml.getCv(ap.getCvRefId()));
-				ap.setUnitCvRef(qcml.getCv(ap.getUnitCvRefId()));
-			}
+			resolveCvRef(qcml, qaIt.next());
 		}
 	}
 
+	private void resolveCvRef(QcML qcml, QualityAssessment qa) {
+		// all MetaDataParameters
+		for(Iterator<MetaDataParameter> mpIt = qa.getMetaDataParameterIterator(); mpIt.hasNext(); ) {
+            MetaDataParameter mp = mpIt.next();
+            mp.setCvRef(qcml.getCv(mp.getCvRefId()));
+        }
+		// all QualityParameters
+		for(Iterator<QualityParameter> qpIt = qa.getQualityParameterIterator(); qpIt.hasNext(); ) {
+            QualityParameter qp = qpIt.next();
+            qp.setCvRef(qcml.getCv(qp.getCvRefId()));
+            qp.setUnitCvRef(qcml.getCv(qp.getUnitCvRefId()));
+            // threshold
+            for(Iterator<Threshold> thresholdIt = qp.getThresholdIterator(); thresholdIt.hasNext(); ) {
+                Threshold threshold = thresholdIt.next();
+                threshold.setCvRef(qcml.getCv(threshold.getCvRefId()));
+                threshold.setUnitCvRef(qcml.getCv(threshold.getUnitCvRefId()));
+            }
+        }
+		// all AttachmentParameters
+		for(Iterator<AttachmentParameter> apIt = qa.getAttachmentParameterIterator(); apIt.hasNext(); ) {
+            AttachmentParameter ap = apIt.next();
+            ap.setCvRef(qcml.getCv(ap.getCvRefId()));
+            ap.setUnitCvRef(qcml.getCv(ap.getUnitCvRefId()));
+        }
+	}
 }

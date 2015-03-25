@@ -390,71 +390,52 @@ public class QcML {
 			Cv cv = getCv(id);
 			if(cv != null) {
 				boolean canDelete = true;
-	
 				// check all runQualities
 				for(Iterator<QualityAssessment> qaIt = getRunQualityIterator(); canDelete && qaIt.hasNext(); ) {
-					QualityAssessment qa = qaIt.next();
-					// check all MetaDataParameters
-					for(Iterator<MetaDataParameter> paramIt = qa.getMetaDataParameterIterator(); canDelete && paramIt.hasNext(); ) {
-						MetaDataParameter param = paramIt.next();
-						canDelete &= param.getCvRef() != null ? !param.getCvRef().equals(cv) : canDelete;
-					}
-					// check all QualityParameters
-					for(Iterator<QualityParameter> paramIt = qa.getQualityParameterIterator(); canDelete && paramIt.hasNext(); ) {
-						QualityParameter param = paramIt.next();
-						canDelete &= param.getCvRef() != null ? !param.getCvRef().equals(cv) : canDelete;
-						canDelete &= param.getUnitCvRef() != null ? !param.getUnitCvRef().equals(cv) : canDelete;
-						// check all Thresholds
-						for(Iterator<Threshold> thrIt = param.getThresholdIterator(); canDelete && thrIt.hasNext(); ) {
-							Threshold thr = thrIt.next();
-							canDelete &= thr.getCvRef() != null ? !thr.getCvRef().equals(cv) : canDelete;
-							canDelete &= thr.getUnitCvRef() != null ? !thr.getUnitCvRef().equals(cv) : canDelete;
-						}
-					}
-					// check all AttachmentParameters
-					for(Iterator<AttachmentParameter> paramIt = qa.getAttachmentParameterIterator(); canDelete && paramIt.hasNext(); ) {
-						AttachmentParameter param = paramIt.next();
-						canDelete &= param.getCvRef() != null ? !param.getCvRef().equals(cv) : canDelete;
-						canDelete &= param.getUnitCvRef() != null ? !param.getUnitCvRef().equals(cv) : canDelete;
-					}
+					canDelete = canDeleteCv(cv, qaIt.next());
 				}
 				// check all setQualities
 				for(Iterator<QualityAssessment> qaIt = getSetQualityIterator(); canDelete && qaIt.hasNext(); ) {
-					QualityAssessment qa = qaIt.next();
-					// check all MetaDataParameters
-					for(Iterator<MetaDataParameter> paramIt = qa.getMetaDataParameterIterator(); canDelete && paramIt.hasNext(); ) {
-						MetaDataParameter param = paramIt.next();
-						canDelete &= param.getCvRef() != null ? !param.getCvRef().equals(cv) : canDelete;
-					}
-					// check all QualityParameters
-					for(Iterator<QualityParameter> paramIt = qa.getQualityParameterIterator(); canDelete && paramIt.hasNext(); ) {
-						QualityParameter param = paramIt.next();
-						canDelete &= param.getCvRef() != null ? !param.getCvRef().equals(cv) : canDelete;
-						canDelete &= param.getUnitCvRef() != null ? !param.getUnitCvRef().equals(cv) : canDelete;
-						// check all Thresholds
-						for(Iterator<Threshold> thrIt = param.getThresholdIterator(); canDelete && thrIt.hasNext(); ) {
-							Threshold thr = thrIt.next();
-							canDelete &= thr.getCvRef() != null ? !thr.getCvRef().equals(cv) : canDelete;
-							canDelete &= thr.getUnitCvRef() != null ? !thr.getUnitCvRef().equals(cv) : canDelete;
-						}
-					}
-					// check all AttachmentParameters
-					for(Iterator<AttachmentParameter> paramIt = qa.getAttachmentParameterIterator(); canDelete && paramIt.hasNext(); ) {
-						AttachmentParameter param = paramIt.next();
-						canDelete &= param.getCvRef() != null ? !param.getCvRef().equals(cv) : canDelete;
-						canDelete &= param.getUnitCvRef() != null ? !param.getUnitCvRef().equals(cv) : canDelete;
-					}
+					canDelete = canDeleteCv(cv, qaIt.next());
 				}
 			
 				// remove the Cv
-				if(canDelete)
+				if(canDelete) {
 					cvList.remove(id);
-				else {
+				} else {
 					logger.error("Can't delete {} because it is still referenced by a child element", cv);
 					throw new IllegalArgumentException("Can't delete " + cv + " because it is still referenced by a child element");
 				}
 			}
 		}
+	}
+
+	private boolean canDeleteCv(Cv cv, QualityAssessment qa) {
+		boolean canDelete = true;
+		// check all MetaDataParameters
+		for(Iterator<MetaDataParameter> paramIt = qa.getMetaDataParameterIterator(); canDelete && paramIt.hasNext(); ) {
+            MetaDataParameter param = paramIt.next();
+			canDelete = param.getCvRef() == null || !param.getCvRef().equals(cv);
+        }
+		// check all QualityParameters
+		for(Iterator<QualityParameter> paramIt = qa.getQualityParameterIterator(); canDelete && paramIt.hasNext(); ) {
+            QualityParameter param = paramIt.next();
+			canDelete = (param.getCvRef() == null || !param.getCvRef().equals(cv)) &&
+						(param.getUnitCvRef() == null || !param.getUnitCvRef().equals(cv));
+            // check all Thresholds
+            for(Iterator<Threshold> thrIt = param.getThresholdIterator(); canDelete && thrIt.hasNext(); ) {
+                Threshold thr = thrIt.next();
+				canDelete = (thr.getCvRef() == null || !thr.getCvRef().equals(cv)) &&
+							(thr.getUnitCvRef() == null || !thr.getUnitCvRef().equals(cv));
+            }
+        }
+		// check all AttachmentParameters
+		for(Iterator<AttachmentParameter> paramIt = qa.getAttachmentParameterIterator(); canDelete && paramIt.hasNext(); ) {
+            AttachmentParameter param = paramIt.next();
+			canDelete = (param.getCvRef() == null || !param.getCvRef().equals(cv)) &&
+						(param.getUnitCvRef() == null || !param.getUnitCvRef().equals(cv));
+        }
+		return canDelete;
 	}
 
 	@Override
