@@ -14,7 +14,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.xml.bind.DatatypeConverter;
 import java.io.File;
-import java.io.IOException;
 import java.math.BigInteger;
 import java.util.Iterator;
 import java.util.Random;
@@ -29,8 +28,6 @@ public class WriteReadFileIT {
     private Random random = new Random();
 
     private QcML qcmlExpected;
-
-    private String schema = "root";
 
     @Before
     public void setUp() {
@@ -251,7 +248,7 @@ public class WriteReadFileIT {
 
     @After
     public void clearMySQL() {
-        EntityManagerFactory emf = QcDBManagerFactory.createMySQLFactory("localhost", PORT, schema, "root", "root");
+        EntityManagerFactory emf = QcDBManagerFactory.createMySQLFactory("localhost", PORT, "root", "root", "root");
         EntityManager em = emf.createEntityManager();
         em.getTransaction().begin();
         em.createNativeQuery("DROP TABLE table_value").executeUpdate();
@@ -296,7 +293,7 @@ public class WriteReadFileIT {
     @Test
     public void mysql_new() {
         // write the object to a MySQL database
-        EntityManagerFactory emf = QcDBManagerFactory.createMySQLFactory("localhost", PORT, schema, "root", "root");
+        EntityManagerFactory emf = QcDBManagerFactory.createMySQLFactory("localhost", PORT, "root", "root", "root");
         QcDBWriter writer = new QcDBWriter(emf);
         writer.writeQcML(qcmlExpected);
 
@@ -311,7 +308,7 @@ public class WriteReadFileIT {
     @Test
     public void mysql_overwrite() {
         // write the object to a MySQL database
-        EntityManagerFactory emf = QcDBManagerFactory.createMySQLFactory("localhost", PORT, schema, "root", "root");
+        EntityManagerFactory emf = QcDBManagerFactory.createMySQLFactory("localhost", PORT, "root", "root", "root");
         QcDBWriter writer = new QcDBWriter(emf);
         writer.writeQcML(qcmlExpected);
         // overwrite the first object
@@ -358,25 +355,6 @@ public class WriteReadFileIT {
 
         assertEquality(qcmlOther, qcmlRead);
     }
-
-	@Test
-	public void qcML2qcDB() throws IOException, InterruptedException {
-		// write to a qcML file
-		QcMLFileWriter fileWriter = new QcMLFileWriter();
-		fileWriter.writeQcML(qcmlExpected);
-
-		// convert using the Python script
-		Process p = Runtime.getRuntime().exec("python " + getClass().getResource("/qcml2qcdb.py").getFile() + " " + getClass().getResource("/WriteReadFileTest.qcML").getFile());
-		p.waitFor();
-
-		// read the qcDB
-		EntityManagerFactory emf = QcDBManagerFactory.createSQLiteFactory(getClass().getResource("/WriteReadFileTest.db").getFile());
-		QcDBReader reader = new QcDBReader(emf);
-		QcML qcmlRead = reader.getQcML(getClass().getResource("/WriteReadFileTest.qcML").getFile());
-		emf.close();
-
-		assertEquality(qcmlExpected, qcmlRead);
-	}
 
     private void assertEquality(QcML qcmlExpected, QcML qcmlRead) {
         // compare both objects
