@@ -65,6 +65,21 @@ public class QcDBWriterIT {
     }
 
 	@Test
+	public void writeCv_new() {
+		Cv cv = new Cv("name", "uri", "id");
+		writer.writeCv(cv);
+	}
+
+	@Test
+	public void writeCv_duplicate() {
+		Cv cv = new Cv("name", "uri", "id");
+		writer.writeCv(cv);
+
+		Cv cvOther = new Cv("other name", "other uri", "id");
+		writer.writeCv(cvOther);
+	}
+
+	@Test
 	public void writeQcML_nullVersion() {
 		QcML qcml = new QcML();
 		qcml.setFileName("Null_version.qcML");

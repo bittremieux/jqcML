@@ -1,29 +1,15 @@
 package inspector.jqcml.io.db;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-
-import javax.persistence.EntityExistsException;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.PersistenceException;
-import javax.persistence.RollbackException;
-import javax.persistence.TypedQuery;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import inspector.jqcml.io.QcMLWriter;
-import inspector.jqcml.model.AttachmentParameter;
 import inspector.jqcml.model.Cv;
 import inspector.jqcml.model.QcML;
 import inspector.jqcml.model.QualityAssessment;
-import inspector.jqcml.model.QualityParameter;
-import inspector.jqcml.model.Threshold;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import javax.persistence.*;
+import java.util.*;
+import java.util.Map.Entry;
 
 /**
  * A qcML output writer which writes to a qcDB RDBMS.
@@ -232,6 +218,7 @@ public class QcDBWriter implements QcMLWriter {
 	// This method has been made unavailable because the DB constraints
 	// enforce a valid foreign key to a qcML object for each QualityAssessment.
 	// Therefore, the valid execution of this method can't be guaranteed.
+    //TODO: re-evaluate or remove this
 	/*@Override
 	public void writeQualityAssessment(QualityAssessment qa) {
 		LOGGER.info("Store QualityAssessment <id={}>", qa.getId());
@@ -291,14 +278,14 @@ public class QcDBWriter implements QcMLWriter {
 		finally {
 			entityManager.close();
 		}
-	}*/
+	}
 	
 	/**
 	 * Fill in the primary keys for all cvRefs and unitCvRefs referenced in the child elements of the given QualityAssessment.
 	 * 
 	 * @param cvIds  map containing all ID-primary key pairs for the Cv's
 	 * @param qa  the QualityAssessment for which the primary keys of the (unit) cv refs in the child elements will be checked
-	 */
+	 *
 	private void mergeCv(Map<String, Integer> cvIds, QualityAssessment qa) {
 		// check all QualityParameters in this QualityAssessment
 		for(Iterator<QualityParameter> it = qa.getQualityParameterIterator(); it.hasNext(); ) {
@@ -344,7 +331,7 @@ public class QcDBWriter implements QcMLWriter {
 					ap.getUnitCvRef().setPrimaryKey(key);
 			}
 		}
-	}
+	}*/
 
 	/**
 	 * Retrieve the combination of all ID's and primary keys for a specific table.
