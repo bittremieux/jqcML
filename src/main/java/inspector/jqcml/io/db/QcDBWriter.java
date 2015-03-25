@@ -97,19 +97,18 @@ public class QcDBWriter implements QcMLWriter {
                 else if(qcml.getNumberOfSetQualities() > 0)
                     querySB.append(" WHERE qa.id IN :sqId");
                 TypedQuery<IdKeyPair> qaQuery = entityManager.createQuery(querySB.toString(), IdKeyPair.class);
-                // try to fill in the parameters
-                try {
+                // fill the required parameters
+                if(qcml.getNumberOfRunQualities() > 0) {
                     ArrayList<String> rqId = new ArrayList<>(qcml.getNumberOfRunQualities());
                     for(Iterator<QualityAssessment> it = qcml.getRunQualityIterator(); it.hasNext(); )
                         rqId.add(it.next().getId());
                     qaQuery.setParameter("rqId", rqId);
+                }
+                if(qcml.getNumberOfSetQualities() > 0) {
                     ArrayList<String> sqId = new ArrayList<>(qcml.getNumberOfSetQualities());
                     for(Iterator<QualityAssessment> it = qcml.getSetQualityIterator(); it.hasNext(); )
                         sqId.add(it.next().getId());
                     qaQuery.setParameter("sqId", sqId);
-                }
-                catch (IllegalArgumentException iae) {
-                    // expected exception if parameter :rqId or :sqId isn't present
                 }
                 Map<String, Integer> qaIds = getIdMap(qaQuery);
                 if(qaIds.size() > 0) {	// only start a transaction if required

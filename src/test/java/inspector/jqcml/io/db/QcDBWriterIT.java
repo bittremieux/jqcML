@@ -1,5 +1,6 @@
 package inspector.jqcml.io.db;
 
+import inspector.jqcml.io.xml.QcMLFileReader;
 import inspector.jqcml.io.xml.QcMLFileWriter;
 import inspector.jqcml.model.Cv;
 import inspector.jqcml.model.QcML;
@@ -124,5 +125,51 @@ public class QcDBWriterIT {
 		writer.writeQcML(qcml);
 
 		assertEquals(QcMLFileWriter.QCML_VERSION, qcml.getVersion());
+	}
+
+	@Test
+	public void writeQcML_noSetQuality() {
+		QcMLFileReader fileReader = new QcMLFileReader();
+		QcML qcml = fileReader.getQcML(getClass().getResource("/CvParameterTest.qcML").getFile());
+
+		qcml.removeAllSetQualities();
+
+		writer.writeQcML(qcml);
+	}
+
+	@Test
+	public void writeQcML_noRunQuality() {
+		QcMLFileReader fileReader = new QcMLFileReader();
+		QcML qcml = fileReader.getQcML(getClass().getResource("/CvParameterTest.qcML").getFile());
+
+		qcml.removeAllRunQualities();
+
+		writer.writeQcML(qcml);
+	}
+
+	@Test
+	public void writeQcML_duplicateRunQuality() {
+		QcMLFileReader fileReader = new QcMLFileReader();
+		QcML qcml = fileReader.getQcML(getClass().getResource("/CvParameterTest.qcML").getFile());
+		writer.writeQcML(qcml);
+
+		QcML qcmlNew = new QcML();
+		qcmlNew.setFileName("new.qcml");
+		qcml.addRunQuality(new QualityAssessment("run_1"));
+
+		writer.writeQcML(qcmlNew);
+	}
+
+	@Test
+	public void writeQcML_duplicateSetQuality() {
+		QcMLFileReader fileReader = new QcMLFileReader();
+		QcML qcml = fileReader.getQcML(getClass().getResource("/CvParameterTest.qcML").getFile());
+		writer.writeQcML(qcml);
+
+		QcML qcmlNew = new QcML();
+		qcmlNew.setFileName("new.qcml");
+		qcml.addSetQuality(new QualityAssessment("set_1"));
+
+		writer.writeQcML(qcmlNew);
 	}
 }
