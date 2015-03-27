@@ -89,9 +89,8 @@ public class QcDBWriterIT {
         Cv cv = new Cv("name", "uri", "cv");
         qcml.addCv(cv);
 
-        QualityAssessment run = new QualityAssessment("run");
-        QualityParameter param = new QualityParameter("name", cv, "param");
-        param.setAccession("accession");
+        QualityAssessment run = new QualityAssessment("run", false);
+        QualityParameter param = new QualityParameter("name", cv, "accession", "param");
         run.addQualityParameter(param);
         qcml.addRunQuality(run);
 
@@ -113,9 +112,8 @@ public class QcDBWriterIT {
         Cv cv = new Cv("name", "uri", "cv");
         qcml.addCv(cv);
 
-        QualityAssessment run = new QualityAssessment("run");
-        QualityParameter param = new QualityParameter("name", cv, "param");
-        param.setAccession("accession");
+        QualityAssessment run = new QualityAssessment("run", false);
+        QualityParameter param = new QualityParameter("name", cv, "accession", "param");
         run.addQualityParameter(param);
         qcml.addRunQuality(run);
 
@@ -155,7 +153,7 @@ public class QcDBWriterIT {
 
         QcML qcmlNew = new QcML();
         qcmlNew.setFileName("new.qcml");
-        qcml.addRunQuality(new QualityAssessment("run_1"));
+        qcml.addRunQuality(new QualityAssessment("run_1", false));
 
         writer.writeQcML(qcmlNew);
     }
@@ -168,7 +166,7 @@ public class QcDBWriterIT {
 
         QcML qcmlNew = new QcML();
         qcmlNew.setFileName("new.qcml");
-        qcml.addSetQuality(new QualityAssessment("set_1"));
+        qcml.addSetQuality(new QualityAssessment("set_1", true));
 
         writer.writeQcML(qcmlNew);
     }

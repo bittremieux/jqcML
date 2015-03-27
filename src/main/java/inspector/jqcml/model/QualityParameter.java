@@ -92,7 +92,7 @@ public class QualityParameter extends CvParameter {
     /**
      * Constructs a new empty QualityParameter object.
      */
-    public QualityParameter() {
+    protected QualityParameter() {
         super();
 
         this.thresholds = new TreeMap<>();
@@ -103,12 +103,14 @@ public class QualityParameter extends CvParameter {
      *
      * @param name  The name of the parameter
      * @param cvRef  The reference to the Cv object which defines this parameter
+     * @param accession  The accession number identifying this parameter in the controlled vocabulary
      * @param id  The unique identifier for this parameter
      */
-    public QualityParameter(String name, Cv cvRef, String id) {
-        super(name, cvRef);
+    public QualityParameter(String name, Cv cvRef, String accession, String id) {
+        super(name, cvRef, accession);
 
         this.thresholds = new TreeMap<>();
+        setFlag(null);
 
         setId(id);
     }
@@ -139,7 +141,7 @@ public class QualityParameter extends CvParameter {
      *
      * @param id  The ID of this QualityParameter object
      */
-    public void setId(String id) {
+    private void setId(String id) {
         this.id = id;
     }
 

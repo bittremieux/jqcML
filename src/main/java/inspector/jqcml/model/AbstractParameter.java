@@ -115,7 +115,7 @@ public abstract class AbstractParameter {
      *
      * @param name  The name of this parameter
      */
-    public void setName(String name) {
+    protected void setName(String name) {
         this.name = name;
     }
 

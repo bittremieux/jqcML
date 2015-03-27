@@ -67,7 +67,7 @@ public class QualityAssessment {
     /**
      * Constructs a new QualityAssessment object with empty {@link QualityParameter} and {@link AttachmentParameter} lists.
      */
-    public QualityAssessment() {
+    protected QualityAssessment() {
         this.metaDataList = new TreeMap<>();
         this.parameterList = new TreeMap<>();
         this.attachmentList = new TreeMap<>();
@@ -77,11 +77,13 @@ public class QualityAssessment {
      * Constructs a new QualityAssessment object, with the specified ID, with empty {@link QualityParameter} and {@link AttachmentParameter} lists.
      * 
      * @param id  The ID of this QualityAssessment object
+     * @param isSet  Indicates whether this QualityAssessment object represents a RunQuality or a SetQuality
      */
-    public QualityAssessment(String id) {
+    public QualityAssessment(String id, boolean isSet) {
         this();
 
         setId(id);
+        setSet(isSet);
     }
 
     /**
@@ -110,7 +112,7 @@ public class QualityAssessment {
      *
      * @param id  The ID of this QualityAssessment object
      */
-    public void setId(String id) {
+    private void setId(String id) {
         this.id = id;
     }
 

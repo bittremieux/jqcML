@@ -1,6 +1,7 @@
 package inspector.jqcml.model;
 
 import com.google.common.base.MoreObjects;
+import inspector.jqcml.io.QcMLReader;
 import inspector.jqcml.jaxb.adapters.CvListAdapter;
 import inspector.jqcml.jaxb.adapters.RunQualityAdapter;
 import inspector.jqcml.jaxb.adapters.SetQualityAdapter;
@@ -97,12 +98,16 @@ public class QcML {
     private Map<String, Cv> cvList;
 
     /**
-     * Constructs a new QcML object with empty runQuality and setQuality list, and an empty cv list.
+     * Constructs a new QcML object with empty runQuality and setQuality lists, and an empty cv list.
+     *
+     * The QcML object will have the default version number.
      */
     public QcML() {
         this.runQuality = new TreeMap<>();
         this.setQuality = new TreeMap<>();
         this.cvList = new TreeMap<>();
+
+        setVersion(QcMLReader.QCML_VERSION);
     }
 
     /**
@@ -193,7 +198,10 @@ public class QcML {
     public void addRunQuality(QualityAssessment qa) {
         if(qa != null) {
             // make sure that the 'set' flag is NOT set
-            qa.setSet(false);
+            if(qa.isSet()) {
+                LOGGER.error("Can't add a <set> QualityAssessment as a runQuality to a QcML object");
+                throw new IllegalArgumentException("Can't add a <set> QualityAssessment as a runQuality");
+            }
             // add the bi-directional relationship
             qa.setParentQcML(this);
             runQuality.put(qa.getId(), qa);
@@ -271,7 +279,10 @@ public class QcML {
     public void addSetQuality(QualityAssessment qa) {
         if(qa != null) {
             // make sure that the 'set' flag is set
-            qa.setSet(true);
+            if(!qa.isSet()) {
+                LOGGER.error("Can't add a <run> QualityAssessment as a setQuality to a QcML object");
+                throw new IllegalArgumentException("Can't add a <run> QualityAssessment as a setQuality");
+            }
             // add the bi-directional relationship
             qa.setParentQcML(this);
             setQuality.put(qa.getId(), qa);

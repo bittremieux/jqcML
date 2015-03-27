@@ -62,9 +62,10 @@ public class Threshold extends CvParameter {
      *
      * @param name  The name of the threshold
      * @param cvRef  The reference to the Cv object which defines this threshold
+     * @param accession  The accession number identifying this parameter in the controlled vocabulary
      */
-    public Threshold(String name, Cv cvRef) {
-        super(name, cvRef);
+    public Threshold(String name, Cv cvRef, String accession) {
+        super(name, cvRef, accession);
     }
 
     /**

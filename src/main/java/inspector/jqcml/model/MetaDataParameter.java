@@ -65,7 +65,7 @@ public class MetaDataParameter extends CvParameter {
     /**
      * Constructs a new empty MetaDataParameter object.
      */
-    public MetaDataParameter() {
+    protected MetaDataParameter() {
         super();
     }
 
@@ -74,10 +74,11 @@ public class MetaDataParameter extends CvParameter {
      *
      * @param name  The name of the parameter
      * @param cvRef  The reference to the Cv object which defines this parameter
+     * @param accession  The accession number identifying this parameter in the controlled vocabulary
      * @param id  The unique identifier for this parameter
      */
-    public MetaDataParameter(String name, Cv cvRef, String id) {
-        super(name, cvRef);
+    public MetaDataParameter(String name, Cv cvRef, String accession, String id) {
+        super(name, cvRef, accession);
 
         setId(id);
     }
@@ -108,7 +109,7 @@ public class MetaDataParameter extends CvParameter {
      *
      * @param id  The ID of this MetaDataParameter object
      */
-    public void setId(String id) {
+    private void setId(String id) {
         this.id = id;
     }
 

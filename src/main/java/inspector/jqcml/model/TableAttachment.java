@@ -150,9 +150,7 @@ public class TableAttachment {
         removeValue(column, row);
 
         // add the new value to the column and row
-        TableValue tv = new TableValue(tc, tr, value);
-        tc.addValue(tv);
-        tr.addValue(tv);
+        new TableValue(tc, tr, value);
     }
 
     /**
@@ -170,8 +168,7 @@ public class TableAttachment {
             value.getRow().removeValue(value);
             // remove the reference to the column and row
             // (this has to happen after both removals have been done because the removal depends on the equals-method)
-            value.setColumn(null);
-            value.setRow(null);
+            value.removeFromTable();
         }
     }
 

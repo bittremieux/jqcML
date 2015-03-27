@@ -46,9 +46,8 @@ public class QcMLWriterTest {
         Cv cv = new Cv("name", "uri", "cv");
         qcml.addCv(cv);
 
-        QualityAssessment run = new QualityAssessment("run");
-        QualityParameter param = new QualityParameter("name", cv, "param");
-        param.setAccession("accession");
+        QualityAssessment run = new QualityAssessment("run", false);
+        QualityParameter param = new QualityParameter("name", cv, "accession", "param");
         run.addQualityParameter(param);
         qcml.addRunQuality(run);
 
@@ -64,9 +63,8 @@ public class QcMLWriterTest {
         Cv cv = new Cv("name", "uri", "cv");
         qcml.addCv(cv);
 
-        QualityAssessment run = new QualityAssessment("run");
-        QualityParameter param = new QualityParameter("name", cv, "param");
-        param.setAccession("accession");
+        QualityAssessment run = new QualityAssessment("run", false);
+        QualityParameter param = new QualityParameter("name", cv, "accession", "param");
         run.addQualityParameter(param);
         qcml.addRunQuality(run);
 
@@ -88,9 +86,8 @@ public class QcMLWriterTest {
         Cv cv = new Cv("name", "uri", "cv");
         qcml.addCv(cv);
 
-        QualityAssessment run = new QualityAssessment("run");
-        QualityParameter param = new QualityParameter("name", cv, "param");
-        param.setAccession("accession");
+        QualityAssessment run = new QualityAssessment("run", false);
+        QualityParameter param = new QualityParameter("name", cv, "accession", "param");
         run.addQualityParameter(param);
         qcml.addRunQuality(run);
 
@@ -120,9 +117,8 @@ public class QcMLWriterTest {
         Cv cv = new Cv("name", "uri", "id");
         qcml.addCv(cv);
 
-        QualityAssessment run = new QualityAssessment("id");
-        QualityParameter param = new QualityParameter("name", cv, "id");
-        param.setAccession("accession");
+        QualityAssessment run = new QualityAssessment("id", false);
+        QualityParameter param = new QualityParameter("name", cv, "accession", "id");
         run.addQualityParameter(param);
         qcml.addRunQuality(run);
 
@@ -134,9 +130,8 @@ public class QcMLWriterTest {
         QcML qcml = new QcML();
         qcml.setFileName("Invalid.qcML");
 
-        QualityAssessment run = new QualityAssessment("run");
-        QualityParameter param = new QualityParameter("name", new Cv("name", "uri", "cv"), "param");
-        param.setAccession("accession");
+        QualityAssessment run = new QualityAssessment("run", false);
+        QualityParameter param = new QualityParameter("name", new Cv("name", "uri", "cv"), "accession", "param");
         run.addQualityParameter(param);
         qcml.addRunQuality(run);
 

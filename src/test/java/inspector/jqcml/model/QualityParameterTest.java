@@ -15,22 +15,17 @@ public class QualityParameterTest {
     public void setUp() {
         cv = new Cv("my controlled vocabulary", "my/controlled/vocabulary/cv", "cv");
 
-        qp = new QualityParameter();
+        qp = new QualityParameter("qp_name",cv, "qp_accession", "qp_id");
 
-        qp.setName("qp_name");
         qp.setValue("qp_value");
         qp.setUnitAccession("qp_unit_accession");
         qp.setUnitName("qp_unit_name");
         qp.setUnitCvRef(cv);
-        qp.setAccession("qp_accession");
-        qp.setCvRef(cv);
-        qp.setId("qp_id");
         qp.setFlag(true);
 
         for(int i = 0; i < 2; i++) {
-            Threshold thr = new Threshold("threshold_" + i, cv);
+            Threshold thr = new Threshold("threshold_" + i, cv, "thr_accession_" + i);
             thr.setFileName("thresholdFileName" + i + ".txt");
-            thr.setAccession("thr_accession_" + i);
             qp.addThreshold(thr);
         }
     }
@@ -59,14 +54,12 @@ public class QualityParameterTest {
     public void addThreshold_new() {
         assertEquals(2, qp.getNumberOfThresholds());
 
-        Threshold thr = new Threshold("new threshold", cv);
-        thr.setAccession("new_thr_accession");
+        Threshold thr = new Threshold("new threshold", cv, "new_thr_accession");
         qp.addThreshold(thr);
 
         assertEquals(3, qp.getNumberOfThresholds());
 
-        Threshold thrOther = new Threshold("some other threshold", cv);
-        thrOther.setAccession("other_thr_accession");
+        Threshold thrOther = new Threshold("some other threshold", cv, "other_thr_accession");
         qp.addThreshold(thrOther);
 
         assertEquals(4, qp.getNumberOfThresholds());
@@ -77,8 +70,7 @@ public class QualityParameterTest {
         assertEquals(2, qp.getNumberOfThresholds());
         assertEquals("threshold_1", qp.getThreshold("thr_accession_1").getName());
 
-        Threshold thr = new Threshold("new threshold, same accession", cv);
-        thr.setAccession("thr_accession_1");
+        Threshold thr = new Threshold("new threshold, same accession", cv, "thr_accession_1");
         qp.addThreshold(thr);
 
         assertEquals(2, qp.getNumberOfThresholds());

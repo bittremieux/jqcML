@@ -105,7 +105,7 @@ public class AttachmentParameter extends CvParameter {
     /**
      * Constructs a new empty AttachmentParameter object.
      */
-    public AttachmentParameter() {
+    protected AttachmentParameter() {
         super();
     }
 
@@ -114,10 +114,11 @@ public class AttachmentParameter extends CvParameter {
      *
      * @param name  The name of the attachment
      * @param cvRef  The reference to the Cv object which defines this attachment
+     * @param accession  The accession number identifying this parameter in the controlled vocabulary
      * @param id  The unique identifier for this attachment
      */
-    public AttachmentParameter(String name, Cv cvRef, String id) {
-        super(name, cvRef);
+    public AttachmentParameter(String name, Cv cvRef, String accession, String id) {
+        super(name, cvRef, accession);
 
         setId(id);
     }
@@ -148,7 +149,7 @@ public class AttachmentParameter extends CvParameter {
      *
      * @param id  The ID of this AttachmentParameter object
      */
-    public void setId(String id) {
+    private void setId(String id) {
         this.id = id;
     }
 

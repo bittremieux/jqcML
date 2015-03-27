@@ -67,7 +67,7 @@ public class CvParameter extends AbstractParameter {
     /**
      * Constructs a new empty CvParameter object.
      */
-    public CvParameter() {
+    protected CvParameter() {
         super();
     }
 
@@ -76,10 +76,12 @@ public class CvParameter extends AbstractParameter {
      *
      * @param name  The name of the parameter
      * @param cvRef  The reference to the Cv object which defines this parameter
+     * @param accession  The accession number identifying this parameter in the controlled vocabulary
      */
-    public CvParameter(String name, Cv cvRef) {
+    public CvParameter(String name, Cv cvRef, String accession) {
         setName(name);
         setCvRef(cvRef);
+        setAccession(accession);
     }
 
     /**
@@ -138,7 +140,7 @@ public class CvParameter extends AbstractParameter {
      *
      * @param accession  The accession number identifying this parameter in the controlled vocabulary
      */
-    public void setAccession(String accession) {
+    protected void setAccession(String accession) {
         this.accession = accession;
     }
 }

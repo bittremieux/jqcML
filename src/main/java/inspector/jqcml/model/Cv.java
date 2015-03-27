@@ -82,7 +82,7 @@ public class Cv {
     /**
      * Constructs a new empty representation of a controlled vocabulary.
      */
-    public Cv() {
+    protected Cv() {
         // do nothing
     }
 
@@ -137,7 +137,7 @@ public class Cv {
      *
      * @param fullName  The full name of this Cv object
      */
-    public void setFullName(String fullName) {
+    private void setFullName(String fullName) {
         this.fullName = fullName;
     }
 
@@ -173,7 +173,7 @@ public class Cv {
      *
      * @param uri  The uri of this Cv object
      */
-    public void setUri(String uri) {
+    private void setUri(String uri) {
         this.uri = uri;
     }
 
@@ -191,7 +191,7 @@ public class Cv {
      *
      * @param id  The ID of this Cv object
      */
-    public void setId(String id) {
+    private void setId(String id) {
         this.id = id;
     }
 

@@ -56,7 +56,7 @@ public class TableColumn {
     /**
      * Constructs a new empty TableColumn object.
      */
-    public TableColumn() {
+    protected TableColumn() {
         values = new HashSet<>();
     }
 
@@ -86,7 +86,7 @@ public class TableColumn {
      *
      * @param column  the name of the column
      */
-    public void setColumn(String column) {
+    private void setColumn(String column) {
         this.column = column;
     }
 
@@ -106,8 +106,6 @@ public class TableColumn {
      */
     public void addValue(TableValue value) {
         if(value != null) {
-            // add the bi-directional relationship
-            value.setColumn(this);
             values.add(value);
         } else {
             LOGGER.error("Can't add <null> TableValue to a TableColumn object");

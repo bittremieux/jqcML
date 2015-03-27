@@ -1,24 +1,17 @@
 package inspector.jqcml.model;
 
-import static org.junit.Assert.*;
-import static org.junit.matchers.JUnitMatchers.*;
+import inspector.jqcml.io.QcMLReader;
+import inspector.jqcml.io.xml.QcMLFileReader;
+import org.junit.Before;
+import org.junit.Test;
 
+import javax.xml.bind.DatatypeConverter;
 import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.util.Iterator;
 
-import javax.xml.bind.DatatypeConverter;
-
-import inspector.jqcml.io.QcMLReader;
-import inspector.jqcml.io.QcMLWriter;
-import inspector.jqcml.io.xml.QcMLFileReader;
-import inspector.jqcml.io.xml.QcMLFileWriter;
-import inspector.jqcml.model.Cv;
-import inspector.jqcml.model.QcML;
-import inspector.jqcml.model.QualityAssessment;
-
-import org.junit.Before;
-import org.junit.Test;
+import static org.junit.Assert.*;
+import static org.junit.matchers.JUnitMatchers.containsString;
 
 public class QcMLTest {
 
@@ -32,42 +25,33 @@ public class QcMLTest {
         qcmlExpected = new QcML();
         // add Cv's
         for(int i = 0; i < 5; i++) {
-            Cv cv = new Cv();
-            cv.setFullName("cv item " + i);
-            cv.setUri("/path/to/cv/" + i);
-            cv.setId("cv_" + i);
+            Cv cv = new Cv("cv item " + i, "/path/to/cv/" + i, "cv_" + i);
             qcmlExpected.addCv(cv);
         }
         // add RunQuality's
         for(int i = 0; i < 5; i++) {
-            QualityAssessment runQuality = new QualityAssessment("run_" + i);
+            QualityAssessment runQuality = new QualityAssessment("run_" + i, false);
             // add MetaDataParameters
             for(int j = 0; j < (i+1) * 2; j++) {
-                MetaDataParameter param = new MetaDataParameter();
-                param.setName("metadata parameter " + i + "-" + j);
-                param.setId("mp_run" + i + "_param" + j);
-                param.setCvRef(qcmlExpected.getCv("cv_" + (i+j) % qcmlExpected.getNumberOfCvs()));
-                param.setAccession("QC:00000" + j);
+                MetaDataParameter param = new MetaDataParameter("metadata parameter " + i + "-" + j,
+                        qcmlExpected.getCv("cv_" + (i+j) % qcmlExpected.getNumberOfCvs()), "QC:00000" + j,
+                        "mp_run" + i + "_param" + j);
                 param.setValue(Integer.toString((int)(Math.random()*1000)));
                 runQuality.addMetaDataParameter(param);
             }
             // add QualityParameters
             for(int j = 0; j < (i+1) * 3; j++) {
-                QualityParameter param = new QualityParameter();
-                param.setName("quality parameter " + i + "-" + j);
-                param.setId("qp_run" + i + "_param" + j);
-                param.setCvRef(qcmlExpected.getCv("cv_" + (i+j) % qcmlExpected.getNumberOfCvs()));
-                param.setAccession("QC:00000" + j);
+                QualityParameter param = new QualityParameter("quality parameter " + i + "-" + j,
+                        qcmlExpected.getCv("cv_" + (i+j) % qcmlExpected.getNumberOfCvs()), "QC:00000" + j,
+                        "qp_run" + i + "_param" + j);
                 param.setValue(Integer.toString((int)(Math.random()*1000)));
                 runQuality.addQualityParameter(param);
             }
             // add AttachmentParameters
             for(int j = 0; j < (i+1) * 2; j++) {
-                AttachmentParameter param = new AttachmentParameter();
-                param.setName("attachment parameter " + i + "-" + j);
-                param.setId("ap_run" + i + "_param" + j);
-                param.setCvRef(qcmlExpected.getCv("cv_" + (i+j) % qcmlExpected.getNumberOfCvs()));
-                param.setAccession("QC:00000" + j);
+                AttachmentParameter param = new AttachmentParameter("attachment parameter " + i + "-" + j,
+                        qcmlExpected.getCv("cv_" + (i+j) % qcmlExpected.getNumberOfCvs()), "QC:00000" + j,
+                        "ap_run" + i + "_param" + j);
                 param.setQualityParameterRef(runQuality.getQualityParameter("qp_run" + i + "_param" + j));
                 param.setBinary(DatatypeConverter.printBase64Binary(new BigInteger(1024, random).toByteArray()));
                 runQuality.addAttachmentParameter(param);
@@ -76,34 +60,29 @@ public class QcMLTest {
         }
         // add SetQuality's
         for(int i = 0; i < 2; i++) {
-            QualityAssessment setQuality = new QualityAssessment("set_" + i);
+            QualityAssessment setQuality = new QualityAssessment("set_" + i, true);
             // add MetaDataParameters
             for(int j = 0; j < (i+1) * 2; j++) {
-                MetaDataParameter param = new MetaDataParameter();
-                param.setName("metadata parameter " + i + "-" + j);
-                param.setId("mp_set" + i + "_param" + j);
-                param.setCvRef(qcmlExpected.getCv("cv_" + (i+j) % qcmlExpected.getNumberOfCvs()));
-                param.setAccession("QC:00000" + j);
+                MetaDataParameter param = new MetaDataParameter("metadata parameter " + i + "-" + j,
+                        qcmlExpected.getCv("cv_" + (i+j) % qcmlExpected.getNumberOfCvs()), "QC:00000" + j,
+                        "mp_set" + i + "_param" + j);
                 param.setValue(Integer.toString((int)(Math.random()*1000)));
                 setQuality.addMetaDataParameter(param);
             }
             // add QualityParameters
             for(int j = 0; j < (i+1) * 5; j++) {
-                QualityParameter param = new QualityParameter();
-                param.setName("quality parameter " + i + "-" + j);
-                param.setId("qp_set" + i + "_param" + j);
-                param.setCvRef(qcmlExpected.getCv("cv_" + (i+j) % qcmlExpected.getNumberOfCvs()));
+                QualityParameter param = new QualityParameter("quality parameter " + i + "-" + j,
+                        qcmlExpected.getCv("cv_" + (i+j) % qcmlExpected.getNumberOfCvs()), "QC:00000" + j,
+                        "qp_set" + i + "_param" + j);
                 param.setAccession("QC:00000" + j);
                 param.setValue(Integer.toString((int)(Math.random()*1000)));
                 setQuality.addQualityParameter(param);
             }
             // add AttachmentParameters
             for(int j = 0; j < (i+1) * 3; j++) {
-                AttachmentParameter param = new AttachmentParameter();
-                param.setName("attachment parameter " + i + "-" + j);
-                param.setId("ap_set" + i + "_param" + j);
-                param.setCvRef(qcmlExpected.getCv("cv_" + (i+j) % qcmlExpected.getNumberOfCvs()));
-                param.setAccession("QC:00000" + j);
+                AttachmentParameter param = new AttachmentParameter("attachment parameter " + i + "-" + j,
+                        qcmlExpected.getCv("cv_" + (i+j) % qcmlExpected.getNumberOfCvs()), "QC:00000" + j,
+                        "ap_set" + i + "_param" + j);
                 param.setQualityParameterRef(setQuality.getQualityParameter("qp_set" + i + "_param" + j));
                 param.setBinary(DatatypeConverter.printBase64Binary(new BigInteger(1024, random).toByteArray()));
                 setQuality.addAttachmentParameter(param);
@@ -158,7 +137,7 @@ public class QcMLTest {
         // new RunQuality is absent
         assertNull(qcml.getRunQuality("new RunQuality"));
         // add new RunQuality
-        qcml.addRunQuality(new QualityAssessment("new RunQuality"));
+        qcml.addRunQuality(new QualityAssessment("new RunQuality", false));
         // new RunQuality is present
         assertEquals(qcml.getNumberOfRunQualities(), count+1);
         assertNotNull(qcml.getRunQuality("new RunQuality"));
@@ -171,7 +150,7 @@ public class QcMLTest {
         assertNotNull(qcml.getRunQuality("run_2"));
         QualityAssessment old = qcml.getRunQuality("run_2");
         // add new RunQuality
-        qcml.addRunQuality(new QualityAssessment("run_2"));
+        qcml.addRunQuality(new QualityAssessment("run_2", false));
         // new RunQuality is present
         assertEquals(qcml.getNumberOfRunQualities(), count);
         assertNotNull(qcml.getRunQuality("run_2"));
@@ -253,7 +232,7 @@ public class QcMLTest {
         // new SetQuality is absent
         assertNull(qcml.getSetQuality("new SetQuality"));
         // add new SetQuality
-        qcml.addSetQuality(new QualityAssessment("new SetQuality"));
+        qcml.addSetQuality(new QualityAssessment("new SetQuality", true));
         // new RunQuality is present
         assertEquals(qcml.getNumberOfSetQualities(), count+1);
         assertNotNull(qcml.getSetQuality("new SetQuality"));
@@ -266,7 +245,7 @@ public class QcMLTest {
         assertNotNull(qcml.getSetQuality("set_1"));
         QualityAssessment old = qcml.getSetQuality("set_1");
         // add new SetQuality
-        qcml.addSetQuality(new QualityAssessment("set_1"));
+        qcml.addSetQuality(new QualityAssessment("set_1", true));
         // new SetQuality is present
         assertEquals(qcml.getNumberOfSetQualities(), count);
         assertNotNull(qcml.getSetQuality("set_1"));

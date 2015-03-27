@@ -56,7 +56,7 @@ public class TableRow {
     /**
      * Constructs a new empty TableRow object.
      */
-    public TableRow() {
+    protected TableRow() {
         values = new HashSet<>();
     }
 
@@ -85,7 +85,7 @@ public class TableRow {
      *
      * @param row  the row index
      */
-    public void setRow(int row) {
+    private void setRow(int row) {
         this.row = row;
     }
 
@@ -105,8 +105,6 @@ public class TableRow {
      */
     public void addValue(TableValue value) {
         if(value != null) {
-            // add the bi-directional relationship
-            value.setRow(this);
             values.add(value);
         } else {
             LOGGER.error("Can't add <null> TableValue to a TableRow object");

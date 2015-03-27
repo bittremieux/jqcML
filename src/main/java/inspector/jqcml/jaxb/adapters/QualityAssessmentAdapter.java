@@ -34,8 +34,7 @@ public class QualityAssessmentAdapter extends XmlAdapter<QualityAssessmentList, 
 
     @Override
     public QualityAssessment unmarshal(QualityAssessmentList qal) throws Exception {
-        QualityAssessment qa = new QualityAssessment(qal.getId());
-        qa.setSet(qal.isSet());
+        QualityAssessment qa = new QualityAssessment(qal.getId(), qal.isSet());
 
         for(CvParameter param : qal) {
             if(param instanceof MetaDataParameter) {
