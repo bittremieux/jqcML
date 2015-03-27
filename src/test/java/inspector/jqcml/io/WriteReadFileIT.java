@@ -34,7 +34,7 @@ public class WriteReadFileIT {
     @Before
     public void setUp() {
         // create fully populated qcML object
-        qcmlExpected = generateRandomQcML(getClass().getResource("/").getPath() + "WriteReadFileTest.qcML");
+        qcmlExpected = generateRandomQcML("WriteReadFileTest.qcML");
     }
 
     private QcML generateRandomQcML(String name) {
@@ -238,14 +238,8 @@ public class WriteReadFileIT {
 
     @After
     public void deleteFile() {
-        if(getClass().getResource("/WriteReadFileTest.qcML") != null) {
-            File file = new File(getClass().getResource("/WriteReadFileTest.qcML").getFile());
-            file.delete();
-        }
-        if(getClass().getResource("/WriteReadFileTest.db") != null) {
-            File file = new File(getClass().getResource("/WriteReadFileTest.db").getFile());
-            file.delete();
-        }
+        File file = new File("WriteReadFileTest.qcML");
+        file.delete();
     }
 
     @After
@@ -286,8 +280,8 @@ public class WriteReadFileIT {
 
         // read it back in
         QcMLFileReader reader = new QcMLFileReader();
-        QcML qcmlRead = reader.getQcML(getClass().getResource("/WriteReadFileTest.qcML").getFile());
-        qcmlRead.setFileName(getClass().getResource("/").getPath() + "WriteReadFileTest.qcML");
+        QcML qcmlRead = reader.getQcML("WriteReadFileTest.qcML");
+        qcmlRead.setFileName("WriteReadFileTest.qcML");
 
         assertEquality(qcmlExpected, qcmlRead);
     }
@@ -301,7 +295,7 @@ public class WriteReadFileIT {
 
         // read it back in
         QcDBReader reader = new QcDBReader(emf);
-        QcML qcmlRead = reader.getQcML(getClass().getResource("/").getPath() + "WriteReadFileTest.qcML");
+        QcML qcmlRead = reader.getQcML("WriteReadFileTest.qcML");
         emf.close();
 
         assertEquality(qcmlExpected, qcmlRead);
@@ -314,12 +308,12 @@ public class WriteReadFileIT {
         QcDBWriter writer = new QcDBWriter(emf);
         writer.writeQcML(qcmlExpected);
         // overwrite the first object
-        QcML qcmlOther = generateRandomQcML(getClass().getResource("/").getPath() + "WriteReadFileTest.qcML");
+        QcML qcmlOther = generateRandomQcML("WriteReadFileTest.qcML");
         writer.writeQcML(qcmlOther);
 
         // read the second object back in
         QcDBReader reader = new QcDBReader(emf);
-        QcML qcmlRead = reader.getQcML(getClass().getResource("/").getPath() + "WriteReadFileTest.qcML");
+        QcML qcmlRead = reader.getQcML("WriteReadFileTest.qcML");
         emf.close();
 
         assertEquality(qcmlOther, qcmlRead);
@@ -334,7 +328,7 @@ public class WriteReadFileIT {
 
         // read it back in
         QcDBReader reader = new QcDBReader(emf);
-        QcML qcmlRead = reader.getQcML(getClass().getResource("/").getPath() + "WriteReadFileTest.qcML");
+        QcML qcmlRead = reader.getQcML("WriteReadFileTest.qcML");
         emf.close();
 
         assertEquality(qcmlExpected, qcmlRead);
@@ -347,12 +341,12 @@ public class WriteReadFileIT {
         QcDBWriter writer = new QcDBWriter(emf);
         writer.writeQcML(qcmlExpected);
         // overwrite the first object
-        QcML qcmlOther = generateRandomQcML(getClass().getResource("/").getPath() + "WriteReadFileTest.qcML");
+        QcML qcmlOther = generateRandomQcML("WriteReadFileTest.qcML");
         writer.writeQcML(qcmlOther);
 
         // read the second object back in
         QcDBReader reader = new QcDBReader(emf);
-        QcML qcmlRead = reader.getQcML(getClass().getResource("/").getPath() + "WriteReadFileTest.qcML");
+        QcML qcmlRead = reader.getQcML("WriteReadFileTest.qcML");
         emf.close();
 
         assertEquality(qcmlOther, qcmlRead);
