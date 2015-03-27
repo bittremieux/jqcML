@@ -1,5 +1,11 @@
 # Release notes
 
+## jqcML v1.0.3 (27-03-2015)
+* ENHANCEMENT: Parameterizable custom qcDB queries
+* ENHANCEMENT: General code style improvements, cyclic dependency fixes, code duplication removals, and vulnerability fixes
+* BUGFIX: Fix an issue where a qcML with only SetQualities and no RunQualities was not written to the qcDB properly
+* BUGFIX: Remove obsolete tests, add additional tests, and optimize unit test execution
+
 ## jqcML v1.0.2 (03-Jun-2014) - qcML v0.0.8
 * NEW FEATURE: Support qcML `version` attribute
 * NEW FEATURE: Support new `MetaDataParameter`s

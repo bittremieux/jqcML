@@ -6,7 +6,7 @@
 	<groupId>inspector.jqcml</groupId>
 	<artifactId>jqcml</artifactId>
 	<packaging>jar</packaging>
-	<version>1.0.2</version>
+	<version>1.0.3</version>
 
 	<name>jqcML</name>
 	<url>https://bitbucket.org/proteinspector/jqcml</url>
