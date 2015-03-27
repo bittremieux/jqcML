@@ -1,37 +1,21 @@
 package inspector.jqcml.model;
 
+import com.google.common.base.MoreObjects;
 import inspector.jqcml.jaxb.adapters.CvListAdapter;
 import inspector.jqcml.jaxb.adapters.RunQualityAdapter;
 import inspector.jqcml.jaxb.adapters.SetQualityAdapter;
 import inspector.jqcml.jpa.listener.QcDBQcMLListener;
-
-import java.util.Iterator;
-import java.util.Map;
-import java.util.TreeMap;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinTable;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
-import javax.persistence.MapKey;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.persistence.TableGenerator;
-import javax.persistence.Transient;
-import javax.xml.bind.annotation.*;
-import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.eclipse.persistence.oxm.annotations.XmlPath;
+
+import javax.persistence.*;
+import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * The root element of a qcML file.
@@ -434,7 +418,18 @@ public class QcML {
 
     @Override
     public String toString() {
-        return "qcML <file name=\"" + getFileName() + "\">";
+        MoreObjects.ToStringHelper tsh = MoreObjects.toStringHelper(this)
+                .add("file name", fileName).add("version", version);
+        for(Iterator<QualityAssessment> it = getRunQualityIterator(); it.hasNext(); ) {
+            tsh.add("run quality", it.next());
+        }
+        for(Iterator<QualityAssessment> it = getSetQualityIterator(); it.hasNext(); ) {
+            tsh.add("set quality", it.next());
+        }
+        for(Iterator<Cv> it = getCvIterator(); it.hasNext(); ) {
+            tsh.add("cv", it.next());
+        }
+        return tsh.toString();
     }
 
 }

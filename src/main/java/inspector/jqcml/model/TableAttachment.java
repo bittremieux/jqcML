@@ -19,6 +19,7 @@ import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
+import com.google.common.base.MoreObjects;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -245,8 +246,6 @@ public class TableAttachment {
 
     @Override
     public String toString() {
-        return "tableAttachment <columns=\"" + columns.keySet() + "\">";
+        return MoreObjects.toStringHelper(this).add("table", Arrays.toString(toArray())).toString();
     }
-
-
 }

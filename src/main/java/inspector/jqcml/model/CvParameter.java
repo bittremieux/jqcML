@@ -141,10 +141,4 @@ public class CvParameter extends AbstractParameter {
     public void setAccession(String accession) {
         this.accession = accession;
     }
-
-    @Override
-    public String toString() {
-        return "cvParameter <name=\"" + getName() + "\", accession=\"" + getAccession() + "\">";
-    }
-
 }

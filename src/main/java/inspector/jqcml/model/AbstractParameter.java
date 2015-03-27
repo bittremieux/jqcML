@@ -253,9 +253,4 @@ public abstract class AbstractParameter {
         this.parentAssessment = parent;
     }
 
-    @Override
-    public String toString() {
-        return "abstractParameter <name=\"" + getName() + "\">";
-    }
-
 }

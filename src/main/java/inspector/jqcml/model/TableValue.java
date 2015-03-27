@@ -1,5 +1,6 @@
 package inspector.jqcml.model;
 
+import com.google.common.base.MoreObjects;
 import inspector.jqcml.jpa.customizer.TableValueTypeCustomizer;
 
 import javax.persistence.Column;
@@ -177,7 +178,8 @@ public class TableValue {
 
     @Override
     public String toString() {
-        return "TableValue value=" + getValue() + " (column=" + column.getColumn() + ", row=" + row.getRow() + ")";
+        return MoreObjects.toStringHelper(this).add("column", column).add("row", row)
+                .add("value", value).add("type", type).toString();
     }
 
 }

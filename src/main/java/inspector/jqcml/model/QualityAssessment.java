@@ -1,5 +1,6 @@
 package inspector.jqcml.model;
 
+import com.google.common.base.MoreObjects;
 import inspector.jqcml.jaxb.adapters.QualityAssessmentAdapter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -381,11 +382,17 @@ public class QualityAssessment {
 
     @Override
     public String toString() {
-        if(!isSet) {
-            return "runQuality <ID=\"" + getId() + "\">";
-        } else {
-            return "setQuality <ID=\"" + getId() + "\">";
+        MoreObjects.ToStringHelper tsh = MoreObjects.toStringHelper(this).add("id", id).add("set", isSet);
+        for(Iterator<MetaDataParameter> it = getMetaDataParameterIterator(); it.hasNext(); ) {
+            tsh.add("metadata", it.next());
         }
+        for(Iterator<QualityParameter> it = getQualityParameterIterator(); it.hasNext(); ) {
+            tsh.add("quality", it.next());
+        }
+        for(Iterator<AttachmentParameter> it = getAttachmentParameterIterator(); it.hasNext(); ) {
+            tsh.add("attachment", it.next());
+        }
+        return tsh.toString();
     }
 
 }

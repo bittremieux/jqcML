@@ -1,27 +1,13 @@
 package inspector.jqcml.model;
 
+import com.google.common.base.MoreObjects;
 import inspector.jqcml.jpa.customizer.ThresholdCustomizer;
+import org.eclipse.persistence.annotations.Customizer;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.TableGenerator;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlSchemaType;
-import javax.xml.bind.annotation.XmlTransient;
+import javax.persistence.*;
+import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-
-import org.eclipse.persistence.annotations.Customizer;
 
 /**
  * Contains threshold information for an associated {@link QualityParameter}.
@@ -104,7 +90,9 @@ public class Threshold extends CvParameter {
 
     @Override
     public String toString() {
-        return "threshold <name=\"" + getName() + "\" file name=\"" + getFileName() + "\">";
+        return MoreObjects.toStringHelper(this).add("name", name).add("accession", accession).add("value", value)
+                .add("unit name", unitName).add("unit accession", unitAccession).add("description", description)
+                .add("file name", fileName).omitNullValues().toString();
     }
 
 }

@@ -1,5 +1,6 @@
 package inspector.jqcml.model;
 
+import com.google.common.base.MoreObjects;
 import inspector.jqcml.jaxb.adapters.TableAttachmentAdapter;
 
 import javax.persistence.CascadeType;
@@ -229,7 +230,9 @@ public class AttachmentParameter extends CvParameter {
 
     @Override
     public String toString() {
-        return "attachmentParameter <ID=\"" + getId() + "\" name=\"" + getName() + "\">";
+        return MoreObjects.toStringHelper(this).add("id", id).add("name", name).add("accession", accession).add("value", value)
+                .add("unit name", unitName).add("unit accession", unitAccession).add("description", description)
+                .add("binary", binary).add("table", table).omitNullValues().toString();
     }
 
 }

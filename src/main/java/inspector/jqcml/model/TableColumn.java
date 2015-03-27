@@ -18,6 +18,7 @@ import javax.persistence.Table;
 import javax.persistence.TableGenerator;
 import javax.persistence.Transient;
 
+import com.google.common.base.MoreObjects;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -156,6 +157,6 @@ public class TableColumn {
 
     @Override
     public String toString() {
-        return "TableColumn <" + getColumn() + ">";
+        return MoreObjects.toStringHelper(this).add("column", column).toString();
     }
 }

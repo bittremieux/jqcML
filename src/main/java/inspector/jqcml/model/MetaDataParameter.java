@@ -19,6 +19,7 @@ import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
+import com.google.common.base.MoreObjects;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -113,6 +114,8 @@ public class MetaDataParameter extends CvParameter {
 
     @Override
     public String toString() {
-        return "metadataParameter <ID=\"" + getId() + "\" name=\"" + getName() + "\" value=\"" + getValue() + "\">";
+        return MoreObjects.toStringHelper(this).add("id", id).add("name", name).add("accession", accession).add("value", value)
+                .add("unit name", unitName).add("unit accession", unitAccession).add("description", description)
+                .omitNullValues().toString();
     }
 }

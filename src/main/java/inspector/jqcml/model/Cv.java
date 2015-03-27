@@ -1,5 +1,7 @@
 package inspector.jqcml.model;
 
+import com.google.common.base.MoreObjects;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -215,7 +217,8 @@ public class Cv {
 
     @Override
     public String toString() {
-        return "cv <ID=\"" + getId() + "\", fullname=\"" + getFullName() + "\">";
+        return MoreObjects.toStringHelper(this).add("id", id).add("name", fullName).add("version", version)
+                .add("uri", uri).omitNullValues().toString();
     }
 
 }

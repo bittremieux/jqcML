@@ -1,5 +1,6 @@
 package inspector.jqcml.model;
 
+import com.google.common.base.MoreObjects;
 import inspector.jqcml.jaxb.adapters.ThresholdListAdapter;
 
 import java.util.Iterator;
@@ -238,6 +239,12 @@ public class QualityParameter extends CvParameter {
 
     @Override
     public String toString() {
-        return "qualityParameter <ID=\"" + getId() + "\" name=\"" + getName() + "\" value=\"" + getValue() + "\">";
+        MoreObjects.ToStringHelper tsh = MoreObjects.toStringHelper(this).add("id", id).add("name", name)
+                .add("accession", accession).add("value", value).add("unit name", unitName)
+                .add("unit accession", unitAccession).add("description", description).add("threshold flag", flag);
+        for(Iterator<Threshold> it = getThresholdIterator(); it.hasNext(); ) {
+            tsh.add("threshold", it.next());
+        }
+        return tsh.omitNullValues().toString();
     }
 }
