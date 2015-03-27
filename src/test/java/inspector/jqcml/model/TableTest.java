@@ -1,10 +1,10 @@
 package inspector.jqcml.model;
 
-import static org.junit.Assert.assertEquals;
-
 import org.junit.Test;
 
-public class TableValueTest {
+import static org.junit.Assert.assertEquals;
+
+public class TableTest {
 	
 	@Test
 	public void tableValueType() {
@@ -16,5 +16,17 @@ public class TableValueTest {
 
 		TableValue tvStr = new TableValue(null, null, "some value");
 		assertEquals(TableValueType.STRING, tvStr.getType());
+	}
+
+	@Test(expected = NullPointerException.class)
+	public void rowAddValue_null() {
+		TableRow row = new TableRow();
+		row.addValue(null);
+	}
+
+	@Test(expected = NullPointerException.class)
+	public void columnAddValue_null() {
+		TableColumn column = new TableColumn();
+		column.addValue(null);
 	}
 }

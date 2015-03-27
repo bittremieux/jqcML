@@ -1,12 +1,11 @@
 package inspector.jqcml.io.xml;
 
 import inspector.jqcml.model.QcML;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 /**
  * JAXBContext singleton.
@@ -16,26 +15,26 @@ import org.apache.logging.log4j.Logger;
  */
 public enum QcMLJAXBContext {
 
-	INSTANCE;
-	
-	private final Logger logger = LogManager.getLogger(QcMLJAXBContext.class);
-	
-	public final JAXBContext context = initContext();
-	
-	/**
-	 * Because JAXBContext is thread-safe, this should only be created once and reused to avoid the cost of initializing the metadata multiple times.
-	 * Hence the encapsulation in a Singleton object.
-	 * 
-	 * @return The JAXB Context for (un)marshalling qcML files.
-	 */
-	private JAXBContext initContext() {
-		try {
-			logger.info("Create the JAXB Context");
-			return JAXBContext.newInstance(QcML.class);
-		} catch (JAXBException e) {
-			logger.error("Error while creating the JAXB Context: {}", e);
-			throw new IllegalStateException("Could not create the JAXB Context: " + e);
-		}
-	}
+    INSTANCE;
+
+    private final Logger LOGGER = LogManager.getLogger(QcMLJAXBContext.class);
+
+    public final JAXBContext context = initContext();
+
+    /**
+     * Because JAXBContext is thread-safe, this should only be created once and reused to avoid the cost of initializing the metadata multiple times.
+     * Hence the encapsulation in a Singleton object.
+     *
+     * @return The JAXB Context for (un)marshalling qcML files.
+     */
+    private JAXBContext initContext() {
+        try {
+            LOGGER.info("Create the JAXB Context");
+            return JAXBContext.newInstance(QcML.class);
+        } catch (JAXBException e) {
+            LOGGER.error("Error while creating the JAXB Context: {}", e);
+            throw new IllegalStateException("Could not create the JAXB Context: " + e);
+        }
+    }
 
 }

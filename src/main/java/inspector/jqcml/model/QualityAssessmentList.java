@@ -23,42 +23,42 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 public class QualityAssessmentList implements Iterable<CvParameter> {
 
     @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
-	@XmlSchemaType(name="ID")
-	@XmlID
-	@XmlAttribute(name="ID", required=true)
-	private String id;
+    @XmlSchemaType(name="ID")
+    @XmlID
+    @XmlAttribute(name="ID", required=true)
+    private String id;
     @XmlElementRef
-	private List<CvParameter> paramList;
+    private List<CvParameter> paramList;
     @XmlTransient
     private boolean isSet;
-	
-	public QualityAssessmentList() {
-		paramList = new ArrayList<>();
-	}
 
-	public String getId() {
-		return id;
-	}
+    public QualityAssessmentList() {
+        paramList = new ArrayList<>();
+    }
 
-	public void setId(String id) {
-		this.id = id;
-	}
-	
-	public void addParameter(CvParameter param) {
-		paramList.add(param);
-	}
+    public String getId() {
+        return id;
+    }
 
-	@Override
-	public Iterator<CvParameter> iterator() {
-		return paramList.iterator();
-	}
+    public void setId(String id) {
+        this.id = id;
+    }
 
-	public boolean isSet() {
-		return isSet;
-	}
+    public void addParameter(CvParameter param) {
+        paramList.add(param);
+    }
 
-	public void setSet(boolean isSet) {
-		this.isSet = isSet;
-	}
-	
+    @Override
+    public Iterator<CvParameter> iterator() {
+        return paramList.iterator();
+    }
+
+    public boolean isSet() {
+        return isSet;
+    }
+
+    public void setSet(boolean isSet) {
+        this.isSet = isSet;
+    }
+
 }

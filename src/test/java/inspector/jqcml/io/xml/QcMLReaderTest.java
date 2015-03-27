@@ -20,13 +20,13 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class QcMLReaderTest {
-		
-	private QcMLFileReader reader;
+
+    private QcMLFileReader reader;
 
     @Before
     public void setUp() {
         reader = new QcMLFileReader();
-	}
+    }
 
     @Test(expected=NullPointerException.class)
     public void validate_null() {
@@ -73,21 +73,21 @@ public class QcMLReaderTest {
         assertNull(reader.getQcML(getClass().getResource("/Invalid.qcML").getFile()));
     }
 
-	@Test
-	public void getQcML_invalidVersionFormat() {
-		// warning should be logged
-		assertNull(reader.getQcML(getClass().getResource("/InvalidVersionFormat.qcML").getFile()));
-	}
+    @Test
+    public void getQcML_invalidVersionFormat() {
+        // warning should be logged
+        assertNull(reader.getQcML(getClass().getResource("/InvalidVersionFormat.qcML").getFile()));
+    }
 
-	@Test
-	public void getQcML_invalidVersionNumber() {
-		// warning should be logged
-		QcML qcml = reader.getQcML(getClass().getResource("/InvalidVersionNumber.qcML").getFile());
+    @Test
+    public void getQcML_invalidVersionNumber() {
+        // warning should be logged
+        QcML qcml = reader.getQcML(getClass().getResource("/InvalidVersionNumber.qcML").getFile());
 
-		assertNotNull(qcml);
+        assertNotNull(qcml);
 
-		assertEquals(QcMLFileReader.QCML_VERSION, qcml.getVersion());
-	}
+        assertEquals(QcMLFileReader.QCML_VERSION, qcml.getVersion());
+    }
 
     @Test(expected=NullPointerException.class)
     public void getCv_nullFile() {

@@ -14,9 +14,9 @@ import org.eclipse.persistence.descriptors.ClassDescriptor;
  */
 public class ThresholdCustomizer implements DescriptorCustomizer {
 
-	@Override
-	public void customize(ClassDescriptor descriptor) {
-		descriptor.removeMappingForAttributeName("parentAssessment");
-	}
+    @Override
+    public void customize(ClassDescriptor descriptor) {
+        descriptor.removeMappingForAttributeName("parentAssessment");
+    }
 
 }

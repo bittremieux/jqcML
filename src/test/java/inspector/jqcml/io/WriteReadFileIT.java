@@ -14,27 +14,28 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.xml.bind.DatatypeConverter;
 import java.io.File;
-import java.io.IOException;
 import java.math.BigInteger;
 import java.util.Iterator;
+import java.util.Objects;
 import java.util.Random;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
-public class WriteReadFileTest {
+public class WriteReadFileIT {
+
+    private static final String PORT = System.getProperty("mysql.port");
 
     private Random random = new Random();
 
     private QcML qcmlExpected;
 
-    private String schema = "jqcmltest";
-
     @Before
     public void setUp() {
         // create fully populated qcML object
-        qcmlExpected = generateRandomQcML(getClass().getResource("/").getPath() + "WriteReadFileTest.qcML");
-	}
+        qcmlExpected = generateRandomQcML("WriteReadFileTest.qcML");
+    }
 
     private QcML generateRandomQcML(String name) {
         QcML qcml = new QcML();
@@ -51,22 +52,22 @@ public class WriteReadFileTest {
         // add runQualities
         for(int run = 0; run < 4; run++) {
             QualityAssessment runQuality = new QualityAssessment("run_" + run);
-			// add MetaDataParameters
-			for(int p = 0; p < Math.random() * 10; p++) {
-				MetaDataParameter param = new MetaDataParameter();
-				param.setName("metadata parameter " + p + " name");
-				param.setDescription("metadata parameter " + p + " description");
-				param.setValue("metadata value " + p);
-				param.setCvRef(qcml.getCv("cv_" + (int)(Math.random() * qcml.getNumberOfCvs())));
-				param.setAccession("accession " + p);
-				param.setId("r" + run + "_mp" + p);
-				runQuality.addMetaDataParameter(param);
-			}
+            // add MetaDataParameters
+            for(int p = 0; p < Math.random() * 10; p++) {
+                MetaDataParameter param = new MetaDataParameter();
+                param.setName("metadata parameter " + p + " name");
+                param.setDescription("metadata parameter " + p + " description");
+                param.setValue("metadata value " + p);
+                param.setCvRef(qcml.getCv("cv_" + (int)(Math.random() * qcml.getNumberOfCvs())));
+                param.setAccession("accession " + p);
+                param.setId("r" + run + "_mp" + p);
+                runQuality.addMetaDataParameter(param);
+            }
             // add QualityParameters
             for(int p = 0; p < Math.random() * 30; p++) {
                 QualityParameter param = new QualityParameter();
                 param.setName("quality parameter " + p + " name");
-				param.setDescription("quality parameter " + p + " description");
+                param.setDescription("quality parameter " + p + " description");
                 param.setValue("value " + p);
                 param.setUnitAccession("unit accession " + p);
                 param.setUnitName("unit name " + p);
@@ -79,7 +80,7 @@ public class WriteReadFileTest {
                     for(int t = 0; t < Math.random() * 3; t++) {
                         Threshold threshold = new Threshold();
                         threshold.setName("threshold " + p + " " + t);
-						threshold.setDescription("threshold " + p + " description");
+                        threshold.setDescription("threshold " + p + " description");
                         threshold.setValue("threshold value " + p + " " + t);
                         threshold.setUnitAccession("threshold unit accession " + p + " " + t);
                         threshold.setUnitName("threshold unit name " + p + " " + t);
@@ -98,7 +99,7 @@ public class WriteReadFileTest {
                     // binary attachment
                     AttachmentParameter binaryAttachment = new AttachmentParameter();
                     binaryAttachment.setName("binary attachment parameter name " + run + " " + p);
-					binaryAttachment.setDescription("binary attachment parameter " + p + " description");
+                    binaryAttachment.setDescription("binary attachment parameter " + p + " description");
                     binaryAttachment.setValue(Double.toString(Math.random() * 100000));
                     binaryAttachment.setUnitAccession("binary attachment unit accession " + run + " " + p);
                     binaryAttachment.setUnitName("binary attachment unit name " + run + " " + p);
@@ -115,7 +116,7 @@ public class WriteReadFileTest {
                     // tabular attachment
                     AttachmentParameter tableAttachment = new AttachmentParameter();
                     tableAttachment.setName("table attachment parameter name " + run + " " + p);
-					tableAttachment.setDescription("table attachment parameter " + p + " description");
+                    tableAttachment.setDescription("table attachment parameter " + p + " description");
                     tableAttachment.setValue("456");
                     tableAttachment.setUnitAccession("table attachment unit accession " + run + " " + p);
                     tableAttachment.setUnitName("table attachment unit name " + run + " " + p);
@@ -143,22 +144,22 @@ public class WriteReadFileTest {
         // add setQualities
         for(int set = 0; set < 2; set++) {
             QualityAssessment setQuality = new QualityAssessment("set_" + set);
-			// add MetaDataParameters
-			for(int p = 0; p < Math.random() * 10; p++) {
-				MetaDataParameter param = new MetaDataParameter();
-				param.setName("metadata parameter " + p + " name");
-				param.setDescription("metadata parameter " + p + " description");
-				param.setValue("metadata value " + p);
-				param.setCvRef(qcml.getCv("cv_" + (int)(Math.random() * qcml.getNumberOfCvs())));
-				param.setAccession("accession " + p);
-				param.setId("s" + set + "_mp" + p);
-				setQuality.addMetaDataParameter(param);
-			}
+            // add MetaDataParameters
+            for(int p = 0; p < Math.random() * 10; p++) {
+                MetaDataParameter param = new MetaDataParameter();
+                param.setName("metadata parameter " + p + " name");
+                param.setDescription("metadata parameter " + p + " description");
+                param.setValue("metadata value " + p);
+                param.setCvRef(qcml.getCv("cv_" + (int)(Math.random() * qcml.getNumberOfCvs())));
+                param.setAccession("accession " + p);
+                param.setId("s" + set + "_mp" + p);
+                setQuality.addMetaDataParameter(param);
+            }
             // add QualityParameters
             for(int p = 0; p < Math.random() * 20; p++) {
                 QualityParameter param = new QualityParameter();
                 param.setName("quality parameter " + p + " name");
-				param.setDescription("quality parameter " + p + " description");
+                param.setDescription("quality parameter " + p + " description");
                 param.setValue("value " + p);
                 param.setUnitAccession("unit accession " + p);
                 param.setUnitName("unit name " + p);
@@ -171,7 +172,7 @@ public class WriteReadFileTest {
                     for(int t = 0; t < Math.random() * 3; t++) {
                         Threshold threshold = new Threshold();
                         threshold.setName("threshold " + p + " " + t);
-						threshold.setDescription("threshold " + p + " description");
+                        threshold.setDescription("threshold " + p + " description");
                         threshold.setValue("threshold value " + p + " " + t);
                         threshold.setUnitAccession("threshold unit accession " + p + " " + t);
                         threshold.setUnitName("threshold unit name " + p + " " + t);
@@ -190,7 +191,7 @@ public class WriteReadFileTest {
                     // binary attachment
                     AttachmentParameter binaryAttachment = new AttachmentParameter();
                     binaryAttachment.setName("binary attachment parameter name " + set + " " + p);
-					binaryAttachment.setDescription("binary attachment parameter " + p + " description");
+                    binaryAttachment.setDescription("binary attachment parameter " + p + " description");
                     binaryAttachment.setValue(Double.toString(Math.random() * 100000));
                     binaryAttachment.setUnitAccession("binary attachment unit accession " + set + " " + p);
                     binaryAttachment.setUnitName("binary attachment unit name " + set + " " + p);
@@ -207,7 +208,7 @@ public class WriteReadFileTest {
                     // tabular attachment
                     AttachmentParameter tableAttachment = new AttachmentParameter();
                     tableAttachment.setName("table attachment parameter name " + set + " " + p);
-					tableAttachment.setDescription("table attachment parameter " + p + " description");
+                    tableAttachment.setDescription("table attachment parameter " + p + " description");
                     tableAttachment.setValue("456");
                     tableAttachment.setUnitAccession("table attachment unit accession " + set + " " + p);
                     tableAttachment.setUnitName("table attachment unit name " + set + " " + p);
@@ -237,19 +238,13 @@ public class WriteReadFileTest {
 
     @After
     public void deleteFile() {
-		if(getClass().getResource("/WriteReadFileTest.qcML") != null) {
-			File file = new File(getClass().getResource("/WriteReadFileTest.qcML").getFile());
-			file.delete();
-		}
-		if(getClass().getResource("/WriteReadFileTest.db") != null) {
-			File file = new File(getClass().getResource("/WriteReadFileTest.db").getFile());
-			file.delete();
-		}
+        File file = new File("WriteReadFileTest.qcML");
+        file.delete();
     }
 
     @After
     public void clearMySQL() {
-        EntityManagerFactory emf = QcDBManagerFactory.createMySQLFactory("localhost", "3306", schema, "root", null);
+        EntityManagerFactory emf = QcDBManagerFactory.createMySQLFactory("localhost", PORT, "root", "root", "root");
         EntityManager em = emf.createEntityManager();
         em.getTransaction().begin();
         em.createNativeQuery("DROP TABLE table_value").executeUpdate();
@@ -258,8 +253,8 @@ public class WriteReadFileTest {
         em.createNativeQuery("DROP TABLE table_attachment").executeUpdate();
         em.createNativeQuery("DROP TABLE attachment_parameter").executeUpdate();
         em.createNativeQuery("DROP TABLE threshold").executeUpdate();
-		em.createNativeQuery("DROP TABLE quality_parameter").executeUpdate();
-		em.createNativeQuery("DROP TABLE meta_data_parameter").executeUpdate();
+        em.createNativeQuery("DROP TABLE quality_parameter").executeUpdate();
+        em.createNativeQuery("DROP TABLE meta_data_parameter").executeUpdate();
         em.createNativeQuery("DROP TABLE quality_assessment").executeUpdate();
         em.createNativeQuery("DROP TABLE cv_list").executeUpdate();
         em.createNativeQuery("DROP TABLE cv").executeUpdate();
@@ -285,8 +280,8 @@ public class WriteReadFileTest {
 
         // read it back in
         QcMLFileReader reader = new QcMLFileReader();
-        QcML qcmlRead = reader.getQcML(getClass().getResource("/WriteReadFileTest.qcML").getFile());
-		qcmlRead.setFileName(getClass().getResource("/").getPath() + "WriteReadFileTest.qcML");
+        QcML qcmlRead = reader.getQcML("WriteReadFileTest.qcML");
+        qcmlRead.setFileName("WriteReadFileTest.qcML");
 
         assertEquality(qcmlExpected, qcmlRead);
     }
@@ -294,13 +289,13 @@ public class WriteReadFileTest {
     @Test
     public void mysql_new() {
         // write the object to a MySQL database
-        EntityManagerFactory emf = QcDBManagerFactory.createMySQLFactory("localhost", "3306", schema, "root", null);
+        EntityManagerFactory emf = QcDBManagerFactory.createMySQLFactory("localhost", PORT, "root", "root", "root");
         QcDBWriter writer = new QcDBWriter(emf);
         writer.writeQcML(qcmlExpected);
 
         // read it back in
         QcDBReader reader = new QcDBReader(emf);
-		QcML qcmlRead = reader.getQcML(getClass().getResource("/").getPath() + "WriteReadFileTest.qcML");
+        QcML qcmlRead = reader.getQcML("WriteReadFileTest.qcML");
         emf.close();
 
         assertEquality(qcmlExpected, qcmlRead);
@@ -309,16 +304,16 @@ public class WriteReadFileTest {
     @Test
     public void mysql_overwrite() {
         // write the object to a MySQL database
-        EntityManagerFactory emf = QcDBManagerFactory.createMySQLFactory("localhost", "3306", schema, "root", null);
+        EntityManagerFactory emf = QcDBManagerFactory.createMySQLFactory("localhost", PORT, "root", "root", "root");
         QcDBWriter writer = new QcDBWriter(emf);
         writer.writeQcML(qcmlExpected);
         // overwrite the first object
-        QcML qcmlOther = generateRandomQcML(getClass().getResource("/").getPath() + "WriteReadFileTest.qcML");
+        QcML qcmlOther = generateRandomQcML("WriteReadFileTest.qcML");
         writer.writeQcML(qcmlOther);
 
         // read the second object back in
         QcDBReader reader = new QcDBReader(emf);
-        QcML qcmlRead = reader.getQcML(getClass().getResource("/").getPath() + "WriteReadFileTest.qcML");
+        QcML qcmlRead = reader.getQcML("WriteReadFileTest.qcML");
         emf.close();
 
         assertEquality(qcmlOther, qcmlRead);
@@ -333,7 +328,7 @@ public class WriteReadFileTest {
 
         // read it back in
         QcDBReader reader = new QcDBReader(emf);
-        QcML qcmlRead = reader.getQcML(getClass().getResource("/").getPath() + "WriteReadFileTest.qcML");
+        QcML qcmlRead = reader.getQcML("WriteReadFileTest.qcML");
         emf.close();
 
         assertEquality(qcmlExpected, qcmlRead);
@@ -346,35 +341,16 @@ public class WriteReadFileTest {
         QcDBWriter writer = new QcDBWriter(emf);
         writer.writeQcML(qcmlExpected);
         // overwrite the first object
-        QcML qcmlOther = generateRandomQcML(getClass().getResource("/").getPath() + "WriteReadFileTest.qcML");
+        QcML qcmlOther = generateRandomQcML("WriteReadFileTest.qcML");
         writer.writeQcML(qcmlOther);
 
         // read the second object back in
         QcDBReader reader = new QcDBReader(emf);
-        QcML qcmlRead = reader.getQcML(getClass().getResource("/").getPath() + "WriteReadFileTest.qcML");
+        QcML qcmlRead = reader.getQcML("WriteReadFileTest.qcML");
         emf.close();
 
         assertEquality(qcmlOther, qcmlRead);
     }
-
-	@Test
-	public void qcML2qcDB() throws IOException, InterruptedException {
-		// write to a qcML file
-		QcMLFileWriter fileWriter = new QcMLFileWriter();
-		fileWriter.writeQcML(qcmlExpected);
-
-		// convert using the Python script
-		Process p = Runtime.getRuntime().exec("python " + getClass().getResource("/qcml2qcdb.py").getFile() + " " + getClass().getResource("/WriteReadFileTest.qcML").getFile());
-		p.waitFor();
-
-		// read the qcDB
-		EntityManagerFactory emf = QcDBManagerFactory.createSQLiteFactory(getClass().getResource("/WriteReadFileTest.db").getFile());
-		QcDBReader reader = new QcDBReader(emf);
-		QcML qcmlRead = reader.getQcML(getClass().getResource("/WriteReadFileTest.qcML").getFile());
-		emf.close();
-
-		assertEquality(qcmlExpected, qcmlRead);
-	}
 
     private void assertEquality(QcML qcmlExpected, QcML qcmlRead) {
         // compare both objects
@@ -396,14 +372,14 @@ public class WriteReadFileTest {
             assertEquals(qa.getId(), qaOther.getId());
             assertEquals(qa.isSet(), qaOther.isSet());
 
-			// MetaDataParameters
-			assertEquals(qa.getNumberOfMetaDataParameters(), qaOther.getNumberOfMetaDataParameters());
-			for(Iterator<MetaDataParameter> paramIt = qa.getMetaDataParameterIterator(); paramIt.hasNext(); ) {
-				MetaDataParameter param = paramIt.next();
-				MetaDataParameter paramOther = qaOther.getMetaDataParameter(param.getAccession());
-				assertNotNull(paramOther);
-				assertEquals(param, paramOther);
-			}
+            // MetaDataParameters
+            assertEquals(qa.getNumberOfMetaDataParameters(), qaOther.getNumberOfMetaDataParameters());
+            for(Iterator<MetaDataParameter> paramIt = qa.getMetaDataParameterIterator(); paramIt.hasNext(); ) {
+                MetaDataParameter param = paramIt.next();
+                MetaDataParameter paramOther = qaOther.getMetaDataParameter(param.getAccession());
+                assertNotNull(paramOther);
+                assertTrue(equalsParameters(param, paramOther));
+            }
 
             // QualityParameters
             assertEquals(qa.getNumberOfQualityParameters(), qaOther.getNumberOfQualityParameters());
@@ -411,7 +387,7 @@ public class WriteReadFileTest {
                 QualityParameter param = paramIt.next();
                 QualityParameter paramOther = qaOther.getQualityParameter(param.getAccession());
                 assertNotNull(paramOther);
-                assertEquals(param, paramOther);
+                assertTrue(equalsParameters(param, paramOther));
             }
 
             // AttachmentParameters
@@ -420,7 +396,7 @@ public class WriteReadFileTest {
                 AttachmentParameter param = paramIt.next();
                 AttachmentParameter paramOther = qaOther.getAttachmentParameter(param.getAccession());
                 assertNotNull(paramOther);
-                assertEquals(param, paramOther);
+                assertTrue(equalsParameters(param, paramOther));
             }
         }
         // setQualities
@@ -432,14 +408,14 @@ public class WriteReadFileTest {
             assertEquals(qa.getId(), qaOther.getId());
             assertEquals(qa.isSet(), qaOther.isSet());
 
-			// MetaDataParameters
-			assertEquals(qa.getNumberOfMetaDataParameters(), qaOther.getNumberOfMetaDataParameters());
-			for(Iterator<MetaDataParameter> paramIt = qa.getMetaDataParameterIterator(); paramIt.hasNext(); ) {
-				MetaDataParameter param = paramIt.next();
-				MetaDataParameter paramOther = qaOther.getMetaDataParameter(param.getAccession());
-				assertNotNull(paramOther);
-				assertEquals(param, paramOther);
-			}
+            // MetaDataParameters
+            assertEquals(qa.getNumberOfMetaDataParameters(), qaOther.getNumberOfMetaDataParameters());
+            for(Iterator<MetaDataParameter> paramIt = qa.getMetaDataParameterIterator(); paramIt.hasNext(); ) {
+                MetaDataParameter param = paramIt.next();
+                MetaDataParameter paramOther = qaOther.getMetaDataParameter(param.getAccession());
+                assertNotNull(paramOther);
+                assertTrue(equalsParameters(param, paramOther));
+            }
 
             // QualityParameters
             assertEquals(qa.getNumberOfQualityParameters(), qaOther.getNumberOfQualityParameters());
@@ -447,7 +423,7 @@ public class WriteReadFileTest {
                 QualityParameter param = paramIt.next();
                 QualityParameter paramOther = qaOther.getQualityParameter(param.getAccession());
                 assertNotNull(paramOther);
-                assertEquals(param, paramOther);
+                assertTrue(equalsParameters(param, paramOther));
             }
 
             // AttachmentParameters
@@ -456,9 +432,85 @@ public class WriteReadFileTest {
                 AttachmentParameter param = paramIt.next();
                 AttachmentParameter paramOther = qaOther.getAttachmentParameter(param.getAccession());
                 assertNotNull(paramOther);
-                assertEquals(param, paramOther);
+                assertTrue(equalsParameters(param, paramOther));
             }
         }
     }
 
+    private boolean equalsParameters(AbstractParameter param1, AbstractParameter param2) {
+        boolean abstractEquals = Objects.equals(param1.getName(), param2.getName()) &&
+                Objects.equals(param1.getDescription(), param2.getDescription()) &&
+                Objects.equals(param1.getValue(), param2.getValue()) &&
+                Objects.equals(param1.getUnitAccession(), param2.getUnitAccession()) &&
+                Objects.equals(param1.getUnitName(), param2.getUnitName()) &&
+                Objects.equals(param1.getUnitCvRefId(), param2.getUnitCvRefId()) &&
+                Objects.equals(param1.getUnitCvRef(), param2.getUnitCvRef());
+        boolean metadataEquals = true;
+        if(param1 instanceof MetaDataParameter) {
+            if(param2 instanceof MetaDataParameter) {
+                metadataEquals = Objects.equals(((MetaDataParameter) param1).getId(), ((MetaDataParameter) param2).getId());
+            } else {
+                metadataEquals = false;
+            }
+        }
+        boolean qualityEquals = true;
+        if(param1 instanceof QualityParameter) {
+            if(param2 instanceof QualityParameter) {
+                QualityParameter qp1 = (QualityParameter) param1;
+                QualityParameter qp2 = (QualityParameter) param2;
+                qualityEquals = Objects.equals(qp1.getId(), qp2.getId()) &&
+                        Objects.equals(qp1.hasFlag(), qp2.hasFlag());
+                for(Iterator<Threshold> it = qp1.getThresholdIterator(); it.hasNext(); ) {
+                    Threshold tr1 = it.next();
+                    Threshold tr2 = qp2.getThreshold(tr1.getAccession());
+                    qualityEquals &= equalsParameters(tr1, tr2);
+                }
+            } else {
+                qualityEquals = false;
+            }
+        }
+        boolean attachmentEquals = true;
+        if(param1 instanceof AttachmentParameter) {
+            if(param2 instanceof AttachmentParameter) {
+                AttachmentParameter ap1 = (AttachmentParameter) param1;
+                AttachmentParameter ap2 = (AttachmentParameter) param2;
+                attachmentEquals = Objects.equals(ap1.getId(), ap2.getId()) &&
+                        Objects.equals(ap1.getBinary(), ap2.getBinary()) &&
+                        equalsTable(ap1.getTable(), ap2.getTable()) &&
+                        equalsParameters(ap1.getQualityParameterRef(), ap2.getQualityParameterRef());
+            } else {
+                attachmentEquals = false;
+            }
+        }
+        boolean thresholdEquals = true;
+        if(param1 instanceof Threshold) {
+            if(param2 instanceof Threshold) {
+                thresholdEquals = Objects.equals(((Threshold) param1).getFileName(), ((Threshold) param2).getFileName());
+            } else {
+                thresholdEquals = false;
+            }
+        }
+        return abstractEquals && metadataEquals && qualityEquals && attachmentEquals && thresholdEquals;
+    }
+
+    private boolean equalsTable(TableAttachment table1, TableAttachment table2) {
+        if(table1 == null && table2 == null) {
+            return true;
+        } else if(table1 == null || table2 == null) {
+            return false;
+        } else {
+            if(Objects.equals(table1.getRows(), table2.getRows()) &&
+                    Objects.equals(table1.getColumns(), table2.getColumns())) {
+                for(TableRow row : table1.getRows()) {
+                    for(TableColumn column : table1.getColumns()) {
+                        if(!table1.getValue(column.getColumn(), row.getRow()).equals(
+                                table2.getValue(column.getColumn(), row.getRow()))) {
+                            return false;
+                        }
+                    }
+                }
+            }
+            return true;
+        }
+    }
 }
