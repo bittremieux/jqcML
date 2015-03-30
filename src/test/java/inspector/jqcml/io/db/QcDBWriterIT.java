@@ -1,5 +1,25 @@
 package inspector.jqcml.io.db;
 
+/*
+ * #%L
+ * jqcML
+ * %%
+ * Copyright (C) 2013 - 2015 InSPECtor
+ * %%
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * #L%
+ */
+
 import inspector.jqcml.io.xml.QcMLFileReader;
 import inspector.jqcml.io.xml.QcMLFileWriter;
 import inspector.jqcml.model.Cv;
@@ -89,9 +109,8 @@ public class QcDBWriterIT {
         Cv cv = new Cv("name", "uri", "cv");
         qcml.addCv(cv);
 
-        QualityAssessment run = new QualityAssessment("run");
-        QualityParameter param = new QualityParameter("name", cv, "param");
-        param.setAccession("accession");
+        QualityAssessment run = new QualityAssessment("run", false);
+        QualityParameter param = new QualityParameter("name", cv, "accession", "param");
         run.addQualityParameter(param);
         qcml.addRunQuality(run);
 
@@ -113,9 +132,8 @@ public class QcDBWriterIT {
         Cv cv = new Cv("name", "uri", "cv");
         qcml.addCv(cv);
 
-        QualityAssessment run = new QualityAssessment("run");
-        QualityParameter param = new QualityParameter("name", cv, "param");
-        param.setAccession("accession");
+        QualityAssessment run = new QualityAssessment("run", false);
+        QualityParameter param = new QualityParameter("name", cv, "accession", "param");
         run.addQualityParameter(param);
         qcml.addRunQuality(run);
 
@@ -155,7 +173,7 @@ public class QcDBWriterIT {
 
         QcML qcmlNew = new QcML();
         qcmlNew.setFileName("new.qcml");
-        qcml.addRunQuality(new QualityAssessment("run_1"));
+        qcml.addRunQuality(new QualityAssessment("run_1", false));
 
         writer.writeQcML(qcmlNew);
     }
@@ -168,7 +186,7 @@ public class QcDBWriterIT {
 
         QcML qcmlNew = new QcML();
         qcmlNew.setFileName("new.qcml");
-        qcml.addSetQuality(new QualityAssessment("set_1"));
+        qcml.addSetQuality(new QualityAssessment("set_1", true));
 
         writer.writeQcML(qcmlNew);
     }

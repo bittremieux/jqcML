@@ -1,5 +1,25 @@
 package inspector.jqcml.io.xml;
 
+/*
+ * #%L
+ * jqcML
+ * %%
+ * Copyright (C) 2013 - 2015 InSPECtor
+ * %%
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * #L%
+ */
+
 import inspector.jqcml.io.QcMLWriter;
 import inspector.jqcml.model.Cv;
 import inspector.jqcml.model.QcML;
@@ -46,9 +66,8 @@ public class QcMLWriterTest {
         Cv cv = new Cv("name", "uri", "cv");
         qcml.addCv(cv);
 
-        QualityAssessment run = new QualityAssessment("run");
-        QualityParameter param = new QualityParameter("name", cv, "param");
-        param.setAccession("accession");
+        QualityAssessment run = new QualityAssessment("run", false);
+        QualityParameter param = new QualityParameter("name", cv, "accession", "param");
         run.addQualityParameter(param);
         qcml.addRunQuality(run);
 
@@ -64,9 +83,8 @@ public class QcMLWriterTest {
         Cv cv = new Cv("name", "uri", "cv");
         qcml.addCv(cv);
 
-        QualityAssessment run = new QualityAssessment("run");
-        QualityParameter param = new QualityParameter("name", cv, "param");
-        param.setAccession("accession");
+        QualityAssessment run = new QualityAssessment("run", false);
+        QualityParameter param = new QualityParameter("name", cv, "accession", "param");
         run.addQualityParameter(param);
         qcml.addRunQuality(run);
 
@@ -88,9 +106,8 @@ public class QcMLWriterTest {
         Cv cv = new Cv("name", "uri", "cv");
         qcml.addCv(cv);
 
-        QualityAssessment run = new QualityAssessment("run");
-        QualityParameter param = new QualityParameter("name", cv, "param");
-        param.setAccession("accession");
+        QualityAssessment run = new QualityAssessment("run", false);
+        QualityParameter param = new QualityParameter("name", cv, "accession", "param");
         run.addQualityParameter(param);
         qcml.addRunQuality(run);
 
@@ -120,9 +137,8 @@ public class QcMLWriterTest {
         Cv cv = new Cv("name", "uri", "id");
         qcml.addCv(cv);
 
-        QualityAssessment run = new QualityAssessment("id");
-        QualityParameter param = new QualityParameter("name", cv, "id");
-        param.setAccession("accession");
+        QualityAssessment run = new QualityAssessment("id", false);
+        QualityParameter param = new QualityParameter("name", cv, "accession", "id");
         run.addQualityParameter(param);
         qcml.addRunQuality(run);
 
@@ -134,9 +150,8 @@ public class QcMLWriterTest {
         QcML qcml = new QcML();
         qcml.setFileName("Invalid.qcML");
 
-        QualityAssessment run = new QualityAssessment("run");
-        QualityParameter param = new QualityParameter("name", new Cv("name", "uri", "cv"), "param");
-        param.setAccession("accession");
+        QualityAssessment run = new QualityAssessment("run", false);
+        QualityParameter param = new QualityParameter("name", new Cv("name", "uri", "cv"), "accession", "param");
         run.addQualityParameter(param);
         qcml.addRunQuality(run);
 

@@ -1,37 +1,42 @@
 package inspector.jqcml.model;
 
+/*
+ * #%L
+ * jqcML
+ * %%
+ * Copyright (C) 2013 - 2015 InSPECtor
+ * %%
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * #L%
+ */
+
+import com.google.common.base.MoreObjects;
+import inspector.jqcml.io.QcMLReader;
 import inspector.jqcml.jaxb.adapters.CvListAdapter;
 import inspector.jqcml.jaxb.adapters.RunQualityAdapter;
 import inspector.jqcml.jaxb.adapters.SetQualityAdapter;
 import inspector.jqcml.jpa.listener.QcDBQcMLListener;
-
-import java.util.Iterator;
-import java.util.Map;
-import java.util.TreeMap;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinTable;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
-import javax.persistence.MapKey;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.persistence.TableGenerator;
-import javax.persistence.Transient;
-import javax.xml.bind.annotation.*;
-import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.eclipse.persistence.oxm.annotations.XmlPath;
+
+import javax.persistence.*;
+import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * The root element of a qcML file.
@@ -113,12 +118,16 @@ public class QcML {
     private Map<String, Cv> cvList;
 
     /**
-     * Constructs a new QcML object with empty runQuality and setQuality list, and an empty cv list.
+     * Constructs a new QcML object with empty runQuality and setQuality lists, and an empty cv list.
+     *
+     * The QcML object will have the default version number.
      */
     public QcML() {
         this.runQuality = new TreeMap<>();
         this.setQuality = new TreeMap<>();
         this.cvList = new TreeMap<>();
+
+        setVersion(QcMLReader.QCML_VERSION);
     }
 
     /**
@@ -209,7 +218,10 @@ public class QcML {
     public void addRunQuality(QualityAssessment qa) {
         if(qa != null) {
             // make sure that the 'set' flag is NOT set
-            qa.setSet(false);
+            if(qa.isSet()) {
+                LOGGER.error("Can't add a <set> QualityAssessment as a runQuality to a QcML object");
+                throw new IllegalArgumentException("Can't add a <set> QualityAssessment as a runQuality");
+            }
             // add the bi-directional relationship
             qa.setParentQcML(this);
             runQuality.put(qa.getId(), qa);
@@ -287,7 +299,10 @@ public class QcML {
     public void addSetQuality(QualityAssessment qa) {
         if(qa != null) {
             // make sure that the 'set' flag is set
-            qa.setSet(true);
+            if(!qa.isSet()) {
+                LOGGER.error("Can't add a <run> QualityAssessment as a setQuality to a QcML object");
+                throw new IllegalArgumentException("Can't add a <run> QualityAssessment as a setQuality");
+            }
             // add the bi-directional relationship
             qa.setParentQcML(this);
             setQuality.put(qa.getId(), qa);
@@ -434,7 +449,18 @@ public class QcML {
 
     @Override
     public String toString() {
-        return "qcML <file name=\"" + getFileName() + "\">";
+        MoreObjects.ToStringHelper tsh = MoreObjects.toStringHelper(this)
+                .add("file name", fileName).add("version", version);
+        for(Iterator<QualityAssessment> it = getRunQualityIterator(); it.hasNext(); ) {
+            tsh.add("run quality", it.next());
+        }
+        for(Iterator<QualityAssessment> it = getSetQualityIterator(); it.hasNext(); ) {
+            tsh.add("set quality", it.next());
+        }
+        for(Iterator<Cv> it = getCvIterator(); it.hasNext(); ) {
+            tsh.add("cv", it.next());
+        }
+        return tsh.toString();
     }
 
 }

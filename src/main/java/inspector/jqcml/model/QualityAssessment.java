@@ -1,5 +1,26 @@
 package inspector.jqcml.model;
 
+/*
+ * #%L
+ * jqcML
+ * %%
+ * Copyright (C) 2013 - 2015 InSPECtor
+ * %%
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * #L%
+ */
+
+import com.google.common.base.MoreObjects;
 import inspector.jqcml.jaxb.adapters.QualityAssessmentAdapter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -66,7 +87,7 @@ public class QualityAssessment {
     /**
      * Constructs a new QualityAssessment object with empty {@link QualityParameter} and {@link AttachmentParameter} lists.
      */
-    public QualityAssessment() {
+    protected QualityAssessment() {
         this.metaDataList = new TreeMap<>();
         this.parameterList = new TreeMap<>();
         this.attachmentList = new TreeMap<>();
@@ -75,12 +96,14 @@ public class QualityAssessment {
     /**
      * Constructs a new QualityAssessment object, with the specified ID, with empty {@link QualityParameter} and {@link AttachmentParameter} lists.
      * 
-     * @param id  The ID of this QualityAssessment object
+     * @param id  The ID of this QualityAssessment object, not {@code null}
+     * @param isSet  Indicates whether this QualityAssessment object represents a RunQuality or a SetQuality
      */
-    public QualityAssessment(String id) {
+    public QualityAssessment(String id, boolean isSet) {
         this();
 
         setId(id);
+        setSet(isSet);
     }
 
     /**
@@ -107,10 +130,15 @@ public class QualityAssessment {
     /**
      * Sets the unique identifier of this QualityAssessment object.
      *
-     * @param id  The ID of this QualityAssessment object
+     * @param id  The ID of this QualityAssessment object, not {@code null}
      */
-    public void setId(String id) {
-        this.id = id;
+    private void setId(String id) {
+        if(id != null) {
+            this.id = id;
+        } else {
+            LOGGER.error("The QualityAssessment's ID is not allowed to be <null>");
+            throw new NullPointerException("The QualityAssessment's ID is not allowed to be <null>");
+        }
     }
 
     /**
@@ -381,11 +409,17 @@ public class QualityAssessment {
 
     @Override
     public String toString() {
-        if(!isSet) {
-            return "runQuality <ID=\"" + getId() + "\">";
-        } else {
-            return "setQuality <ID=\"" + getId() + "\">";
+        MoreObjects.ToStringHelper tsh = MoreObjects.toStringHelper(this).add("id", id).add("set", isSet);
+        for(Iterator<MetaDataParameter> it = getMetaDataParameterIterator(); it.hasNext(); ) {
+            tsh.add("metadata", it.next());
         }
+        for(Iterator<QualityParameter> it = getQualityParameterIterator(); it.hasNext(); ) {
+            tsh.add("quality", it.next());
+        }
+        for(Iterator<AttachmentParameter> it = getAttachmentParameterIterator(); it.hasNext(); ) {
+            tsh.add("attachment", it.next());
+        }
+        return tsh.toString();
     }
 
 }

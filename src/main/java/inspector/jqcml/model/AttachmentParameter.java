@@ -1,40 +1,37 @@
 package inspector.jqcml.model;
 
+/*
+ * #%L
+ * jqcML
+ * %%
+ * Copyright (C) 2013 - 2015 InSPECtor
+ * %%
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * #L%
+ */
+
+import com.google.common.base.MoreObjects;
 import inspector.jqcml.jaxb.adapters.TableAttachmentAdapter;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
-import javax.persistence.TableGenerator;
-import javax.persistence.Transient;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlID;
-import javax.xml.bind.annotation.XmlIDREF;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlSchemaType;
-import javax.xml.bind.annotation.XmlTransient;
-import javax.xml.bind.annotation.XmlType;
-import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.eclipse.persistence.oxm.annotations.XmlPath;
 
+import javax.persistence.*;
+import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.File;
 import java.io.IOException;
 
@@ -104,19 +101,20 @@ public class AttachmentParameter extends CvParameter {
     /**
      * Constructs a new empty AttachmentParameter object.
      */
-    public AttachmentParameter() {
+    protected AttachmentParameter() {
         super();
     }
 
     /**
      * Constructs a new AttachmentParameter object with the given name and id, and defined by the given {@link Cv} object.
      *
-     * @param name  The name of the attachment
-     * @param cvRef  The reference to the Cv object which defines this attachment
-     * @param id  The unique identifier for this attachment
+     * @param name  The name of the attachment, not {@code null}
+     * @param cvRef  The reference to the Cv object which defines this attachment, not {@code null}
+     * @param accession  The accession number identifying this parameter in the controlled vocabulary, not {@code null}
+     * @param id  The unique identifier for this attachment, not {@code null}
      */
-    public AttachmentParameter(String name, Cv cvRef, String id) {
-        super(name, cvRef);
+    public AttachmentParameter(String name, Cv cvRef, String accession, String id) {
+        super(name, cvRef, accession);
 
         setId(id);
     }
@@ -145,10 +143,15 @@ public class AttachmentParameter extends CvParameter {
     /**
      * Sets the unique identifier of this AttachmentParameter object.
      *
-     * @param id  The ID of this AttachmentParameter object
+     * @param id  The ID of this AttachmentParameter object, not {@code null}
      */
-    public void setId(String id) {
-        this.id = id;
+    private void setId(String id) {
+        if(id != null) {
+            this.id = id;
+        } else {
+            LOGGER.error("The AttachmentParameter's ID is not allowed to be <null>");
+            throw new NullPointerException("The AttachmentParameter's ID is not allowed to be <null>");
+        }
     }
 
     /**
@@ -229,7 +232,9 @@ public class AttachmentParameter extends CvParameter {
 
     @Override
     public String toString() {
-        return "attachmentParameter <ID=\"" + getId() + "\" name=\"" + getName() + "\">";
+        return MoreObjects.toStringHelper(this).add("id", id).add("name", name).add("accession", accession).add("value", value)
+                .add("unit name", unitName).add("unit accession", unitAccession).add("description", description)
+                .add("binary", binary).add("table", table).omitNullValues().toString();
     }
 
 }

@@ -1,5 +1,25 @@
 package inspector.jqcml.model;
 
+/*
+ * #%L
+ * jqcML
+ * %%
+ * Copyright (C) 2013 - 2015 InSPECtor
+ * %%
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * #L%
+ */
+
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -18,6 +38,7 @@ import javax.persistence.Table;
 import javax.persistence.TableGenerator;
 import javax.persistence.Transient;
 
+import com.google.common.base.MoreObjects;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -55,7 +76,7 @@ public class TableRow {
     /**
      * Constructs a new empty TableRow object.
      */
-    public TableRow() {
+    protected TableRow() {
         values = new HashSet<>();
     }
 
@@ -84,7 +105,7 @@ public class TableRow {
      *
      * @param row  the row index
      */
-    public void setRow(int row) {
+    private void setRow(int row) {
         this.row = row;
     }
 
@@ -104,8 +125,6 @@ public class TableRow {
      */
     public void addValue(TableValue value) {
         if(value != null) {
-            // add the bi-directional relationship
-            value.setRow(this);
             values.add(value);
         } else {
             LOGGER.error("Can't add <null> TableValue to a TableRow object");
@@ -155,7 +174,7 @@ public class TableRow {
 
     @Override
     public String toString() {
-        return "TableRow <" + getRow() + ">";
+        return MoreObjects.toStringHelper(this).add("row", row).toString();
     }
 
 }

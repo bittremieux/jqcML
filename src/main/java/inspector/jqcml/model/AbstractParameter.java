@@ -1,23 +1,32 @@
 package inspector.jqcml.model;
 
-import javax.persistence.Column;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.MappedSuperclass;
-import javax.persistence.Transient;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlSchemaType;
-import javax.xml.bind.annotation.XmlSeeAlso;
-import javax.xml.bind.annotation.XmlTransient;
-import javax.xml.bind.annotation.XmlType;
-import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+/*
+ * #%L
+ * jqcML
+ * %%
+ * Copyright (C) 2013 - 2015 InSPECtor
+ * %%
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * #L%
+ */
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import javax.persistence.*;
+import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 /**
  * Abstract base class for parameters containing some general information.
@@ -113,10 +122,15 @@ public abstract class AbstractParameter {
     /**
      * Sets the name of this parameter.
      *
-     * @param name  The name of this parameter
+     * @param name  The name of this parameter, not {@code null}
      */
-    public void setName(String name) {
-        this.name = name;
+    protected void setName(String name) {
+        if(name != null) {
+            this.name = name;
+        } else {
+            LOGGER.error("The parameter's name is not allowed to be <null>");
+            throw new NullPointerException("The parameter's name is not allowed to be <null>");
+        }
     }
 
     /**
@@ -251,11 +265,6 @@ public abstract class AbstractParameter {
      */
     public void setParentQualityAssessment(QualityAssessment parent) {
         this.parentAssessment = parent;
-    }
-
-    @Override
-    public String toString() {
-        return "abstractParameter <name=\"" + getName() + "\">";
     }
 
 }

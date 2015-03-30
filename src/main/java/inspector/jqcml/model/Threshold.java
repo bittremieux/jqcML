@@ -1,27 +1,33 @@
 package inspector.jqcml.model;
 
-import inspector.jqcml.jpa.customizer.ThresholdCustomizer;
+/*
+ * #%L
+ * jqcML
+ * %%
+ * Copyright (C) 2013 - 2015 InSPECtor
+ * %%
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * #L%
+ */
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.TableGenerator;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlSchemaType;
-import javax.xml.bind.annotation.XmlTransient;
+import com.google.common.base.MoreObjects;
+import inspector.jqcml.jpa.customizer.ThresholdCustomizer;
+import org.eclipse.persistence.annotations.Customizer;
+
+import javax.persistence.*;
+import javax.xml.bind.annotation.*;
 import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-
-import org.eclipse.persistence.annotations.Customizer;
 
 /**
  * Contains threshold information for an associated {@link QualityParameter}.
@@ -74,11 +80,12 @@ public class Threshold extends CvParameter {
     /**
      * Constructs a new Threshold object with the given name and defined by the given {@link Cv} object.
      *
-     * @param name  The name of the threshold
-     * @param cvRef  The reference to the Cv object which defines this threshold
+     * @param name  The name of the threshold, not {@code null}
+     * @param cvRef  The reference to the Cv object which defines this threshold, not {@code null}
+     * @param accession  The accession number identifying this parameter in the controlled vocabulary, not {@code null}
      */
-    public Threshold(String name, Cv cvRef) {
-        super(name, cvRef);
+    public Threshold(String name, Cv cvRef, String accession) {
+        super(name, cvRef, accession);
     }
 
     /**
@@ -104,7 +111,9 @@ public class Threshold extends CvParameter {
 
     @Override
     public String toString() {
-        return "threshold <name=\"" + getName() + "\" file name=\"" + getFileName() + "\">";
+        return MoreObjects.toStringHelper(this).add("name", name).add("accession", accession).add("value", value)
+                .add("unit name", unitName).add("unit accession", unitAccession).add("description", description)
+                .add("file name", fileName).omitNullValues().toString();
     }
 
 }

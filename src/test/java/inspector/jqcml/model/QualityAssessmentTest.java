@@ -1,11 +1,31 @@
 package inspector.jqcml.model;
 
-import static org.junit.Assert.*;
+/*
+ * #%L
+ * jqcML
+ * %%
+ * Copyright (C) 2013 - 2015 InSPECtor
+ * %%
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * #L%
+ */
 
+import inspector.jqcml.io.xml.QcMLFileReader;
 import org.junit.Before;
 import org.junit.Test;
 
-import inspector.jqcml.io.xml.QcMLFileReader;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 public class QualityAssessmentTest {
 
@@ -45,14 +65,12 @@ public class QualityAssessmentTest {
         QualityAssessment qa = qcml.getRunQuality("run_1");
         assertEquals(2, qa.getNumberOfMetaDataParameters());
 
-        MetaDataParameter mp = new MetaDataParameter("new parameter", qcml.getCv("cv_0"), "mp_new");
-        mp.setAccession("new_mp_accession");
+        MetaDataParameter mp = new MetaDataParameter("new parameter", qcml.getCv("cv_0"), "new_mp_accession", "mp_new");
         qa.addMetaDataParameter(mp);
 
         assertEquals(3, qa.getNumberOfMetaDataParameters());
 
-        MetaDataParameter mpOther = new MetaDataParameter("some other parameter", qcml.getCv("cv_1"), "mp_other");
-        mpOther.setAccession("other_qp_accession");
+        MetaDataParameter mpOther = new MetaDataParameter("some other parameter", qcml.getCv("cv_1"), "other_qp_accession", "mp_other");
         qa.addMetaDataParameter(mpOther);
 
         assertEquals(4, qa.getNumberOfMetaDataParameters());
@@ -64,8 +82,7 @@ public class QualityAssessmentTest {
         assertEquals(2, qa.getNumberOfMetaDataParameters());
         assertEquals("metadata parameter 0 at run 1", qa.getMetaDataParameter("QC:000000").getName());
 
-        MetaDataParameter mp = new MetaDataParameter("new parameter, same accession", qcml.getCv("cv_1"), "mp_new");
-        mp.setAccession("QC:000000");
+        MetaDataParameter mp = new MetaDataParameter("new parameter, same accession", qcml.getCv("cv_1"), "QC:000000", "mp_new");
         qa.addMetaDataParameter(mp);
 
         assertEquals(2, qa.getNumberOfMetaDataParameters());
@@ -141,14 +158,12 @@ public class QualityAssessmentTest {
         QualityAssessment qa = qcml.getRunQuality("run_1");
         assertEquals(4, qa.getNumberOfQualityParameters());
 
-        QualityParameter qp = new QualityParameter("new parameter", qcml.getCv("cv_0"), "qp_new");
-        qp.setAccession("new_qp_accession");
+        QualityParameter qp = new QualityParameter("new parameter", qcml.getCv("cv_0"), "new_qp_accession", "qp_new");
         qa.addQualityParameter(qp);
 
         assertEquals(5, qa.getNumberOfQualityParameters());
 
-        QualityParameter qpOther = new QualityParameter("some other parameter", qcml.getCv("cv_1"), "qp_other");
-        qpOther.setAccession("other_qp_accession");
+        QualityParameter qpOther = new QualityParameter("some other parameter", qcml.getCv("cv_1"), "other_qp_accession", "qp_other");
         qa.addQualityParameter(qpOther);
 
         assertEquals(6, qa.getNumberOfQualityParameters());
@@ -160,8 +175,7 @@ public class QualityAssessmentTest {
         assertEquals(4, qa.getNumberOfQualityParameters());
         assertEquals("quality parameter 0 at run 1", qa.getQualityParameter("QC:000000").getName());
 
-        QualityParameter qp = new QualityParameter("new parameter, same accession", qcml.getCv("cv_1"), "qp_new");
-        qp.setAccession("QC:000000");
+        QualityParameter qp = new QualityParameter("new parameter, same accession", qcml.getCv("cv_1"), "QC:000000", "qp_new");
         qa.addQualityParameter(qp);
 
         assertEquals(4, qa.getNumberOfQualityParameters());
@@ -237,14 +251,12 @@ public class QualityAssessmentTest {
         QualityAssessment qa = qcml.getRunQuality("run_1");
         assertEquals(1, qa.getNumberOfAttachmentParameters());
 
-        AttachmentParameter ap = new AttachmentParameter("new parameter", qcml.getCv("cv_0"), "ap_new");
-        ap.setAccession("new_qp_accession");
+        AttachmentParameter ap = new AttachmentParameter("new parameter", qcml.getCv("cv_0"), "new_qp_accession", "ap_new");
         qa.addAttachmentParameter(ap);
 
         assertEquals(2, qa.getNumberOfAttachmentParameters());
 
-        AttachmentParameter apOther = new AttachmentParameter("some other parameter", qcml.getCv("cv_1"), "ap_other");
-        apOther.setAccession("other_ap_accession");
+        AttachmentParameter apOther = new AttachmentParameter("some other parameter", qcml.getCv("cv_1"), "other_ap_accession", "ap_other");
         qa.addAttachmentParameter(apOther);
 
         assertEquals(3, qa.getNumberOfAttachmentParameters());
@@ -256,8 +268,7 @@ public class QualityAssessmentTest {
         assertEquals(1, qa.getNumberOfAttachmentParameters());
         assertEquals("attachment", qa.getAttachmentParameter("QC:000009").getName());
 
-        AttachmentParameter ap = new AttachmentParameter("new parameter, same accession", qcml.getCv("cv_1"), "ap_new");
-        ap.setAccession("QC:000009");
+        AttachmentParameter ap = new AttachmentParameter("new parameter, same accession", qcml.getCv("cv_1"), "QC:000009", "ap_new");
         qa.addAttachmentParameter(ap);
 
         assertEquals(1, qa.getNumberOfAttachmentParameters());

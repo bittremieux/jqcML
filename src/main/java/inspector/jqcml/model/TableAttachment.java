@@ -1,28 +1,34 @@
 package inspector.jqcml.model;
 
-import java.util.*;
+/*
+ * #%L
+ * jqcML
+ * %%
+ * Copyright (C) 2013 - 2015 InSPECtor
+ * %%
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * #L%
+ */
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.MapKey;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
-import javax.persistence.TableGenerator;
-import javax.persistence.Transient;
-import javax.xml.bind.annotation.XmlTransient;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-
+import com.google.common.base.MoreObjects;
+import inspector.jqcml.jaxb.adapters.TableAttachmentAdapter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import inspector.jqcml.jaxb.adapters.TableAttachmentAdapter;
+import javax.persistence.*;
+import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import java.util.*;
 
 /**
  * Contains tabular data for an {@link AttachmentParameter}.
@@ -69,6 +75,19 @@ public class TableAttachment {
     public TableAttachment() {
         columns = new HashMap<>();
         rows = new HashMap<>();
+    }
+
+    /**
+     * Constructs a new TableAttachment object with the given named columns.
+     *
+     * @param columns  the names of the table's columns
+     */
+    public TableAttachment(String[] columns) {
+        this();
+
+        for(String column : columns) {
+            addColumn(column);
+        }
     }
 
     /**
@@ -149,9 +168,7 @@ public class TableAttachment {
         removeValue(column, row);
 
         // add the new value to the column and row
-        TableValue tv = new TableValue(tc, tr, value);
-        tc.addValue(tv);
-        tr.addValue(tv);
+        new TableValue(tc, tr, value);
     }
 
     /**
@@ -169,8 +186,7 @@ public class TableAttachment {
             value.getRow().removeValue(value);
             // remove the reference to the column and row
             // (this has to happen after both removals have been done because the removal depends on the equals-method)
-            value.setColumn(null);
-            value.setRow(null);
+            value.removeFromTable();
         }
     }
 
@@ -245,8 +261,6 @@ public class TableAttachment {
 
     @Override
     public String toString() {
-        return "tableAttachment <columns=\"" + columns.keySet() + "\">";
+        return MoreObjects.toStringHelper(this).add("table", Arrays.toString(toArray())).toString();
     }
-
-
 }

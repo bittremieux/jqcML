@@ -1,25 +1,33 @@
 package inspector.jqcml.model;
 
+/*
+ * #%L
+ * jqcML
+ * %%
+ * Copyright (C) 2013 - 2015 InSPECtor
+ * %%
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * #L%
+ */
+
+import com.google.common.base.MoreObjects;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.persistence.TableGenerator;
-import javax.persistence.Transient;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 /**
  * Represents header information for a single column in a {@link TableAttachment}.
@@ -55,14 +63,14 @@ public class TableColumn {
     /**
      * Constructs a new empty TableColumn object.
      */
-    public TableColumn() {
+    protected TableColumn() {
         values = new HashSet<>();
     }
 
     /**
      * Constructs a new TableColumn object with the given column name.
      *
-     * @param column  either an arbitrary name for this column, or a (textual) reference to a term in a cv
+     * @param column  either an arbitrary name for this column, or a (textual) reference to a term in a cv, not {@code null}
      */
     public TableColumn(String column) {
         this();
@@ -83,10 +91,15 @@ public class TableColumn {
      * Sets the name of the column.
      * This is either an arbitrary name, or a (textual) reference to a term in a cv.
      *
-     * @param column  the name of the column
+     * @param column  the name of the column, not {@code null}
      */
-    public void setColumn(String column) {
-        this.column = column;
+    private void setColumn(String column) {
+        if(column != null) {
+            this.column = column;
+        } else {
+            LOGGER.error("The column is not allowed to be <null>");
+            throw new NullPointerException("The column is not allowed to be <null>");
+        }
     }
 
     /**
@@ -105,8 +118,6 @@ public class TableColumn {
      */
     public void addValue(TableValue value) {
         if(value != null) {
-            // add the bi-directional relationship
-            value.setColumn(this);
             values.add(value);
         } else {
             LOGGER.error("Can't add <null> TableValue to a TableColumn object");
@@ -156,6 +167,6 @@ public class TableColumn {
 
     @Override
     public String toString() {
-        return "TableColumn <" + getColumn() + ">";
+        return MoreObjects.toStringHelper(this).add("column", column).toString();
     }
 }

@@ -1,26 +1,33 @@
 package inspector.jqcml.model;
 
+/*
+ * #%L
+ * jqcML
+ * %%
+ * Copyright (C) 2013 - 2015 InSPECtor
+ * %%
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * #L%
+ */
+
 import inspector.jqcml.jpa.listener.QcDBParameterListener;
-
-import javax.persistence.Column;
-import javax.persistence.EntityListeners;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.MappedSuperclass;
-import javax.persistence.Transient;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlSchemaType;
-import javax.xml.bind.annotation.XmlSeeAlso;
-import javax.xml.bind.annotation.XmlTransient;
-import javax.xml.bind.annotation.XmlType;
-import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import javax.persistence.*;
+import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 /**
  * Base class for parameters that are defined by a controlled vocabulary.
@@ -67,19 +74,21 @@ public class CvParameter extends AbstractParameter {
     /**
      * Constructs a new empty CvParameter object.
      */
-    public CvParameter() {
+    protected CvParameter() {
         super();
     }
 
     /**
      * Constructs a new CvParameter object with the given name and defined by the given {@link Cv} object.
      *
-     * @param name  The name of the parameter
-     * @param cvRef  The reference to the Cv object which defines this parameter
+     * @param name  The name of the parameter, not {@code null}
+     * @param cvRef  The reference to the Cv object which defines this parameter, not {@code null}
+     * @param accession  The accession number identifying this parameter in the controlled vocabulary, not {@code null}
      */
-    public CvParameter(String name, Cv cvRef) {
+    public CvParameter(String name, Cv cvRef, String accession) {
         setName(name);
         setCvRef(cvRef);
+        setAccession(accession);
     }
 
     /**
@@ -136,15 +145,14 @@ public class CvParameter extends AbstractParameter {
     /**
      * Sets the accession number identifying this parameter in the controlled vocabulary.
      *
-     * @param accession  The accession number identifying this parameter in the controlled vocabulary
+     * @param accession  The accession number identifying this parameter in the controlled vocabulary, not {@code null}
      */
-    public void setAccession(String accession) {
-        this.accession = accession;
+    protected void setAccession(String accession) {
+        if(accession != null) {
+            this.accession = accession;
+        } else {
+            LOGGER.error("The parameter's accession is not allowed to be <null>");
+            throw new NullPointerException("The parameter's accession is not allowed to be <null>");
+        }
     }
-
-    @Override
-    public String toString() {
-        return "cvParameter <name=\"" + getName() + "\", accession=\"" + getAccession() + "\">";
-    }
-
 }

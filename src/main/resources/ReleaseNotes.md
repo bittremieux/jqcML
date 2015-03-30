@@ -1,6 +1,10 @@
 # Release notes
 
-## jqcML v1.0.3 (27-03-2015)
+## jqcML v1.0.4 (30-Mar-2015)
+* ENHANCEMENT: Enforce valid required elements
+* ENHANCEMENT: Unified toString() behavior
+
+## jqcML v1.0.3 (27-Mar-2015)
 * ENHANCEMENT: Parameterizable custom qcDB queries
 * ENHANCEMENT: General code style improvements, cyclic dependency fixes, code duplication removals, and vulnerability fixes
 * BUGFIX: Fix an issue where a qcML with only SetQualities and no RunQualities was not written to the qcDB properly
@@ -25,7 +29,7 @@
 * BUGFIX: Automatically set the bidirectional relationship between `AttachmentParameter` and `TableAttachment`
 * BUGFIX: Fix SQL error when retrieving a `setQuality` from a qcDB
 * BUGFIX: Use a custom table for primary key generation instead of the SQLite reserved table `sqlite_sequence`
-* NEW FEATURE: On the fly validition against the XML schema during (un)marshalling to/from a qcML file
+* NEW FEATURE: On the fly validation against the XML schema during (un)marshalling to/from a qcML file
 * NEW FEATURE: JPA logging to log file `jpa.log`
 * NEW FEATURE: Retrieve arbitrary data from a qcDB using custom queries
 

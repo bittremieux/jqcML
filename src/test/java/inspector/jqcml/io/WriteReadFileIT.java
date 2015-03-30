@@ -1,5 +1,25 @@
 package inspector.jqcml.io;
 
+/*
+ * #%L
+ * jqcML
+ * %%
+ * Copyright (C) 2013 - 2015 InSPECtor
+ * %%
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * #L%
+ */
+
 import inspector.jqcml.io.db.QcDBManagerFactory;
 import inspector.jqcml.io.db.QcDBReader;
 import inspector.jqcml.io.db.QcDBWriter;
@@ -42,51 +62,43 @@ public class WriteReadFileIT {
         qcml.setFileName(name);
         // add Cv's
         for(int i = 0; i < 4; i++) {
-            Cv cv = new Cv();
-            cv.setFullName("cv full name " + i);
-            cv.setUri("/uri/to/cv/" + i);
-            cv.setId("cv_" + i);
+            Cv cv = new Cv("cv full name " + i, "/uri/to/cv/" + i, "cv_" + i);
             cv.setVersion(Integer.toString(i));
             qcml.addCv(cv);
         }
         // add runQualities
         for(int run = 0; run < 4; run++) {
-            QualityAssessment runQuality = new QualityAssessment("run_" + run);
+            QualityAssessment runQuality = new QualityAssessment("run_" + run, false);
             // add MetaDataParameters
             for(int p = 0; p < Math.random() * 10; p++) {
-                MetaDataParameter param = new MetaDataParameter();
-                param.setName("metadata parameter " + p + " name");
+                MetaDataParameter param = new MetaDataParameter("metadata parameter " + p + " name",
+                        qcml.getCv("cv_" + (int)(Math.random() * qcml.getNumberOfCvs())), "accession " + p,
+                        "r" + run + "_mp" + p);
                 param.setDescription("metadata parameter " + p + " description");
                 param.setValue("metadata value " + p);
-                param.setCvRef(qcml.getCv("cv_" + (int)(Math.random() * qcml.getNumberOfCvs())));
-                param.setAccession("accession " + p);
-                param.setId("r" + run + "_mp" + p);
                 runQuality.addMetaDataParameter(param);
             }
             // add QualityParameters
             for(int p = 0; p < Math.random() * 30; p++) {
-                QualityParameter param = new QualityParameter();
-                param.setName("quality parameter " + p + " name");
+                QualityParameter param = new QualityParameter("quality parameter " + p + " name",
+                        qcml.getCv("cv_" + (int)(Math.random() * qcml.getNumberOfCvs())), "accession " + p,
+                        "r" + run + "_qp" + p);
                 param.setDescription("quality parameter " + p + " description");
                 param.setValue("value " + p);
                 param.setUnitAccession("unit accession " + p);
                 param.setUnitName("unit name " + p);
                 param.setUnitCvRef(qcml.getCv("cv_" + (int) (Math.random() * qcml.getNumberOfCvs())));
-                param.setCvRef(qcml.getCv("cv_" + (int)(Math.random() * qcml.getNumberOfCvs())));
-                param.setAccession("accession " + p);
-                param.setId("r" + run + "_qp" + p);
                 param.setFlag(Math.random() < 0.5);
                 if(param.hasFlag()) {
                     for(int t = 0; t < Math.random() * 3; t++) {
-                        Threshold threshold = new Threshold();
-                        threshold.setName("threshold " + p + " " + t);
+                        Threshold threshold = new Threshold("threshold " + p + " " + t,
+                                qcml.getCv("cv_" + (int)(Math.random() * qcml.getNumberOfCvs())),
+                                "threshold accession " + p + " " + t);
                         threshold.setDescription("threshold " + p + " description");
                         threshold.setValue("threshold value " + p + " " + t);
                         threshold.setUnitAccession("threshold unit accession " + p + " " + t);
                         threshold.setUnitName("threshold unit name " + p + " " + t);
                         threshold.setUnitCvRef(qcml.getCv("cv_" + (int) (Math.random() * qcml.getNumberOfCvs())));
-                        threshold.setCvRef(qcml.getCv("cv_" + (int)(Math.random() * qcml.getNumberOfCvs())));
-                        threshold.setAccession("threshold accession " + p + " " + t);
                         threshold.setFileName("threshold file " + p + " " + t);
                         param.addThreshold(threshold);
                     }
@@ -97,35 +109,31 @@ public class WriteReadFileIT {
             for(int p = 0; p < Math.random() * 10; p++) {
                 if(Math.random() < 0.5) {
                     // binary attachment
-                    AttachmentParameter binaryAttachment = new AttachmentParameter();
-                    binaryAttachment.setName("binary attachment parameter name " + run + " " + p);
+                    AttachmentParameter binaryAttachment = new AttachmentParameter("binary attachment parameter name " + run + " " + p,
+                            qcml.getCv("cv_" + (int)(Math.random() * qcml.getNumberOfCvs())),
+                            "binary attachment accession " + run + " " + p, "r" + run + "_ap" + p);
                     binaryAttachment.setDescription("binary attachment parameter " + p + " description");
                     binaryAttachment.setValue(Double.toString(Math.random() * 100000));
                     binaryAttachment.setUnitAccession("binary attachment unit accession " + run + " " + p);
                     binaryAttachment.setUnitName("binary attachment unit name " + run + " " + p);
                     binaryAttachment.setUnitCvRef(qcml.getCv("cv_" + (int) (Math.random() * qcml.getNumberOfCvs())));
-                    binaryAttachment.setCvRef(qcml.getCv("cv_" + (int)(Math.random() * qcml.getNumberOfCvs())));
-                    binaryAttachment.setAccession("binary attachment accession " + run + " " + p);
-                    binaryAttachment.setQualityParameterRef(
-                            runQuality.getQualityParameter("accession " + (int)(Math.random() * runQuality.getNumberOfQualityParameters())));
-                    binaryAttachment.setId("r" + run + "_ap" + p);
+                    binaryAttachment.setQualityParameterRef(runQuality.getQualityParameter(
+                            "accession " + (int) (Math.random() * runQuality.getNumberOfQualityParameters())));
                     binaryAttachment.setBinary(DatatypeConverter.printBase64Binary(new BigInteger(1000, random).toString().getBytes()));
                     runQuality.addAttachmentParameter(binaryAttachment);
                 }
                 else {
                     // tabular attachment
-                    AttachmentParameter tableAttachment = new AttachmentParameter();
-                    tableAttachment.setName("table attachment parameter name " + run + " " + p);
+                    AttachmentParameter tableAttachment = new AttachmentParameter("table attachment parameter name " + run + " " + p,
+                            qcml.getCv("cv_" + (int)(Math.random() * qcml.getNumberOfCvs())),
+                            "table attachment accession " + run + " " + p, "r" + run + "_ap" + p);
                     tableAttachment.setDescription("table attachment parameter " + p + " description");
                     tableAttachment.setValue("456");
                     tableAttachment.setUnitAccession("table attachment unit accession " + run + " " + p);
                     tableAttachment.setUnitName("table attachment unit name " + run + " " + p);
                     tableAttachment.setUnitCvRef(qcml.getCv("cv_" + (int) (Math.random() * qcml.getNumberOfCvs())));
-                    tableAttachment.setCvRef(qcml.getCv("cv_" + (int)(Math.random() * qcml.getNumberOfCvs())));
-                    tableAttachment.setAccession("table attachment accession " + run + " " + p);
-                    tableAttachment.setQualityParameterRef(
-                            runQuality.getQualityParameter("accession " + (int)(Math.random() * runQuality.getNumberOfQualityParameters())));
-                    tableAttachment.setId("r" + run + "_ap" + p);
+                    tableAttachment.setQualityParameterRef(runQuality.getQualityParameter(
+                            "accession " + (int) (Math.random() * runQuality.getNumberOfQualityParameters())));
                     TableAttachment table = new TableAttachment();
                     int rows = 1 + (int)(Math.random() * 100);
                     int cols = 1 + (int)(Math.random() * 10);
@@ -143,42 +151,37 @@ public class WriteReadFileIT {
 
         // add setQualities
         for(int set = 0; set < 2; set++) {
-            QualityAssessment setQuality = new QualityAssessment("set_" + set);
+            QualityAssessment setQuality = new QualityAssessment("set_" + set, true);
             // add MetaDataParameters
             for(int p = 0; p < Math.random() * 10; p++) {
-                MetaDataParameter param = new MetaDataParameter();
-                param.setName("metadata parameter " + p + " name");
+                MetaDataParameter param = new MetaDataParameter("metadata parameter " + p + " name",
+                        qcml.getCv("cv_" + (int)(Math.random() * qcml.getNumberOfCvs())), "accession " + p,
+                        "s" + set + "_mp" + p);
                 param.setDescription("metadata parameter " + p + " description");
                 param.setValue("metadata value " + p);
-                param.setCvRef(qcml.getCv("cv_" + (int)(Math.random() * qcml.getNumberOfCvs())));
-                param.setAccession("accession " + p);
-                param.setId("s" + set + "_mp" + p);
                 setQuality.addMetaDataParameter(param);
             }
             // add QualityParameters
             for(int p = 0; p < Math.random() * 20; p++) {
-                QualityParameter param = new QualityParameter();
-                param.setName("quality parameter " + p + " name");
+                QualityParameter param = new QualityParameter("quality parameter " + p + " name",
+                        qcml.getCv("cv_" + (int)(Math.random() * qcml.getNumberOfCvs())), "accession " + p,
+                        "s" + set + "_qp" + p);
                 param.setDescription("quality parameter " + p + " description");
                 param.setValue("value " + p);
                 param.setUnitAccession("unit accession " + p);
                 param.setUnitName("unit name " + p);
                 param.setUnitCvRef(qcml.getCv("cv_" + (int) (Math.random() * qcml.getNumberOfCvs())));
-                param.setCvRef(qcml.getCv("cv_" + (int)(Math.random() * qcml.getNumberOfCvs())));
-                param.setAccession("accession " + p);
-                param.setId("s" + set + "_qp" + p);
                 param.setFlag(Math.random() < 0.5);
                 if(param.hasFlag()) {
                     for(int t = 0; t < Math.random() * 3; t++) {
-                        Threshold threshold = new Threshold();
-                        threshold.setName("threshold " + p + " " + t);
+                        Threshold threshold = new Threshold("threshold " + p + " " + t,
+                                qcml.getCv("cv_" + (int)(Math.random() * qcml.getNumberOfCvs())),
+                                "threshold accession " + p + " " + t);
                         threshold.setDescription("threshold " + p + " description");
                         threshold.setValue("threshold value " + p + " " + t);
                         threshold.setUnitAccession("threshold unit accession " + p + " " + t);
                         threshold.setUnitName("threshold unit name " + p + " " + t);
                         threshold.setUnitCvRef(qcml.getCv("cv_" + (int) (Math.random() * qcml.getNumberOfCvs())));
-                        threshold.setCvRef(qcml.getCv("cv_" + (int)(Math.random() * qcml.getNumberOfCvs())));
-                        threshold.setAccession("threshold accession " + p + " " + t);
                         threshold.setFileName("threshold file " + p + " " + t);
                         param.addThreshold(threshold);
                     }
@@ -189,35 +192,31 @@ public class WriteReadFileIT {
             for(int p = 0; p < Math.random() * 10; p++) {
                 if(Math.random() < 0.5) {
                     // binary attachment
-                    AttachmentParameter binaryAttachment = new AttachmentParameter();
-                    binaryAttachment.setName("binary attachment parameter name " + set + " " + p);
+                    AttachmentParameter binaryAttachment = new AttachmentParameter("binary attachment parameter name " + set + " " + p,
+                            qcml.getCv("cv_" + (int)(Math.random() * qcml.getNumberOfCvs())),
+                            "binary attachment accession " + set + " " + p, "s" + set + "_ap" + p);
                     binaryAttachment.setDescription("binary attachment parameter " + p + " description");
                     binaryAttachment.setValue(Double.toString(Math.random() * 100000));
                     binaryAttachment.setUnitAccession("binary attachment unit accession " + set + " " + p);
                     binaryAttachment.setUnitName("binary attachment unit name " + set + " " + p);
                     binaryAttachment.setUnitCvRef(qcml.getCv("cv_" + (int) (Math.random() * qcml.getNumberOfCvs())));
-                    binaryAttachment.setCvRef(qcml.getCv("cv_" + (int)(Math.random() * qcml.getNumberOfCvs())));
-                    binaryAttachment.setAccession("binary attachment accession " + set + " " + p);
-                    binaryAttachment.setQualityParameterRef(
-                            setQuality.getQualityParameter("accession " + (int) (Math.random() * setQuality.getNumberOfQualityParameters())));
-                    binaryAttachment.setId("s" + set + "_ap" + p);
+                    binaryAttachment.setQualityParameterRef(setQuality.getQualityParameter(
+                            "accession " + (int) (Math.random() * setQuality.getNumberOfQualityParameters())));
                     binaryAttachment.setBinary(DatatypeConverter.printBase64Binary(new BigInteger(1000, random).toString().getBytes()));
                     setQuality.addAttachmentParameter(binaryAttachment);
                 }
                 else {
                     // tabular attachment
-                    AttachmentParameter tableAttachment = new AttachmentParameter();
-                    tableAttachment.setName("table attachment parameter name " + set + " " + p);
+                    AttachmentParameter tableAttachment = new AttachmentParameter("table attachment parameter name " + set + " " + p,
+                            qcml.getCv("cv_" + (int)(Math.random() * qcml.getNumberOfCvs())),
+                            "table attachment accession " + set + " " + p, "s" + set + "_ap" + p);
                     tableAttachment.setDescription("table attachment parameter " + p + " description");
                     tableAttachment.setValue("456");
                     tableAttachment.setUnitAccession("table attachment unit accession " + set + " " + p);
                     tableAttachment.setUnitName("table attachment unit name " + set + " " + p);
                     tableAttachment.setUnitCvRef(qcml.getCv("cv_" + (int) (Math.random() * qcml.getNumberOfCvs())));
-                    tableAttachment.setCvRef(qcml.getCv("cv_" + (int)(Math.random() * qcml.getNumberOfCvs())));
-                    tableAttachment.setAccession("table attachment accession " + set + " " + p);
-                    tableAttachment.setQualityParameterRef(
-                            setQuality.getQualityParameter("accession " + (int) (Math.random() * setQuality.getNumberOfQualityParameters())));
-                    tableAttachment.setId("s" + set + "_ap" + p);
+                    tableAttachment.setQualityParameterRef(setQuality.getQualityParameter(
+                            "accession " + (int) (Math.random() * setQuality.getNumberOfQualityParameters())));
                     TableAttachment table = new TableAttachment();
                     int rows = 1 + (int)(Math.random() * 100);
                     int cols = 1 + (int)(Math.random() * 10);
