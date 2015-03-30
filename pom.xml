@@ -11,6 +11,12 @@
 	<name>jqcML</name>
 	<url>https://bitbucket.org/proteinspector/jqcml</url>
 	<description>jqcML is a Java application programming interface (API) for the qcML standard. Firstly, jqcML provides a complete object model to represent qcML data. Secondly, jqcML provides the ability to read, write and work in a uniform manner with qcML data from different sources, including the XML-based qcML file format and the relational database qcDB.</description>
+	<inceptionYear>2013</inceptionYear>
+
+	<organization>
+		<name>InSPECtor</name>
+		<url>http://www.proteinspector.com/</url>
+	</organization>
 
 	<!-- License -->
 	<licenses>
@@ -39,12 +45,15 @@
 
 	<!-- Dependencies -->
 	<dependencies>
+		<!-- unit testing -->
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.12</version>
 			<scope>test</scope>
 		</dependency>
+
+		<!-- logging -->
 		<dependency>
 			<groupId>org.apache.logging.log4j</groupId>
 			<artifactId>log4j-api</artifactId>
@@ -55,6 +64,8 @@
 			<artifactId>log4j-core</artifactId>
 			<version>2.2</version>
 		</dependency>
+
+		<!-- xml -->
 		<dependency>
 			<groupId>psidev.psi.tools</groupId>
 			<artifactId>xxindex</artifactId>
@@ -70,11 +81,8 @@
 			<artifactId>org.eclipse.persistence.moxy</artifactId>
 			<version>2.6.0</version>
 		</dependency>
-		<dependency>
-			<groupId>javax.mail</groupId>
-			<artifactId>javax.mail-api</artifactId>
-			<version>1.5.2</version>
-		</dependency>
+
+		<!-- JPA -->
 		<dependency>
 			<groupId>org.eclipse.persistence</groupId>
 			<artifactId>org.eclipse.persistence.jpa</artifactId>
@@ -90,11 +98,15 @@
 			<artifactId>mysql-connector-java</artifactId>
 			<version>5.1.34</version>
 		</dependency>
+
+		<!-- command line -->
 		<dependency>
 			<groupId>commons-cli</groupId>
 			<artifactId>commons-cli</artifactId>
 			<version>1.2</version>
 		</dependency>
+
+		<!-- general purpose -->
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
@@ -142,6 +154,24 @@
 					<target>1.7</target>
 				</configuration>
 			</plugin>
+
+			<!-- Davy's packing method puts the dependencies in a lib folder alongside
+                the jar, and adds this folder to the manifest -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>2.5</version>
+				<configuration>
+					<archive>
+						<manifest>
+							<mainClass>inspector.imondb.CLI</mainClass>
+							<addClasspath>true</addClasspath>
+							<classpathPrefix>lib</classpathPrefix>
+						</manifest>
+					</archive>
+					<outputDirectory>${project.build.directory}</outputDirectory>
+				</configuration>
+			</plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
@@ -182,7 +212,7 @@
                 </executions>
             </plugin>
 
-			<!--assembly-plugin makes a jar with dependencies if you do "mvn clean compile assembly:single" -->
+			<!--assembly-plugin makes a jar with dependencies if you do "mvn clean compile assembly:single"
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-assembly-plugin</artifactId>
@@ -197,7 +227,7 @@
 						<descriptorRef>jar-with-dependencies</descriptorRef>
 					</descriptorRefs>
 				</configuration>
-			</plugin>
+			</plugin>-->
 
 			<!--with org.codehaus.mojo you can run the main class (at the time of 
 				writing inspector.jqcml.Main) with "mvn exec:java" -->
@@ -234,6 +264,33 @@
 								</resource>
 							</resources>
 						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<!-- add license information -->
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>license-maven-plugin</artifactId>
+				<version>1.8</version>
+				<configuration>
+					<licenseName>apache_v2</licenseName>
+					<verbose>false</verbose>
+					<canUpdateCopyright>true</canUpdateCopyright>
+					<canUpdateDescription>true</canUpdateDescription>
+					<roots>
+						<root>src/main/java</root>
+						<root>src/test/java</root>
+					</roots>
+				</configuration>
+				<executions>
+					<execution>
+						<id>first</id>
+						<goals>
+							<goal>update-project-license</goal>
+							<goal>update-file-header</goal>
+						</goals>
+						<phase>process-sources</phase>
 					</execution>
 				</executions>
 			</plugin>
