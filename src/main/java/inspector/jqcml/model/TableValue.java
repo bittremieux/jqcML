@@ -22,14 +22,12 @@ package inspector.jqcml.model;
 
 import com.google.common.base.MoreObjects;
 import inspector.jqcml.jpa.customizer.TableValueTypeCustomizer;
-
-import javax.persistence.*;
-import javax.xml.bind.annotation.XmlTransient;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.eclipse.persistence.annotations.Customizer;
 
+import javax.persistence.*;
+import javax.xml.bind.annotation.XmlTransient;
 import java.util.Objects;
 
 /**
@@ -80,9 +78,9 @@ public class TableValue {
     /**
      * Constructs a new TableValue object with the given value in the given column and row.
      *
-     * @param column  the column that contains this value
-     * @param row  the row that contains this value
-     * @param value  the value
+     * @param column  the column that contains this value, not {@code null}
+     * @param row  the row that contains this value, not {@code null}
+     * @param value  the value, not {@code null}
      */
     public TableValue(TableColumn column, TableRow row, String value) {
         setValue(value);
@@ -107,11 +105,16 @@ public class TableValue {
     /**
      * Sets the value for this TableValue object.
      *
-     * @param value  the value
+     * @param value  the value, not {@code null}
      */
     private void setValue(String value) {
-        this.value = value;
-        setType();
+        if(value != null) {
+            this.value = value;
+            setType();
+        } else {
+            LOGGER.error("The value is not allowed to be <null>");
+            throw new NullPointerException("The value is not allowed to be <null>");
+        }
     }
 
     public TableValueType getType() {
@@ -187,6 +190,9 @@ public class TableValue {
         }
     }
 
+    /**
+     * Remove all references to the previous {@link TableColumn} and {@link TableRow}.
+     */
     void removeFromTable() {
         column = null;
         row = null;

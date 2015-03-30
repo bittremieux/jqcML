@@ -20,28 +20,14 @@ package inspector.jqcml.model;
  * #L%
  */
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.TableGenerator;
-import javax.persistence.Transient;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlID;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlSchemaType;
-import javax.xml.bind.annotation.XmlTransient;
-import javax.xml.bind.annotation.XmlType;
-import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-
 import com.google.common.base.MoreObjects;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import javax.persistence.*;
+import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 /**
  * Metadata parameter. A metadata parameter contains metadata about the {@link QualityParameter}s.
@@ -92,10 +78,10 @@ public class MetaDataParameter extends CvParameter {
     /**
      * Constructs a new MetaDataParameter object with the given name and id, and defined by the given {@link Cv} object.
      *
-     * @param name  The name of the parameter
-     * @param cvRef  The reference to the Cv object which defines this parameter
-     * @param accession  The accession number identifying this parameter in the controlled vocabulary
-     * @param id  The unique identifier for this parameter
+     * @param name  The name of the parameter, not {@code null}
+     * @param cvRef  The reference to the Cv object which defines this parameter, not {@code null}
+     * @param accession  The accession number identifying this parameter in the controlled vocabulary, not {@code null}
+     * @param id  The unique identifier for this parameter, not {@code null}
      */
     public MetaDataParameter(String name, Cv cvRef, String accession, String id) {
         super(name, cvRef, accession);
@@ -127,10 +113,15 @@ public class MetaDataParameter extends CvParameter {
     /**
      * Sets the unique identifier of this MetaDataParameter object.
      *
-     * @param id  The ID of this MetaDataParameter object
+     * @param id  The ID of this MetaDataParameter object, not {@code null}
      */
     private void setId(String id) {
-        this.id = id;
+        if(id != null) {
+            this.id = id;
+        } else {
+            LOGGER.error("The MetaDataParameter's ID is not allowed to be <null>");
+            throw new NullPointerException("The MetaDataParameter's ID is not allowed to be <null>");
+        }
     }
 
     @Override

@@ -20,30 +20,15 @@ package inspector.jqcml.model;
  * #L%
  */
 
-import java.util.*;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.MapKey;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
-import javax.persistence.TableGenerator;
-import javax.persistence.Transient;
-import javax.xml.bind.annotation.XmlTransient;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-
 import com.google.common.base.MoreObjects;
+import inspector.jqcml.jaxb.adapters.TableAttachmentAdapter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import inspector.jqcml.jaxb.adapters.TableAttachmentAdapter;
+import javax.persistence.*;
+import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import java.util.*;
 
 /**
  * Contains tabular data for an {@link AttachmentParameter}.
@@ -90,6 +75,19 @@ public class TableAttachment {
     public TableAttachment() {
         columns = new HashMap<>();
         rows = new HashMap<>();
+    }
+
+    /**
+     * Constructs a new TableAttachment object with the given named columns.
+     *
+     * @param columns  the names of the table's columns
+     */
+    public TableAttachment(String[] columns) {
+        this();
+
+        for(String column : columns) {
+            addColumn(column);
+        }
     }
 
     /**

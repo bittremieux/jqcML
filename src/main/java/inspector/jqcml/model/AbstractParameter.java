@@ -20,24 +20,13 @@ package inspector.jqcml.model;
  * #L%
  */
 
-import javax.persistence.Column;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.MappedSuperclass;
-import javax.persistence.Transient;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlSchemaType;
-import javax.xml.bind.annotation.XmlSeeAlso;
-import javax.xml.bind.annotation.XmlTransient;
-import javax.xml.bind.annotation.XmlType;
-import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import javax.persistence.*;
+import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 /**
  * Abstract base class for parameters containing some general information.
@@ -133,10 +122,15 @@ public abstract class AbstractParameter {
     /**
      * Sets the name of this parameter.
      *
-     * @param name  The name of this parameter
+     * @param name  The name of this parameter, not {@code null}
      */
     protected void setName(String name) {
-        this.name = name;
+        if(name != null) {
+            this.name = name;
+        } else {
+            LOGGER.error("The parameter's name is not allowed to be <null>");
+            throw new NullPointerException("The parameter's name is not allowed to be <null>");
+        }
     }
 
     /**

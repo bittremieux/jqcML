@@ -22,38 +22,18 @@ package inspector.jqcml.model;
 
 import com.google.common.base.MoreObjects;
 import inspector.jqcml.jaxb.adapters.ThresholdListAdapter;
-
-import java.util.Iterator;
-import java.util.Map;
-import java.util.TreeMap;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.MapKey;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.persistence.TableGenerator;
-import javax.persistence.Transient;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlID;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlSchemaType;
-import javax.xml.bind.annotation.XmlTransient;
-import javax.xml.bind.annotation.XmlType;
-import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.eclipse.persistence.oxm.annotations.XmlPath;
+
+import javax.persistence.*;
+import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * General parameter type. A quality parameter describes a certain parameter for the encompassing {@link QualityAssessment}.
@@ -121,10 +101,10 @@ public class QualityParameter extends CvParameter {
     /**
      * Constructs a new QualityParameter object with the given name and id, and defined by the given {@link Cv} object.
      *
-     * @param name  The name of the parameter
-     * @param cvRef  The reference to the Cv object which defines this parameter
-     * @param accession  The accession number identifying this parameter in the controlled vocabulary
-     * @param id  The unique identifier for this parameter
+     * @param name  The name of the parameter, not {@code null}
+     * @param cvRef  The reference to the Cv object which defines this parameter, not {@code null}
+     * @param accession  The accession number identifying this parameter in the controlled vocabulary, not {@code null}
+     * @param id  The unique identifier for this parameter, not {@code null}
      */
     public QualityParameter(String name, Cv cvRef, String accession, String id) {
         super(name, cvRef, accession);
@@ -159,10 +139,15 @@ public class QualityParameter extends CvParameter {
     /**
      * Sets the unique identifier of this QualityParameter object.
      *
-     * @param id  The ID of this QualityParameter object
+     * @param id  The ID of this QualityParameter object, not {@code null}
      */
     private void setId(String id) {
-        this.id = id;
+        if(id != null) {
+            this.id = id;
+        } else {
+            LOGGER.error("The QualityParameter's ID is not allowed to be <null>");
+            throw new NullPointerException("The QualityParameter's ID is not allowed to be <null>");
+        }
     }
 
     /**

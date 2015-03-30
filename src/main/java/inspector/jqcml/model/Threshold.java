@@ -80,9 +80,9 @@ public class Threshold extends CvParameter {
     /**
      * Constructs a new Threshold object with the given name and defined by the given {@link Cv} object.
      *
-     * @param name  The name of the threshold
-     * @param cvRef  The reference to the Cv object which defines this threshold
-     * @param accession  The accession number identifying this parameter in the controlled vocabulary
+     * @param name  The name of the threshold, not {@code null}
+     * @param cvRef  The reference to the Cv object which defines this threshold, not {@code null}
+     * @param accession  The accession number identifying this parameter in the controlled vocabulary, not {@code null}
      */
     public Threshold(String name, Cv cvRef, String accession) {
         super(name, cvRef, accession);

@@ -96,7 +96,7 @@ public class QualityAssessment {
     /**
      * Constructs a new QualityAssessment object, with the specified ID, with empty {@link QualityParameter} and {@link AttachmentParameter} lists.
      * 
-     * @param id  The ID of this QualityAssessment object
+     * @param id  The ID of this QualityAssessment object, not {@code null}
      * @param isSet  Indicates whether this QualityAssessment object represents a RunQuality or a SetQuality
      */
     public QualityAssessment(String id, boolean isSet) {
@@ -130,10 +130,15 @@ public class QualityAssessment {
     /**
      * Sets the unique identifier of this QualityAssessment object.
      *
-     * @param id  The ID of this QualityAssessment object
+     * @param id  The ID of this QualityAssessment object, not {@code null}
      */
     private void setId(String id) {
-        this.id = id;
+        if(id != null) {
+            this.id = id;
+        } else {
+            LOGGER.error("The QualityAssessment's ID is not allowed to be <null>");
+            throw new NullPointerException("The QualityAssessment's ID is not allowed to be <null>");
+        }
     }
 
     /**
