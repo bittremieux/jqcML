@@ -1,5 +1,9 @@
 # Release notes
 
+## jqcML v1.0.4 (30-Mar-2015)
+* ENHANCEMENT: Enforce valid required elements
+* ENHANCEMENT: Unified toString() behavior
+
 ## jqcML v1.0.3 (27-Mar-2015)
 * ENHANCEMENT: Parameterizable custom qcDB queries
 * ENHANCEMENT: General code style improvements, cyclic dependency fixes, code duplication removals, and vulnerability fixes
