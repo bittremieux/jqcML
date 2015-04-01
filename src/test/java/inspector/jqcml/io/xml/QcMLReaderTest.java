@@ -20,24 +20,17 @@ package inspector.jqcml.io.xml;
  * #L%
  */
 
-import static org.junit.Assert.*;
-
-import inspector.jqcml.io.xml.QcMLFileReader;
 import inspector.jqcml.model.Cv;
 import inspector.jqcml.model.QcML;
 import inspector.jqcml.model.QualityAssessment;
-
-import java.io.StringWriter;
-import java.util.Iterator;
-import java.util.Vector;
-
-import org.apache.log4j.Appender;
-import org.apache.log4j.ConsoleAppender;
-import org.apache.log4j.PatternLayout;
-import org.apache.log4j.WriterAppender;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
+
+import java.io.File;
+import java.net.URISyntaxException;
+import java.util.Iterator;
+
+import static org.junit.Assert.*;
 
 public class QcMLReaderTest {
 
@@ -60,17 +53,17 @@ public class QcMLReaderTest {
 
     @Test
     public void validate_noXMLFile() {
-        assertFalse(reader.validate(getClass().getResource("/PlainText.qcML").getFile()));
+        assertFalse(reader.validate(loadResource("/PlainText.qcML").getAbsolutePath()));
     }
 
     @Test
     public void validate_invalidXMLFile() {
-        assertFalse(reader.validate(getClass().getResource("/Invalid.qcML").getFile()));
+        assertFalse(reader.validate(loadResource("/Invalid.qcML").getAbsolutePath()));
     }
 
     @Test
     public void validate_validQcMLFile() {
-        assertTrue(reader.validate(getClass().getResource("/CvParameterTest.qcML").getFile()));
+        assertTrue(reader.validate(loadResource("/CvParameterTest.qcML").getAbsolutePath()));
     }
 
     @Test(expected=NullPointerException.class)
@@ -85,24 +78,24 @@ public class QcMLReaderTest {
 
     @Test
     public void getQcML_noXMLFile() {
-        assertNull(reader.getQcML(getClass().getResource("/PlainText.qcML").getFile()));
+        assertNull(reader.getQcML(loadResource("/PlainText.qcML").getAbsolutePath()));
     }
 
     @Test
     public void getQcML_invalidXMLFile() {
-        assertNull(reader.getQcML(getClass().getResource("/Invalid.qcML").getFile()));
+        assertNull(reader.getQcML(loadResource("/Invalid.qcML").getAbsolutePath()));
     }
 
     @Test
     public void getQcML_invalidVersionFormat() {
         // warning should be logged
-        assertNull(reader.getQcML(getClass().getResource("/InvalidVersionFormat.qcML").getFile()));
+        assertNull(reader.getQcML(loadResource("/InvalidVersionFormat.qcML").getAbsolutePath()));
     }
 
     @Test
     public void getQcML_invalidVersionNumber() {
         // warning should be logged
-        QcML qcml = reader.getQcML(getClass().getResource("/InvalidVersionNumber.qcML").getFile());
+        QcML qcml = reader.getQcML(loadResource("/InvalidVersionNumber.qcML").getAbsolutePath());
 
         assertNotNull(qcml);
 
@@ -121,28 +114,28 @@ public class QcMLReaderTest {
 
     @Test
     public void getCv_noXMLFile() {
-        assertNull(reader.getCv(getClass().getResource("/PlainText.qcML").getFile(), "id"));
+        assertNull(reader.getCv(loadResource("/PlainText.qcML").getAbsolutePath(), "id"));
     }
 
     @Test
     public void getCv_invalidXMLFile() {
-        assertNull(reader.getCv(getClass().getResource("/Invalid.qcML").getFile(), "id"));
+        assertNull(reader.getCv(loadResource("/Invalid.qcML").getAbsolutePath(), "id"));
     }
 
     @Test
     public void getCv_nullId() {
-        assertNull(reader.getCv(getClass().getResource("/CvParameterTest.qcML").getFile(), null));
+        assertNull(reader.getCv(loadResource("/CvParameterTest.qcML").getAbsolutePath(), null));
     }
 
     @Test
     public void getCv_nonExistingId() {
-        assertNull(reader.getCv(getClass().getResource("/CvParameterTest.qcML").getFile(), "non-existing id"));
+        assertNull(reader.getCv(loadResource("/CvParameterTest.qcML").getAbsolutePath(), "non-existing id"));
     }
 
     @Test
     public void getCv_valid() {
-        assertNotNull(reader.getCv(getClass().getResource("/CvParameterTest.qcML").getFile(), "cv_0"));
-        assertNotNull(reader.getCv(getClass().getResource("/CvParameterTest.qcML").getFile(), "cv_1"));
+        assertNotNull(reader.getCv(loadResource("/CvParameterTest.qcML").getAbsolutePath(), "cv_0"));
+        assertNotNull(reader.getCv(loadResource("/CvParameterTest.qcML").getAbsolutePath(), "cv_1"));
     }
 
     @Test(expected=NullPointerException.class)
@@ -157,21 +150,21 @@ public class QcMLReaderTest {
 
     @Test
     public void getCvIterator_noXMLFile() {
-        Iterator<Cv> it = reader.getCvIterator(getClass().getResource("/PlainText.qcML").getFile());
+        Iterator<Cv> it = reader.getCvIterator(loadResource("/PlainText.qcML").getAbsolutePath());
 
         assertFalse(it.hasNext());
     }
 
     @Test
     public void getCvIterator_invalidXMLFile() {
-        Iterator<Cv> it = reader.getCvIterator(getClass().getResource("/Invalid.qcML").getFile());
+        Iterator<Cv> it = reader.getCvIterator(loadResource("/Invalid.qcML").getAbsolutePath());
 
         assertFalse(it.hasNext());
     }
 
     @Test
     public void getCvIterator_valid() {
-        Iterator<Cv> it = reader.getCvIterator(getClass().getResource("/CvParameterTest.qcML").getFile());
+        Iterator<Cv> it = reader.getCvIterator(loadResource("/CvParameterTest.qcML").getAbsolutePath());
 
         for(int i = 0; i < 2; i++) {
             assertTrue(it.hasNext());
@@ -192,29 +185,29 @@ public class QcMLReaderTest {
 
     @Test
     public void getQualityAssessment_noXMLFile() {
-        assertNull(reader.getQualityAssessment(getClass().getResource("/PlainText.qcML").getFile(), "id"));
+        assertNull(reader.getQualityAssessment(loadResource("/PlainText.qcML").getAbsolutePath(), "id"));
     }
 
     @Test
     public void getQualityAssessment_invalidXMLFile() {
-        assertNull(reader.getQualityAssessment(getClass().getResource("/Invalid.qcML").getFile(), "id"));
+        assertNull(reader.getQualityAssessment(loadResource("/Invalid.qcML").getAbsolutePath(), "id"));
     }
 
     @Test
     public void getQualityAssessment_nullId() {
-        assertNull(reader.getQualityAssessment(getClass().getResource("/CvParameterTest.qcML").getFile(), null));
+        assertNull(reader.getQualityAssessment(loadResource("/CvParameterTest.qcML").getAbsolutePath(), null));
     }
 
     @Test
     public void getQualityAssessment_nonExistingId() {
-        assertNull(reader.getQualityAssessment(getClass().getResource("/CvParameterTest.qcML").getFile(), "non-existing id"));
+        assertNull(reader.getQualityAssessment(loadResource("/CvParameterTest.qcML").getAbsolutePath(), "non-existing id"));
     }
 
     @Test
     public void getQualityAssessment_valid() {
-        assertNotNull(reader.getQualityAssessment(getClass().getResource("/CvParameterTest.qcML").getFile(), "run_1"));
-        assertNotNull(reader.getQualityAssessment(getClass().getResource("/CvParameterTest.qcML").getFile(), "run_2"));
-        assertNotNull(reader.getQualityAssessment(getClass().getResource("/CvParameterTest.qcML").getFile(), "set_1"));
+        assertNotNull(reader.getQualityAssessment(loadResource("/CvParameterTest.qcML").getAbsolutePath(), "run_1"));
+        assertNotNull(reader.getQualityAssessment(loadResource("/CvParameterTest.qcML").getAbsolutePath(), "run_2"));
+        assertNotNull(reader.getQualityAssessment(loadResource("/CvParameterTest.qcML").getAbsolutePath(), "set_1"));
     }
 
     @Test(expected=NullPointerException.class)
@@ -229,21 +222,21 @@ public class QcMLReaderTest {
 
     @Test
     public void getQualityAssessmentIterator_noXMLFile() {
-        Iterator<QualityAssessment> it = reader.getQualityAssessmentIterator(getClass().getResource("/PlainText.qcML").getFile());
+        Iterator<QualityAssessment> it = reader.getQualityAssessmentIterator(loadResource("/PlainText.qcML").getAbsolutePath());
 
         assertFalse(it.hasNext());
     }
 
     @Test
     public void getQualityAssessmentIterator_invalidXMLFile() {
-        Iterator<QualityAssessment> it = reader.getQualityAssessmentIterator(getClass().getResource("/Invalid.qcML").getFile());
+        Iterator<QualityAssessment> it = reader.getQualityAssessmentIterator(loadResource("/Invalid.qcML").getAbsolutePath());
 
         assertFalse(it.hasNext());
     }
 
     @Test
     public void getQualityAssessmentIterator_valid() {
-        Iterator<QualityAssessment> it = reader.getQualityAssessmentIterator(getClass().getResource("/CvParameterTest.qcML").getFile());
+        Iterator<QualityAssessment> it = reader.getQualityAssessmentIterator(loadResource("/CvParameterTest.qcML").getAbsolutePath());
 
         for(int i = 0; i < 3; i++) {
             assertTrue(it.hasNext());
@@ -252,4 +245,12 @@ public class QcMLReaderTest {
         assertFalse(it.hasNext());
     }
 
+    private File loadResource(String fileName) {
+        try {
+            return new File(getClass().getResource(fileName).toURI());
+        } catch(URISyntaxException e) {
+            fail(e.getMessage());
+        }
+        return null;
+    }
 }
