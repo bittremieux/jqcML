@@ -33,8 +33,12 @@ import org.junit.Test;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
+import java.io.File;
+import java.net.URISyntaxException;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.fail;
 
 public class QcDBWriterIT {
 
@@ -148,7 +152,7 @@ public class QcDBWriterIT {
     @Test
     public void writeQcML_noSetQuality() {
         QcMLFileReader fileReader = new QcMLFileReader();
-        QcML qcml = fileReader.getQcML(getClass().getResource("/CvParameterTest.qcML").getFile());
+        QcML qcml = fileReader.getQcML(loadResource("/CvParameterTest.qcML").getAbsolutePath());
 
         qcml.removeAllSetQualities();
 
@@ -158,7 +162,7 @@ public class QcDBWriterIT {
     @Test
     public void writeQcML_noRunQuality() {
         QcMLFileReader fileReader = new QcMLFileReader();
-        QcML qcml = fileReader.getQcML(getClass().getResource("/CvParameterTest.qcML").getFile());
+        QcML qcml = fileReader.getQcML(loadResource("/CvParameterTest.qcML").getAbsolutePath());
 
         qcml.removeAllRunQualities();
 
@@ -168,7 +172,7 @@ public class QcDBWriterIT {
     @Test
     public void writeQcML_duplicateRunQuality() {
         QcMLFileReader fileReader = new QcMLFileReader();
-        QcML qcml = fileReader.getQcML(getClass().getResource("/CvParameterTest.qcML").getFile());
+        QcML qcml = fileReader.getQcML(loadResource("/CvParameterTest.qcML").getAbsolutePath());
         writer.writeQcML(qcml);
 
         QcML qcmlNew = new QcML();
@@ -181,7 +185,7 @@ public class QcDBWriterIT {
     @Test
     public void writeQcML_duplicateSetQuality() {
         QcMLFileReader fileReader = new QcMLFileReader();
-        QcML qcml = fileReader.getQcML(getClass().getResource("/CvParameterTest.qcML").getFile());
+        QcML qcml = fileReader.getQcML(loadResource("/CvParameterTest.qcML").getAbsolutePath());
         writer.writeQcML(qcml);
 
         QcML qcmlNew = new QcML();
@@ -189,5 +193,14 @@ public class QcDBWriterIT {
         qcml.addSetQuality(new QualityAssessment("set_1", true));
 
         writer.writeQcML(qcmlNew);
+    }
+
+    private File loadResource(String fileName) {
+        try {
+            return new File(getClass().getResource(fileName).toURI());
+        } catch(URISyntaxException e) {
+            fail(e.getMessage());
+        }
+        return null;
     }
 }

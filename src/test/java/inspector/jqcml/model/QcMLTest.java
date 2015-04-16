@@ -26,7 +26,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 import javax.xml.bind.DatatypeConverter;
+import java.io.File;
 import java.math.BigInteger;
+import java.net.URISyntaxException;
 import java.security.SecureRandom;
 import java.util.Iterator;
 
@@ -119,7 +121,7 @@ public class QcMLTest {
         qcmlExpected.addCv(new Cv("cv item 12", "/path/to/cv/12", "cv_12"));
 
         // read qcML
-        qcml = new QcMLFileReader().getQcML(getClass().getResource("/QcMLTest.qcML").getFile());
+        qcml = new QcMLFileReader().getQcML(loadResource("/QcMLTest.qcML").getAbsolutePath());
     }
 
     @SuppressWarnings("deprecation")
@@ -238,7 +240,7 @@ public class QcMLTest {
 
     @Test
     public void getSetQuality_noSet() {
-        qcml = new QcMLFileReader().getQcML(getClass().getResource("/NoSet.qcML").getFile());
+        qcml = new QcMLFileReader().getQcML(loadResource("/NoSet.qcML").getAbsolutePath());
 
         assertEquals(qcml.getNumberOfSetQualities(), 0);
 
@@ -254,7 +256,7 @@ public class QcMLTest {
         // add new SetQuality
         qcml.addSetQuality(new QualityAssessment("new SetQuality", true));
         // new RunQuality is present
-        assertEquals(qcml.getNumberOfSetQualities(), count+1);
+        assertEquals(qcml.getNumberOfSetQualities(), count + 1);
         assertNotNull(qcml.getSetQuality("new SetQuality"));
     }
 
@@ -438,4 +440,12 @@ public class QcMLTest {
         assertEquals(qcmlExpected.getNumberOfCvs() - 1, qcml.getNumberOfCvs());
     }
 
+    private File loadResource(String fileName) {
+        try {
+            return new File(getClass().getResource(fileName).toURI());
+        } catch(URISyntaxException e) {
+            fail(e.getMessage());
+        }
+        return null;
+    }
 }

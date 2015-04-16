@@ -20,12 +20,14 @@ package inspector.jqcml.model;
  * #L%
  */
 
-import static org.junit.Assert.*;
-
+import inspector.jqcml.io.xml.QcMLFileReader;
 import org.junit.Before;
 import org.junit.Test;
 
-import inspector.jqcml.io.xml.QcMLFileReader;
+import java.io.File;
+import java.net.URISyntaxException;
+
+import static org.junit.Assert.*;
 
 public class CvParameterTest {
 
@@ -33,7 +35,16 @@ public class CvParameterTest {
 
     @Before
     public void setUp() {
-        qcml = new QcMLFileReader().getQcML(getClass().getResource("/CvParameterTest.qcML").getFile());
+        qcml = new QcMLFileReader().getQcML(loadResource("/CvParameterTest.qcML").getAbsolutePath());
+    }
+
+    private File loadResource(String fileName) {
+        try {
+            return new File(getClass().getResource(fileName).toURI());
+        } catch(URISyntaxException e) {
+            fail(e.getMessage());
+        }
+        return null;
     }
 
     @Test

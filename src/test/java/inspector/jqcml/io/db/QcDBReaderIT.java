@@ -29,6 +29,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import javax.persistence.EntityManagerFactory;
+import java.io.File;
+import java.net.URISyntaxException;
 import java.util.Iterator;
 
 import static org.junit.Assert.*;
@@ -46,7 +48,7 @@ public class QcDBReaderIT {
         reader = new QcDBReader(emf);
 
         QcMLFileReader xmlReader = new QcMLFileReader();
-        QcML qcml = xmlReader.getQcML(getClass().getResource("/CvParameterTest.qcML").getFile());
+        QcML qcml = xmlReader.getQcML(loadResource("/CvParameterTest.qcML").getAbsolutePath());
 
         QcDBWriter writer = new QcDBWriter(emf);
         writer.writeQcML(qcml);
@@ -142,4 +144,12 @@ public class QcDBReaderIT {
         assertTrue(it.hasNext());
     }
 
+    private File loadResource(String fileName) {
+        try {
+            return new File(getClass().getResource(fileName).toURI());
+        } catch(URISyntaxException e) {
+            fail(e.getMessage());
+        }
+        return null;
+    }
 }
