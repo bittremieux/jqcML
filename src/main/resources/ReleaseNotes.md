@@ -1,5 +1,8 @@
 # Release notes
 
+## jqcML v1.0.5 (16-Apr-2015)
+* BUGFIX: Fix error while validating an embedded stylesheet
+
 ## jqcML v1.0.4 (30-Mar-2015)
 * ENHANCEMENT: Enforce valid required elements
 * ENHANCEMENT: Unified toString() behavior
