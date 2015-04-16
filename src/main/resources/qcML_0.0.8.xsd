@@ -36,8 +36,7 @@ Distributed under the Creative Commons license http://creativecommons.org/licens
 				</xsd:annotation>
 				<xsd:complexType>
 					<xsd:sequence>
-						<xsd:any namespace="http://www.w3.org/1999/XSL/Transform"
-							processContents="lax" minOccurs="1" maxOccurs="unbounded"/>
+						<xsd:any processContents="lax" minOccurs="1" maxOccurs="unbounded"/>
 					</xsd:sequence>
 				</xsd:complexType>
 			</xsd:element>
